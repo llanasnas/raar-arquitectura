@@ -1,0 +1,548 @@
+[
+  {
+    "path": "assets/apple-icon-180x180.png",
+    "status": 200,
+    "bytes": 3105,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/favicon.ico",
+    "status": 404,
+    "bytes": 961,
+    "type": "text/html"
+  },
+  {
+    "path": "assets/images/AR07/RENDER  ACCESO FINAL SIN ESCALA (1).jpg",
+    "status": 200,
+    "bytes": 3524788,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/AR07/RENDER  EXTERIOR (1).jpg",
+    "status": 200,
+    "bytes": 6049607,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/AR07/RENDER INTERIOR (1).jpg",
+    "status": 200,
+    "bytes": 3883828,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/AR07/arino exterior.jpg",
+    "status": 200,
+    "bytes": 6652094,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/AR07/gif ariño bo.gif",
+    "status": 200,
+    "bytes": 4711471,
+    "type": "image/gif"
+  },
+  {
+    "path": "assets/images/AR07/planta.jpg",
+    "status": 200,
+    "bytes": 42723,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/AR07/planta2.jpg",
+    "status": 200,
+    "bytes": 56749,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/AR07/planta3.jpg",
+    "status": 200,
+    "bytes": 56728,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/AR07/planta4.jpg",
+    "status": 200,
+    "bytes": 49896,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/CO38/RENDER FRONTAL.jpg",
+    "status": 200,
+    "bytes": 1497878,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/CO38/co38.gif",
+    "status": 200,
+    "bytes": 31543439,
+    "type": "image/gif"
+  },
+  {
+    "path": "assets/images/CO38/planta FINAL.jpg",
+    "status": 200,
+    "bytes": 294460,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/GG01/GG PORTADA.jpg",
+    "status": 200,
+    "bytes": 2479199,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/GG01/GG01 bo.gif",
+    "status": 200,
+    "bytes": 55592387,
+    "type": "image/gif"
+  },
+  {
+    "path": "assets/images/GG01/RENDER ACCESO.jpg",
+    "status": 200,
+    "bytes": 1474735,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/GG01/RENDER PATIO.jpg",
+    "status": 200,
+    "bytes": 753238,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/GG01/RENDER TERRAZA.jpg",
+    "status": 200,
+    "bytes": 436809,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/GG01/RENDER TRASERA .jpg",
+    "status": 200,
+    "bytes": 567633,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/GG01/planta.jpg",
+    "status": 200,
+    "bytes": 1503613,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/GG01/planta2.jpg",
+    "status": 200,
+    "bytes": 1819617,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/GG01/planta3.jpg",
+    "status": 200,
+    "bytes": 1970157,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/GG01/planta4.jpg",
+    "status": 200,
+    "bytes": 1962966,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/IM10/COCINA.png",
+    "status": 200,
+    "bytes": 1636524,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/IM10/COMEDOR.png",
+    "status": 200,
+    "bytes": 2078951,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/IM10/FACHADA.jpg",
+    "status": 200,
+    "bytes": 5779255,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/IM10/HABPP1.png",
+    "status": 200,
+    "bytes": 6452112,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/IM10/OFICINA.png",
+    "status": 200,
+    "bytes": 2018901,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/IM10/SALAF.jpg",
+    "status": 200,
+    "bytes": 866833,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/IM10/pb.png",
+    "status": 200,
+    "bytes": 281756,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/MO07/0.jpg",
+    "status": 200,
+    "bytes": 1469257,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/MO07/1.jpg",
+    "status": 200,
+    "bytes": 858790,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/MO07/2.jpg",
+    "status": 200,
+    "bytes": 800254,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/MO07/3.jpg",
+    "status": 200,
+    "bytes": 880810,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/MO07/CUBIERTA2.png",
+    "status": 200,
+    "bytes": 5194407,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/MO07/Escena1.png",
+    "status": 200,
+    "bytes": 4239925,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/MO07/Escena12.png",
+    "status": 200,
+    "bytes": 2587848,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/MO07/Escena7.png",
+    "status": 200,
+    "bytes": 4499009,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/MO07/mo07.gif",
+    "status": 200,
+    "bytes": 149817,
+    "type": "image/gif"
+  },
+  {
+    "path": "assets/images/PE17/Escena1.png",
+    "status": 200,
+    "bytes": 7053051,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/PE17/Escena2.png",
+    "status": 200,
+    "bytes": 7101649,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/PE17/Escena3.png",
+    "status": 200,
+    "bytes": 7021400,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/PE17/HABITACIONFINAL.jpg",
+    "status": 200,
+    "bytes": 2631269,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/PE17/p1.jpg",
+    "status": 200,
+    "bytes": 315556,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/PE17/pb.jpg",
+    "status": 200,
+    "bytes": 307076,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/TO39/CERAMICA.jpg",
+    "status": 200,
+    "bytes": 2823328,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/TO39/GIFTO39.gif",
+    "status": 200,
+    "bytes": 37255792,
+    "type": "image/gif"
+  },
+  {
+    "path": "assets/images/TO39/RECEPCION.jpg",
+    "status": 200,
+    "bytes": 2522559,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/TO39/SALAPP.jpg",
+    "status": 200,
+    "bytes": 3256010,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/TO39/YOGA.jpg",
+    "status": 200,
+    "bytes": 2371315,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/TO39/p1.png",
+    "status": 404,
+    "bytes": 961,
+    "type": "text/html"
+  },
+  {
+    "path": "assets/images/TO39/pb.png",
+    "status": 404,
+    "bytes": 961,
+    "type": "text/html"
+  },
+  {
+    "path": "assets/images/VI02/Escena9.png",
+    "status": 200,
+    "bytes": 4016962,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/VI02/HAB2.png",
+    "status": 200,
+    "bytes": 4014192,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/VI02/HABPP1.png",
+    "status": 200,
+    "bytes": 4791022,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/VI02/OFI.png",
+    "status": 200,
+    "bytes": 4437791,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/VI02/ZS.png",
+    "status": 200,
+    "bytes": 4301388,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/VI02/ZS1.png",
+    "status": 200,
+    "bytes": 4190014,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/VI02/ZS2.png",
+    "status": 200,
+    "bytes": 2719822,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/VI02/p1.jpg",
+    "status": 200,
+    "bytes": 841635,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/VI02/p2.jpg",
+    "status": 200,
+    "bytes": 766416,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/VI02/pb.jpg",
+    "status": 200,
+    "bytes": 837108,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/ariño/RENDER  EXTERIOR (1).jpg",
+    "status": 404,
+    "bytes": 961,
+    "type": "text/html"
+  },
+  {
+    "path": "assets/images/ariño/RENDER INTERIOR (1).jpg",
+    "status": 404,
+    "bytes": 961,
+    "type": "text/html"
+  },
+  {
+    "path": "assets/images/logo definitiu.png",
+    "status": 200,
+    "bytes": 39337,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/logo definitiu blanc.png",
+    "status": 200,
+    "bytes": 18773,
+    "type": "image/png"
+  },
+  {
+    "path": "assets/images/profil.jpg",
+    "status": 200,
+    "bytes": 186927,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "assets/images/space 2.jpg",
+    "status": 200,
+    "bytes": 302160,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "css/CS/style.css",
+    "status": 200,
+    "bytes": 3360,
+    "type": "text/css"
+  },
+  {
+    "path": "css/owl.carousel.min.css",
+    "status": 200,
+    "bytes": 3630,
+    "type": "text/css"
+  },
+  {
+    "path": "css/owl.theme.default.min.css",
+    "status": 200,
+    "bytes": 1055,
+    "type": "text/css"
+  },
+  {
+    "path": "images/portfolio-img1.jpg",
+    "status": 200,
+    "bytes": 278910,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "images/portfolio-img10.jpg",
+    "status": 200,
+    "bytes": 170369,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "images/portfolio-img11.jpg",
+    "status": 200,
+    "bytes": 171548,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "images/portfolio-img12.jpg",
+    "status": 200,
+    "bytes": 117409,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "images/portfolio-img2.jpg",
+    "status": 200,
+    "bytes": 186083,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "images/portfolio-img3.jpg",
+    "status": 200,
+    "bytes": 210178,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "images/portfolio-img4.jpg",
+    "status": 200,
+    "bytes": 184058,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "images/portfolio-img5.jpg",
+    "status": 200,
+    "bytes": 196572,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "images/portfolio-img6.jpg",
+    "status": 200,
+    "bytes": 234587,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "images/portfolio-img7.jpg",
+    "status": 200,
+    "bytes": 198383,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "images/portfolio-img8.jpg",
+    "status": 200,
+    "bytes": 203122,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "images/portfolio-img9.jpg",
+    "status": 200,
+    "bytes": 163976,
+    "type": "image/jpeg"
+  },
+  {
+    "path": "js/jquery.flexslider-min.js",
+    "status": 200,
+    "bytes": 22342,
+    "type": "application/javascript"
+  },
+  {
+    "path": "js/jquery.min.js",
+    "status": 200,
+    "bytes": 84380,
+    "type": "application/javascript"
+  },
+  {
+    "path": "js/jquery.waypoints.min.js",
+    "status": 200,
+    "bytes": 8835,
+    "type": "application/javascript"
+  },
+  {
+    "path": "js/main.js",
+    "status": 200,
+    "bytes": 6819,
+    "type": "application/javascript"
+  },
+  {
+    "path": "js/owl.carousel.min.js",
+    "status": 200,
+    "bytes": 40401,
+    "type": "application/javascript"
+  },
+  {
+    "path": "main.3f6952e4.css",
+    "status": 200,
+    "bytes": 89465,
+    "type": "text/css"
+  },
+  {
+    "path": "main.70a66962.js",
+    "status": 200,
+    "bytes": 138255,
+    "type": "application/javascript"
+  }
+]

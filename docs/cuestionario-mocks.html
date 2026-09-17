@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #888; font-family: Poppins, sans-serif; display: grid; gap: 40px; padding: 40px; }
+  .mock { width: 960px; height: 640px; position: relative; overflow: hidden; font-family: Poppins, sans-serif; color: #1A1A18; }
+  .mock img.hero { object-fit: cover; }
+  /* shared skeleton */
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 22px 40px; position: relative; z-index: 2; }
+  .nav .links { display: flex; gap: 22px; font-size: 14px; }
+  .nav .cta { font-size: 14px; padding: 10px 18px; }
+  .logo { height: 26px; width: auto; }
+  .h { font-size: 44px; line-height: 1.05; letter-spacing: -.02em; font-weight: 500; margin: 0; max-width: 520px; }
+  .sub { font-size: 15px; max-width: 420px; margin: 14px 0 0; opacity: .8; }
+  .btns { display: flex; gap: 10px; margin-top: 22px; }
+  .btn { font-size: 14px; padding: 12px 20px; font-weight: 500; display: inline-block; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .card { padding: 18px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; font-weight: 500; }
+  .card p { margin: 0; font-size: 13px; opacity: .75; }
+  .chips { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .chip { font-size: 11px; padding: 5px 10px; }
+  .thumb { width: 100%; height: 110px; object-fit: cover; display: block; margin-bottom: 12px; }
+  .lab { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; opacity: .6; }
+
+  /* ── 1 glass ── */
+  .glass { background: #F2F2EF; }
+  .glass .bg { position: absolute; inset: -5%; background: url(BG) center/cover; filter: blur(22px) saturate(1.1); transform: scale(1.05); }
+  .glass .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(242,242,239,.35), rgba(242,242,239,.7)); }
+  .glass .g { background: rgba(255,255,255,.58); border: 1px solid rgba(255,255,255,.65); backdrop-filter: blur(22px) saturate(1.5); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 8px 30px rgba(26,26,24,.12); }
+  .glass .nav .links, .glass .nav .logo-box { border-radius: 999px; padding: 10px 18px; }
+  .glass .cta, .glass .btn { border-radius: 999px; }
+  .glass .cta, .glass .btn-red { background: #D8321F; color: #fff; }
+  .glass .body { position: relative; z-index: 1; padding: 10px 40px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items: start; }
+  .glass .card { border-radius: 24px; }
+  .glass .thumb { border-radius: 14px; }
+  .glass .chip { border-radius: 999px; background: rgba(255,255,255,.7); border: 1px solid rgba(26,26,24,.15); }
+  .glass .hero { width: 100%; height: 150px; border-radius: 24px; margin-top: 18px; box-shadow: 0 10px 30px rgba(26,26,24,.15); }
+
+  /* ── 2 clay ── */
+  .clay { background: #EFE9E1; }
+  .clay .c { background: #F7F2EA; border-radius: 28px; box-shadow: 0 18px 30px rgba(120,90,60,.16), inset -8px -8px 16px rgba(120,90,60,.12), inset 8px 8px 16px rgba(255,255,255,.95); }
+  .clay .nav .links, .clay .nav .logo-box { border-radius: 999px; padding: 12px 20px; }
+  .clay .cta, .clay .btn { border-radius: 999px; }
+  .clay .cta, .clay .btn-red { background: #E58A6B; color: #fff; box-shadow: 0 10px 20px rgba(229,138,107,.35), inset -4px -4px 8px rgba(160,70,40,.35), inset 4px 4px 8px rgba(255,255,255,.5); }
+  .clay .btn-2 { background: #F7F2EA; color: #1A1A18; box-shadow: inset -4px -4px 8px rgba(120,90,60,.15), inset 4px 4px 8px #fff, 0 8px 16px rgba(120,90,60,.12); }
+  .clay .body { padding: 10px 40px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items: start; }
+  .clay .hero { width: 100%; height: 150px; border-radius: 28px; margin-top: 18px; box-shadow: 0 18px 30px rgba(120,90,60,.2); }
+  .clay .thumb { border-radius: 18px; }
+  .clay .chip { border-radius: 999px; background: #EFE9E1; box-shadow: inset 2px 2px 5px rgba(120,90,60,.15), inset -2px -2px 5px #fff; }
+
+  /* ── 3 flat ── */
+  .flat { background: #fff; font-family: Inter, sans-serif; }
+  .flat .nav { border-bottom: 2px solid #1A1A18; }
+  .flat .cta, .flat .btn { border-radius: 4px; }
+  .flat .cta, .flat .btn-red { background: #D8321F; color: #fff; }
+  .flat .btn-2 { background: #1A1A18; color: #fff; }
+  .flat .h { font-weight: 800; letter-spacing: -.03em; }
+  .flat .body { padding: 26px 40px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items: start; }
+  .flat .hero { width: 100%; height: 150px; margin-top: 18px; border-radius: 0; }
+  .flat .card { background: #F2F2EF; border-radius: 4px; }
+  .flat .card.red { background: #D8321F; color: #fff; }
+  .flat .card.red p, .flat .card.red .lab { opacity: .85; }
+  .flat .thumb { border-radius: 0; }
+  .flat .chip { background: #1A1A18; color: #fff; border-radius: 2px; }
+  .flat .card.red .chip { background: #fff; color: #D8321F; }
+
+  /* ── 4 bento ── */
+  .bento { background: #F2F2EF; }
+  .bento .grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 150px); gap: 12px; padding: 0 40px 20px; }
+  .bento .t { background: #fff; border-radius: 20px; padding: 18px; box-shadow: 0 1px 2px rgba(26,26,24,.05); overflow: hidden; position: relative; }
+  .bento .t.img { grid-column: span 2; grid-row: span 2; padding: 0; }
+  .bento .t.img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .bento .t.big { grid-column: span 2; }
+  .bento .t.ink { background: #1A1A18; color: #F2F2EF; }
+  .bento .t.red { background: #D8321F; color: #fff; }
+  .bento .n { font-size: 40px; font-weight: 500; line-height: 1; letter-spacing: -.03em; }
+  .bento .t .lab { margin-top: 8px; display: block; }
+  .bento .cta, .bento .btn { border-radius: 999px; }
+  .bento .cta { background: #D8321F; color: #fff; }
+  .bento .h { font-size: 28px; }
+
+  /* ── 5 neumorphism ── */
+  .neu { background: #E8E9EC; color: #2B2C30; }
+  .neu .n { background: #E8E9EC; border-radius: 22px; box-shadow: -8px -8px 18px #fff, 8px 8px 18px rgba(80,84,96,.22); }
+  .neu .in { background: #E8E9EC; border-radius: 22px; box-shadow: inset -6px -6px 12px #fff, inset 6px 6px 12px rgba(80,84,96,.2); }
+  .neu .nav .links, .neu .nav .logo-box { border-radius: 999px; padding: 12px 20px; }
+  .neu .cta, .neu .btn { border-radius: 999px; }
+  .neu .cta, .neu .btn-red { background: #D8321F; color: #fff; box-shadow: -6px -6px 14px #fff, 6px 6px 14px rgba(80,84,96,.25); }
+  .neu .btn-2 { color: #2B2C30; }
+  .neu .body { padding: 10px 40px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items: start; }
+  .neu .hero { width: 100%; height: 150px; border-radius: 22px; margin-top: 18px; }
+  .neu .hero-box { padding: 12px; margin-top: 18px; }
+  .neu .hero-box img { height: 126px; margin: 0; }
+  .neu .thumb { border-radius: 14px; }
+  .neu .chip { border-radius: 999px; }
+
+  /* ── 6 swiss editorial ── */
+  .swiss { background: #fff; font-family: Inter, "Helvetica Neue", Helvetica, sans-serif; }
+  .swiss .nav { border-bottom: 1px solid #1A1A18; padding: 18px 40px; font-size: 13px; }
+  .swiss .cta { border: 1px solid #1A1A18; border-radius: 0; padding: 8px 14px; }
+  .swiss .body { padding: 28px 40px; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 24px; }
+  .swiss .h { font-size: 62px; font-weight: 800; letter-spacing: -.045em; line-height: .95; max-width: none; grid-column: 1 / -1; }
+  .swiss .rule { grid-column: 1 / -1; border-top: 1px solid #1A1A18; }
+  .swiss .col { font-size: 12px; line-height: 1.5; }
+  .swiss .col .lab { display: block; margin-bottom: 8px; opacity: 1; color: #D8321F; }
+  .swiss .hero { width: 100%; height: 200px; border-radius: 0; }
+  .swiss .btn { border: 1px solid #1A1A18; padding: 8px 14px; font-size: 12px; border-radius: 0; margin-top: 10px; }
+  .swiss .idx { font-size: 12px; display: flex; justify-content: space-between; grid-column: 1 / -1; border-top: 1px solid #1A1A18; padding-top: 8px; }
+
+  /* ── 7 neo-brutalism ── */
+  .brut { background: #FFFBEB; font-family: "Space Mono", monospace; }
+  .brut .b { background: #fff; border: 3px solid #111; box-shadow: 7px 7px 0 #111; }
+  .brut .nav { border-bottom: 3px solid #111; }
+  .brut .nav .links { font-weight: 700; }
+  .brut .cta, .brut .btn { border: 3px solid #111; box-shadow: 5px 5px 0 #111; font-weight: 700; }
+  .brut .cta, .brut .btn-red { background: #FF3B1F; color: #111; }
+  .brut .btn-2 { background: #FFE14D; color: #111; }
+  .brut .h { font-family: Inter, sans-serif; font-weight: 800; letter-spacing: -.03em; font-size: 46px; }
+  .brut .body { padding: 26px 40px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items: start; }
+  .brut .hero { width: 100%; height: 150px; margin-top: 18px; border: 3px solid #111; box-shadow: 7px 7px 0 #111; }
+  .brut .card { background: #fff; }
+  .brut .card.y { background: #FFE14D; }
+  .brut .thumb { border: 3px solid #111; }
+  .brut .chip { border: 2px solid #111; background: #fff; font-weight: 700; }
+
+  /* ── 8 dark cinematic ── */
+  .dark { background: #0F0F0E; color: #F2F2EF; }
+  .dark .bg { position: absolute; inset: 0; background: url(BG) center/cover; }
+  .dark .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(15,15,14,.95) 30%, rgba(15,15,14,.35) 70%, rgba(15,15,14,.7)), linear-gradient(0deg, rgba(15,15,14,.95), transparent 50%); }
+  .dark .nav { border-bottom: 1px solid rgba(255,255,255,.12); }
+  .dark .logo { filter: invert(1); }
+  .dark .cta, .dark .btn { border-radius: 999px; }
+  .dark .cta, .dark .btn-red { background: #F2F2EF; color: #0F0F0E; }
+  .dark .btn-2 { border: 1px solid rgba(255,255,255,.35); color: #F2F2EF; }
+  .dark .body { position: relative; z-index: 1; padding: 40px 40px 0; }
+  .dark .h { font-size: 52px; font-weight: 400; max-width: 560px; }
+  .dark .sub { opacity: .7; }
+  .dark .cards { position: absolute; left: 40px; right: 40px; bottom: 28px; z-index: 1; grid-template-columns: 1fr 1fr 1fr; }
+  .dark .card { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; backdrop-filter: blur(12px); }
+  .dark .card p { opacity: .65; }
+  .dark .thumb { height: 70px; border-radius: 10px; }
+  .dark .chip { border-radius: 999px; border: 1px solid rgba(255,255,255,.25); }
+  .dark .acc { color: #E8B36A; }
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<div class="mock glass" data-style="glass">
+  <div class="bg"></div>
+  <div class="nav">
+    <div class="g logo-box"><img class="logo" src="LOGO"></div>
+    <div class="g links"><span>Proyectos</span><span>Servicios</span><span>Estudio</span></div>
+    <span class="cta">Primera visita</span>
+  </div>
+  <div class="body">
+    <div>
+      <h1 class="h">Casas en Barcelona pensadas para durar.</h1>
+      <p class="sub">Reforma integral y obra nueva. Tres arquitectos, un proyecto a la vez.</p>
+      <div class="btns"><span class="btn btn-red">Pide tu primera visita</span><span class="btn g">Ver proyectos</span></div>
+      <img class="hero" src="BG">
+    </div>
+    <div class="cards" style="grid-template-columns:1fr">
+      <div class="card g"><img class="thumb" src="VI02"><h3>Casa entre medianeras, La Garriga</h3><p class="lab">La Garriga · Reforma integral</p></div>
+      <div class="card g"><h3>Reforma integral</h3><p>Pisos y casas con carácter: bóveda catalana, patios, medianeras.</p><div class="chips"><span class="chip">PE_17</span><span class="chip">VI_02</span><span class="chip">IM_10</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 2 -->
+<div class="mock clay" data-style="clay">
+  <div class="nav">
+    <div class="c logo-box"><img class="logo" src="LOGO"></div>
+    <div class="c links"><span>Proyectos</span><span>Servicios</span><span>Estudio</span></div>
+    <span class="cta">Primera visita</span>
+  </div>
+  <div class="body">
+    <div>
+      <h1 class="h">Casas en Barcelona pensadas para durar.</h1>
+      <p class="sub">Reforma integral y obra nueva. Tres arquitectos, un proyecto a la vez.</p>
+      <div class="btns"><span class="btn btn-red">Pide tu primera visita</span><span class="btn btn-2">Ver proyectos</span></div>
+      <img class="hero" src="BG">
+    </div>
+    <div class="cards" style="grid-template-columns:1fr">
+      <div class="card c"><img class="thumb" src="VI02"><h3>Casa entre medianeras, La Garriga</h3><p class="lab">La Garriga · Reforma integral</p></div>
+      <div class="card c"><h3>Reforma integral</h3><p>Pisos y casas con carácter: bóveda catalana, patios, medianeras.</p><div class="chips"><span class="chip">PE_17</span><span class="chip">VI_02</span><span class="chip">IM_10</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 3 -->
+<div class="mock flat" data-style="flat">
+  <div class="nav">
+    <img class="logo" src="LOGO">
+    <div class="links"><span>Proyectos</span><span>Servicios</span><span>Estudio</span></div>
+    <span class="cta">Primera visita</span>
+  </div>
+  <div class="body">
+    <div>
+      <h1 class="h">Casas en Barcelona pensadas para durar.</h1>
+      <p class="sub">Reforma integral y obra nueva. Tres arquitectos, un proyecto a la vez.</p>
+      <div class="btns"><span class="btn btn-red">Pide tu primera visita</span><span class="btn btn-2">Ver proyectos</span></div>
+      <img class="hero" src="BG">
+    </div>
+    <div class="cards" style="grid-template-columns:1fr">
+      <div class="card"><img class="thumb" src="VI02"><h3>Casa entre medianeras, La Garriga</h3><p class="lab">La Garriga · Reforma integral</p></div>
+      <div class="card red"><h3>Reforma integral</h3><p>Pisos y casas con carácter: bóveda catalana, patios, medianeras.</p><div class="chips"><span class="chip">PE_17</span><span class="chip">VI_02</span><span class="chip">IM_10</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 4 -->
+<div class="mock bento" data-style="bento">
+  <div class="nav">
+    <img class="logo" src="LOGO">
+    <div class="links"><span>Proyectos</span><span>Servicios</span><span>Estudio</span></div>
+    <span class="cta btn">Primera visita</span>
+  </div>
+  <div class="grid">
+    <div class="t img"><img src="BG"></div>
+    <div class="t big"><h1 class="h">Casas en Barcelona pensadas para durar.</h1><span class="lab">Reforma integral · Obra nueva</span></div>
+    <div class="t ink"><div class="n">12</div><span class="lab">proyectos</span></div>
+    <div class="t red"><div class="n">1ª</div><span class="lab">visita gratuita</span></div>
+    <div class="t"><span class="lab">Servicio</span><h3 style="margin:8px 0 0;font-size:16px;font-weight:500">Reforma integral</h3></div>
+    <div class="t" style="padding:0"><img src="VI02" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+    <div class="t"><span class="lab">Zona</span><h3 style="margin:8px 0 0;font-size:16px;font-weight:500">Barcelona · Vallès · Gironès</h3></div>
+    <div class="t"><span class="lab">Estudio</span><h3 style="margin:8px 0 0;font-size:16px;font-weight:500">Tres arquitectos</h3></div>
+  </div>
+</div>
+
+<!-- 5 -->
+<div class="mock neu" data-style="neu">
+  <div class="nav">
+    <div class="n logo-box"><img class="logo" src="LOGO"></div>
+    <div class="n links"><span>Proyectos</span><span>Servicios</span><span>Estudio</span></div>
+    <span class="cta">Primera visita</span>
+  </div>
+  <div class="body">
+    <div>
+      <h1 class="h">Casas en Barcelona pensadas para durar.</h1>
+      <p class="sub">Reforma integral y obra nueva. Tres arquitectos, un proyecto a la vez.</p>
+      <div class="btns"><span class="btn btn-red">Pide tu primera visita</span><span class="btn btn-2 n">Ver proyectos</span></div>
+      <div class="hero-box in"><img class="hero" src="BG"></div>
+    </div>
+    <div class="cards" style="grid-template-columns:1fr">
+      <div class="card n"><img class="thumb" src="VI02"><h3>Casa entre medianeras, La Garriga</h3><p class="lab">La Garriga · Reforma integral</p></div>
+      <div class="card n"><h3>Reforma integral</h3><p>Pisos y casas con carácter: bóveda catalana, patios, medianeras.</p><div class="chips"><span class="chip in">PE_17</span><span class="chip in">VI_02</span><span class="chip in">IM_10</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 6 -->
+<div class="mock swiss" data-style="swiss">
+  <div class="nav">
+    <img class="logo" src="LOGO">
+    <div class="links"><span>Proyectos</span><span>Servicios</span><span>Estudio</span></div>
+    <span class="cta">Primera visita</span>
+  </div>
+  <div class="body">
+    <h1 class="h">Casas en Barcelona pensadas para durar.</h1>
+    <div class="rule"></div>
+    <img class="hero" src="BG">
+    <div class="col"><span class="lab">01 — Reforma integral</span>Pisos y casas con carácter: bóveda catalana, patios, medianeras. Reorganizamos y damos luz.<br><span class="btn">Ver proyectos</span></div>
+    <div class="col"><span class="lab">02 — Obra nueva</span>Casas unifamiliares en el Vallès y Girona, adaptadas a la topografía y la luz.<br><span class="btn">Primera visita</span></div>
+    <div class="idx"><span>VI_02 · La Garriga</span><span>AR_07 · Sant Cugat</span><span>IM_10 · Sarrià</span><span>MO_23 · Barcelona</span></div>
+  </div>
+</div>
+
+<!-- 7 -->
+<div class="mock brut" data-style="brut">
+  <div class="nav">
+    <img class="logo" src="LOGO">
+    <div class="links"><span>PROYECTOS</span><span>SERVICIOS</span><span>ESTUDIO</span></div>
+    <span class="cta">PRIMERA VISITA</span>
+  </div>
+  <div class="body">
+    <div>
+      <h1 class="h">Casas en Barcelona pensadas para durar.</h1>
+      <p class="sub">Reforma integral y obra nueva. Tres arquitectos, un proyecto a la vez.</p>
+      <div class="btns"><span class="btn btn-red">PIDE TU VISITA</span><span class="btn btn-2">VER PROYECTOS</span></div>
+      <img class="hero" src="BG">
+    </div>
+    <div class="cards" style="grid-template-columns:1fr">
+      <div class="card b"><img class="thumb" src="VI02"><h3>Casa entre medianeras, La Garriga</h3><p class="lab">LA GARRIGA · REFORMA</p></div>
+      <div class="card b y"><h3>Reforma integral</h3><p>Pisos y casas con carácter: bóveda catalana, patios, medianeras.</p><div class="chips"><span class="chip">PE_17</span><span class="chip">VI_02</span><span class="chip">IM_10</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 8 -->
+<div class="mock dark" data-style="dark">
+  <div class="bg"></div>
+  <div class="nav" style="position:relative;z-index:2">
+    <img class="logo" src="LOGO">
+    <div class="links"><span>Proyectos</span><span>Servicios</span><span>Estudio</span></div>
+    <span class="cta">Primera visita</span>
+  </div>
+  <div class="body">
+    <p class="lab acc" style="opacity:1">IM_10 · Sarrià</p>
+    <h1 class="h">Casas en Barcelona pensadas para durar.</h1>
+    <p class="sub">Reforma integral y obra nueva. Tres arquitectos, un proyecto a la vez.</p>
+    <div class="btns"><span class="btn btn-red">Pide tu primera visita</span><span class="btn btn-2">Ver proyectos</span></div>
+  </div>
+  <div class="cards">
+    <div class="card"><img class="thumb" src="VI02"><h3>La Garriga</h3><p>Reforma integral</p></div>
+    <div class="card"><img class="thumb" src="AR07"><h3>Sant Cugat</h3><p>Obra nueva</p></div>
+    <div class="card"><h3>Reforma integral</h3><p>Bóveda catalana, patios, medianeras.</p><div class="chips"><span class="chip">PE_17</span><span class="chip">VI_02</span></div></div>
+  </div>
+</div>
+
+</body>
+</html>

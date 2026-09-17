@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# heavy source assets (video masters, original renders)
+assets-src/
+/shots
+# local binaries (Real-ESRGAN etc.)
+/tools/

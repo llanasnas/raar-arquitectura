@@ -1,1 +1,139 @@
 @AGENTS.md
+
+# RAAR arquitectura — nueva web
+
+Rediseño de https://www.raar-arquitectura.eu (estudio de arquitectura, Barcelona) para que **convierta visitas en solicitudes de primera visita gratuita**. La web antigua no vendía: hero sin mensaje, 0 CTAs, formulario roto, sin SEO. Ver `docs/03-critica-web-actual.md`.
+
+Estado: **rehaciendo la web desde cero (v2 «revista»)** tras la reunión del 16/09/2026. Portada y páginas interiores (proyectos, ficha de obra, servicios, estudio, contacto, legales y 404) ya en v2; queda elegir propuesta de home. La v1 completa queda archivada en `/v1`. Build, lint y tipos limpios. Nada commiteado todavía. Pendiente: datos del cliente, CA/EN, Resend, redirecciones. Cuestionario para el cliente: `docs/cuestionario-raar.html` (40 preguntas en 8 secciones, la última «Material que necesitamos»: logo vectorial, fotos, renders, textos, accesos, vía de entrega; tooltips «por qué», selector de estilo visual con 8 mockups y de color, genera PDF). Se construye con `node scripts/build-cuestionario.mjs` desde `docs/cuestionario-raar.template.html` + `docs/cuestionario-mocks.html` (mockups) + `assets-src/cuestionario/` (Poppins TTF, jsPDF). Editar la plantilla, nunca el HTML generado. Lista larga de referencia: `docs/05-reunion-cliente-preguntas.md`.
+
+Propuesta de ampliaciones para el cliente (11 servicios opcionales: CMS Payload, landings servicio×zona, asistente IA con fichas MD, recepcionista de voz, agenda, estimador, leads, campañas Brevo, área privada, vídeo por proyecto, mantenimiento; en el presupuesto base van: web, formulario de contacto, WhatsApp, blog estático, CA/EN, analítica + Search Console, SEO inicial y GEO; Google Business ya lo tiene el cliente con reseñas): `docs/propuesta-extras.html` + `docs/propuesta-extras.pdf`, generados con `node scripts/build-propuesta.mjs` desde `docs/propuesta-extras.template.html`. **Precios = `days × RATE`** (`RATE = 200` €/día; `days` ya recortados a ~⅓ porque el usuario trabaja solo con IA: 50–600 €, packs 500 / 500 / 1.000 €). Chrome también deja de pintar secciones si el contenedor raíz es grid. Reglas de impresión en la plantilla: Chrome solapa al paginar grids/floats/multicol, por eso en `@media print` tarjetas y secciones son bloque y solo las tarjetas con diagrama se parten entre páginas.
+
+Idioma de trabajo con el usuario: **español**. Copy de la web: español, tuteo, sereno, sin exclamaciones.
+
+## Comandos
+
+```bash
+pnpm dev                 # http://localhost:3000
+pnpm build && pnpm start -p 3010          # producción local (las capturas asumen 3010)
+pnpm lint && npx tsc --noEmit -p .        # antes de dar algo por terminado
+npx next typegen                          # tras añadir rutas (PageProps tipado)
+node scripts/shots.mjs http://localhost:3010 shots   # capturas desktop + móvil con Chrome local
+node scripts/optimize-images.mjs          # originales → public/images optimizado (idempotente)
+node scripts/hero/generate-hero-video.mjs           # dry-run; --confirm gasta crédito FAL
+node scripts/hero/upscale-master.mjs <mp4> [--model realesrgan-x4plus --scale 4] [--test 3]   # 720p → master 1080p con Real-ESRGAN local (gratis, GPU)
+node scripts/hero/extract-frames.mjs <mp4> [--desktop 240] [--mobile 120] [--autoplay 4]
+```
+
+Marca: el SVG del cliente está en `assets-src/images/brand/` y, optimizado con svgo (133 KB → 19,7 KB), en `public/images/brand/logo-black.svg` (+ blanco). Se usa como **máscara CSS**, no como `<img>`. Vídeo web de la prueba 2: `public/hero/im10-1080p.mp4` (5,9 MB, h264 crf 25 sin audio, hecho con ffmpeg desde el master de 52,7 MB).
+
+Hero v1: `assets-src/hero/im10-hero-v1-1080p.mp4` = vídeo FAL 720p upscalado con `realesrgan-x4plus` (~35 min en la RTX 2060). El exe vive en `tools/realesrgan/` (gitignored; release `realesrgan-ncnn-vulkan-20220424-windows.zip` de xinntao/Real-ESRGAN). `extract-frames` aplica unsharp solo si la fuente es <1080p.
+
+Scripts de playwright deben ejecutarse **desde la raíz del proyecto** (resuelven `playwright-core` de `node_modules`); Chrome en `C:/Program Files/Google/Chrome/Application/chrome.exe`. `shots/` es material desechable.
+
+## Stack y reglas técnicas
+
+- Next.js 16 App Router, React 19, Tailwind 4, pnpm, TypeScript estricto. Leer `node_modules/next/dist/docs/` ante cualquier duda de API: **no fiarse de la memoria** (params/searchParams son `Promise`, `PageProps<'/ruta'>` tipado, `sitemap.ts`/`robots.ts`, iconos y OG por archivo).
+- Server Components por defecto. `"use client"` solo para GSAP, formularios (`useActionState`), `<dialog>` y estado de UI.
+- Tailwind 4: variables como utilidades `px-(--gutter-2)`, `text-carbon`, `bg-paper`. Tokens y componentes de clase viven en `app/globals.css`; no duplicar estilos inline. El bloque v2 está arriba del archivo (`.menu`, `.skip-link`); todo lo de abajo (`.btn`, `.card`, `.plate`, `.glass`…) es de la v1 y **no se usa en páginas nuevas**.
+- GSAP 3.15 + `@gsap/react` (`useGSAP` con `scope`), ScrollTrigger. Siempre dentro de `gsap.matchMedia()` con rama `(prefers-reduced-motion: no-preference)`. **Un solo pin por página** (el hero). Entradas con `<Reveal>` / `data-reveal="up|left|right|scale"`; profundidad con `<Parallax>` (el padre controla posición y tamaño).
+- Imágenes: `next/image` con `sizes` real y `aspect-ratio` reservado. Originales pesados en `assets-src/` (gitignored); derivados optimizados en `public/images/`.
+- Formulario: Server Action `app/actions/contact.ts` (zod + honeypot `website` + consentimiento). Envía con Resend si hay `RESEND_API_KEY`; si no, loguea el lead.
+- SEO/GEO: metadata por página, canonical, OG, JSON-LD (`components/seo/JsonLd.tsx`), sitemap, robots permite bots de IA.
+- ESLint ignora `docs/`, `scripts/`, `assets-src/`. No usar `React.` como namespace en client components: importar tipos (`type MouseEvent as ReactMouseEvent`).
+
+## Dónde está cada cosa
+
+| Ruta | Qué |
+|---|---|
+| `lib/copy.ts` | **Todo el texto de la interfaz** (nav, hero, secciones, FAQ, formulario, páginas). Cambiar copy aquí, nunca en JSX |
+| `lib/site.ts` | Datos del estudio (teléfono, email, dirección, áreas), `routes`, `nav` |
+| `lib/content.ts` | Loader de proyectos: `content/projects/<id>.md` (EN, frontmatter con media) + `content/projects/es/<id>.md` (ES: name, summary, place, secciones `## Intro / ## Bloque 2 / ## Bloque 3 / ## Ficha`) |
+| `components/hero/HeroScrollVideo.tsx` + `lib/hero-manifest.json` | Hero: frames WebP en canvas, autoplay 4 s + scrub 350 vh, 5 notas de cristal, fallback reduced-motion |
+| `components/sections/Landing.tsx` | Secciones de la home (contexto, destacados, servicios, proceso, testimonios, estudio, FAQ, CTA contacto) |
+| `components/projects/` | `ProjectCard` (lámina + código en burbuja de cristal), `Lightbox` (`<dialog>` nativo: hero + renders + planos en una secuencia) |
+| `components/ui/` | `Section`, `Reveal`, `Parallax`, `Icon` (SVG propios, trazo 1.5, sin emoji) |
+| `app/page.tsx` | **La portada**: apertura de persiana + `Cover` (eslogan a la izquierda, vídeo a la derecha) + lo que asoma debajo |
+| `components/site/Menu.tsx` | Menú v2: fila abajo a la izquierda, sin fondo, tono según `data-menu` de la sección de debajo |
+| `components/site/Cover.tsx` | Portada: eslogan a la izquierda y vídeo a la derecha a toda altura. Mide `100svh - --stage-gap` para que asome la sección siguiente |
+| `components/site/Brand.tsx` | El logotipo como máscara CSS (`.brandmark`): toma el color del texto, se anima de blanco a tinta y admite el degradado del barrido |
+| `components/site/SiteBrand.tsx` | **El logotipo fijo de la web**: el mismo elemento durante la apertura y después. Viaja del centro a su esquina y se queda ahí al hacer scroll. `corner="tl"` o `"br"` |
+| `lib/use-tone.ts` | Hook compartido por menú y logotipo: mira el `data-menu` de lo que tienen justo debajo y devuelve el tono |
+| `components/site/intro/SlatsIntro.tsx` | **La apertura**: telón de seis franjas. Columnas en escritorio (vídeo a la derecha) y **filas que salen de lado en móvil** (vídeo abajo). Las franjas sin foto son ventanas al vídeo |
+| `components/site/intro/SlatShow.tsx` | El pase de fotos dentro de una franja: la que entra se pone encima y sube de 0 a 1, así no hay parpadeo negro. Cada franja con su retardo |
+| `components/site/v2/` | **Las propuestas de home**: `Reveal` (entradas con un solo IntersectionObserver), `Pieces` (rótulo de sección, frase y cierre, comunes), `SpreadA` (pliego con ficha pegada), `StripB` (cinta horizontal con pin de GSAP), `IndexC` (sumario con lámina que sigue al cursor), `Feature` (lámina a sangre con pie), `StackD` (páginas pegadas que se apilan, con folio y cambio de imagen al pasar por encima), `DuoScroll` (interludio de dos columnas a distinta velocidad) |
+| `app/home-a/` … `app/home-d/` | Propuestas de home A (pliego), B (cinta), C (sumario) y D (cuadernillo: páginas que se apilan), `noindex`. Misma apertura y misma portada; cambia el scroll. Vídeos en `shots/videos/home-*.mp4` |
+| `components/site/CoverBody.tsx` | El cuerpo de la portada (cliente): eslogan, frase con las cuatro palabras que cambian la lámina, y el vídeo que se recoge al final de la apertura |
+| `app/prueba-2/`, `app/prueba-3/`, `app/prueba-4/`, `app/prueba-4b/` | Pruebas de apertura, `noindex`. La 1 está en `/`. La **4b** es la 4 con el logotipo abajo a la derecha. Vídeos en `shots/videos/` |
+| `app/v1/` | Web v1 archivada (`layout.tsx` con el nav y el footer viejos + la landing). Fuera del índice |
+| `app/` | `/proyectos` (filtros `?tipo=`), `/proyectos/[id]`, `/servicios`, `/estudio`, `/contacto` (`?tipo=`), legales, 404, sitemap, robots — **todas en v2 «revista»** |
+| `components/site/v2/Page.tsx` | Piezas comunes de las páginas interiores: `PageHead` (rótulo + h1), `Crumbs`, `Steps`, `Faq` (`<details>` nativo), `CtaBlock` y `SiteFoot` |
+| `components/site/v2/Works.tsx` | El índice de obra: rejilla de doce columnas con un ritmo de siete posiciones que se repite |
+| `components/site/BrandSlot.tsx` | Decide qué logotipo monta el layout en cada ruta: con apertura en las homes, quieto en el resto, nada en `/v1` |
+| `components/forms/ContactFormV2.tsx` | El formulario en v2: campos de una línea, botón cuadrado de tinta. El `ContactForm` de la v1 sigue para `/v1` |
+| `archive/DESIGN-v1.md` | Sistema visual de la v1. `PRODUCT.md`: verdad de producto. `docs/`: análisis, crítica, plan, guion de reunión |
+
+## Diseño v2 «revista» (en construcción, se valida bloque a bloque)
+
+Reunión con el cliente del **16/09/2026**: cambia el concepto entero. La v1 («vidrio y piedra») queda congelada en `/v1` y documentada en `archive/DESIGN-v1.md`. **No se toma nada de ella como referencia**: ni menú, ni cristal, ni píldoras, ni Poppins.
+
+- **Estilo revista**: muchas imágenes y vídeos a sangre que se van mostrando al avanzar. El cromado desaparece; manda el medio.
+- **Las cuatro palabras del estudio** (Arquitectura · Diseño · Atemporalidad · Contexto) no van sueltas: viven dentro de una frase al pie de la columna (`copy.hero.statement`, tokens con `key: true`) y **mandan sobre la lámina**: al pasar por encima de una, la portada deja el vídeo y enseña la obra que explica esa palabra, con su pie debajo de la frase. Patrón tomado de `mesura.eu` (palabras subrayadas dentro del manifiesto). En táctil se toca y se queda fijada. El cliente cambió «Rigor» por «Contexto».
+- El pie de la obra activa va **en la columna de texto**, no sobre la foto: encima de un render claro el blanco no se lee.
+- **Estructura SEO de la home**: un solo `h1` (el eslogan de la portada), `h2` en el rótulo de sección, `h3` por obra, `alt` real en las fotos de obra y vacío en las decorativas, y `HomeJsonLd` (WebSite + ItemList de proyectos) para que la portada se entienda como índice de obra.
+- Entradas al hacer scroll: `components/site/v2/Reveal.tsx`, con **un solo IntersectionObserver** para toda la página. El recorte del «revelado» va en la imagen, nunca en el elemento observado: un elemento recortado a cero no intersecta y no entra jamás.
+- **GSAP y `filter`**: animar a `brightness(0.92)` desde un elemento sin filtro sale **negro**. El valor de partida es `filter: none` y lo interpreta como `brightness(0)`, así que el recorrido va de negro al valor bueno. Hay que dar el punto de partida a mano (`fromTo` con `brightness(1)`), y de paso dejarlo declarado en el CSS.
+- En el cuadernillo, el pie de cada página va **arriba**: abajo desaparece en cuanto la página siguiente empieza a taparla, y además chocaría con la banda del menú. La página que se queda debajo retrocede con `brightness`, no con `opacity`: con opacidad se lava contra el papel y parece desteñida.
+- En una retícula de dos columnas con `sticky`, hay que poner ambas en `grid-row: 1` a mano: con colocación automática la ficha cae en su propia fila, y entonces no tiene recorrido donde pegarse.
+- **Los ajustes de tokens por media query van fuera de `@layer`.** `:root` se declara sin capa, y una regla dentro de `@layer components` pierde contra ella por mucha media query que lleve: así se cayó sin avisar el tamaño del logotipo en móvil.
+- **Nada de bordes redondos.** Radio 0 en todo, foco cuadrado, marca del activo cuadrada. Es lo contrario de la regla de la v1.
+- **Apertura tipo Netflix**: ident de marca con el logotipo del cliente, **en cada carga de la portada**. Tres pruebas montadas (`/`, `/prueba-2`, `/prueba-3`), pendiente de elegir. Todas **solo CSS**, para que el HTML servido ya lleve la apertura puesta y no haya parpadeo; con `prefers-reduced-motion` no se pintan. El logotipo aterriza siempre en el mismo sitio porque parte de su posición final y lo que se anima es el `transform` que lo lleva al centro.
+- **El cliente eligió la persiana** y la afinó hasta esto: telón de seis franjas sobre un vídeo que ocupa la mitad derecha **a toda altura** durante la apertura (tapa la banda de abajo: no se ve la sección siguiente). La 4ª y la 6ª son ventanas al vídeo; **la 5ª lo parte por la mitad** y quitarla es el gesto que buscaban. Suben en el orden 3ª → 5ª → 2ª → 1ª y detrás está la portada ya montada, así que aparece «Casas en Barcelona». Al final el vídeo se recoge lo justo para dejar libre la banda inferior.
+- **El logotipo se queda abajo a la derecha, en la misma línea que el menú. Decisión cerrada.** Es una pieza más de esa barra: por eso es pequeño (`--brand-size`) y apoya en el mismo borde inferior. En móvil no cabe al lado del menú y se pone justo encima.
+- **Móvil tiene su propia versión del telón**: seis columnas en 390 px son tiras de 65 px donde no se lee ninguna foto, así que ahí son seis **filas** que salen hacia la izquierda (el mismo gesto girado), con el vídeo ocupando la parte de abajo y el texto arriba (36svh). El reparto de franjas es el mismo en los dos tamaños: la 5ª cae por la mitad del vídeo y lo parte, la 4ª y la 6ª son ventanas.
+- Falta que el cliente envíe **sus** vídeos para las franjas (ahora va el único que hay, el de IM10).
+- Reloj de la apertura en `:root`: `--lift-at`, `--lift-step`, `--lift-last`, `--brand-at` y `--bar-h` (la banda inferior). Tocando esos cinco se mueve todo a la vez.
+- El logotipo pasa a tinta en cuanto el telón empieza a subir: detrás aparece papel y en blanco no se leería. Aterriza en la banda, que también es papel, así que se queda en tinta.
+- Reglas que se aprendieron montando las aperturas: el overlay **no pinta fondo propio** (si lo pinta, la portada no se ve entrar y aparece de golpe al esconderse el overlay), la portada entra **antes** de que termine la apertura, y ni el logotipo ni el vídeo **se relevan**: son el mismo nodo de principio a fin (dos elementos cruzándose se ven dobles, y un vídeo duplicado no va sincronizado).
+- En un pase de fotos, si la que sale y la que entra se cruzan a media opacidad **se ve el fondo negro**: la que entra tiene que ir encima y subir de 0 a 1 mientras la otra sigue opaca debajo.
+- **`sizes` en una franja alta y estrecha no es el ancho de la franja.** `object-fit: cover` escala la foto por la altura, así que una columna de 240 px a pantalla completa necesita ≈1600 px de imagen. Con `17vw` pedía 245 px y se veían pixeladas. Por eso `deviceSizes` incluye 1600 en `next.config.ts`: sin ese escalón el navegador saltaba a 1920 y pesaba el doble para nada. Dos fotos por franja, no tres: la tercera no daba tiempo a verse y costaba medio mega.
+- `lib/use-tone.ts` también escucha `animationend`: durante la apertura lo que hay bajo el menú cambia sin que nadie haga scroll, y sin eso el menú se quedaba con la lectura del primer instante.
+- Todas las aperturas terminan en el mismo componente `Cover`, y las medidas comunes (`--brand-size`, `--panel-top`, `--panel-bottom`, `--intro-scale`) viven en `:root`: si se tocan, se mueven a la vez la portada y las tres aperturas.
+- **El logotipo va en el layout, no en cada página** (`components/site/BrandSlot.tsx`): es una pieza fija de la web, como el menú, y tiene que estar abajo a la derecha en **todas** las páginas. La apertura solo se monta en las rutas que llevan telón; la clave por `pathname` lo remonta al volver a la portada.
+- **Las páginas interiores llevan un velo de papel bajo la barra** (`.page::after`): un degradado fijo de la altura de `--bar-h`. En la portada no hace falta —el vídeo se recoge y deja la banda libre—, pero en el resto hay láminas pasando por debajo del menú todo el rato y la letra se pierde en cuanto la foto es oscura. Con el velo, **el tono de las interiores es siempre tinta**: no se declara `data-menu="light"` en ninguna lámina a sangre. Es un pseudoelemento a propósito: un nodo real lo leería `lib/use-tone.ts` (si tiene clics) o se comería los clics de esa franja (si no).
+- **Ningún nombre de clase propio puede coincidir con una utilidad de Tailwind.** Una clase `.block` para un ritmo vertical parecía inofensiva: Tailwind tiene `block` (`display: block`), las utilidades van en una capa posterior y se llevaron por delante todos los `display: grid` de las páginas. Ahora se llama `.vspace`.
+- **Cuidado con la especificidad al deshacer una retícula en móvil.** Si la regla de escritorio lleva un atributo (`.srv[data-side="right"] .srv-body`), una regla de móvil sin él pierde por mucha media query que lleve, y la pieza se queda con `grid-column: 1 / span 5` dentro de una rejilla de una columna: columnas implícitas y texto en tiras de dos palabras. La regla de móvil tiene que llevar también el atributo.
+- Con `prefers-reduced-motion`, el revelado se neutraliza con `.rv[data-rv] img`, no con `.rv img`: `.rv[data-rv="wipe"] img` gana por especificidad y la lámina se quedaba recortada a cero —en negro— para siempre, justo para quien pide menos movimiento.
+- **Menú**: **en fila** a lo largo del borde inferior empezando por la izquierda, sin fondo, mayúsculas en mono. Proyectos · Estudio · Contacto (de momento). Referencia: `estudiodiir.com` (capturas en `shots/ref-diir-*.png`); segunda referencia `mesura.eu`.
+- `data-menu` se declara por la **luminancia de la imagen**, no por el tipo de sección: un render claro lleva `dark` (letra en tinta) aunque sea una lámina a sangre.
+- Legibilidad del menú sin fondo: cada sección declara `data-menu="light|dark"` y `components/site/Menu.tsx` mira qué hay justo debajo para cambiar de tono. `mix-blend-mode: difference` se probó y **falla sobre tonos medios** (piscina, cielo gris): la inversión queda con la misma luminancia que el fondo.
+- Paleta provisional: papel `#F5F4F1`, tinta `#111110`, gris `#6B6B66`. Sin color de acción hasta que el cliente valide la dirección.
+- Tipografía provisional: **Geist** (grotesca neutra) + **Geist Mono** (menú y etiquetas). Poppins solo sobrevive dentro de `.v1-shell`.
+- Orden de trabajo: montar cada apartado por separado, enseñarlo y validarlo antes de seguir. No construir la web entera del tirón.
+- El hook de `impeccable` corre el detector tras editar UI: atender sus hallazgos.
+
+## Decisiones del usuario que no se revierten
+
+**v2 (vigentes)**
+
+- Estilo revista con imágenes y vídeos por delante de todo. Sin esquinas redondeadas.
+- Menú abajo a la izquierda, sin fondo, con Proyectos · Estudio · Contacto.
+- La web v1 no se borra: vive en `/v1` para comparar.
+
+**v1 (archivadas, solo aplican a `/v1`)**
+
+- Hero: vídeo tipo dron de **una** obra (IM10, Sarrià). Notas translúcidas. Sin la cota «IM_10 · Sarrià · +0.00».
+- Tarjetas de proyecto: solo el código como etiqueta. Fichas: las imágenes abren lightbox.
+- Secciones con imagen limitadas por `max-w-(--container)` en pantallas grandes.
+
+## Reglas duras
+
+- **Nada inventado.** Sin testimonios, cifras, nombres de socios, premios ni fotos que RAAR no haya dado. Los huecos se dejan explícitos (`testimonials.items: []`, `legalCopy.pending`). Lo asumido está listado en `docs/05-reunion-cliente-preguntas.md`.
+- **Crédito FAL escaso** (~5 $ tras el vídeo actual). Ningún script gasta sin `--confirm`; nunca lanzar generaciones sin que el usuario lo pida y confirme el coste. Antes de regenerar: leer el prompt y las referencias en `scripts/hero/generate-hero-video.mjs` (dry-run imprime coste estimado).
+- Secretos solo en `.env.local` (gitignored): `FAL_KEY`, `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM`, `NEXT_PUBLIC_SITE_URL`. No mostrar valores en salidas ni logs.
+- No commitear ni inicializar git salvo que el usuario lo pida.
+- Verificar con capturas (desktop 1440 + móvil 390) después de cambios visuales; `html, body { overflow-x: clip }` existe porque las entradas con `x` ensanchaban el viewport móvil.
+- Archivos con acentos: escribir con la herramienta Write o Python, no con heredocs de Git Bash.
+
+## Pendiente (depende del cliente o de decisión)
+
+Datos legales y de socios · fotos de obra terminada y testimonios · nombres públicos, año, m² y estado de cada proyecto · MO07 vs MO23 · GV75/SE08/PR37/GR16 · logo SVG · CA/EN (estructura preparada en `lib/copy.ts` y `content/projects/es/`) · Resend en producción · 301 desde `/works.html`, `/worksXX.html`.

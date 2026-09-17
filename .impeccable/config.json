@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "docs/cuestionario-raar.template.html"
+        ],
+        "createdAt": "2026-09-15T14:15:18.925Z",
+        "reason": "Claude: #peek-img src is set at runtime by showPeek(); build script injects the rest"
+      },
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "app/globals.css"
+        ],
+        "createdAt": "2026-09-16T14:17:21.279Z",
+        "reason": "barrido de luz del ident de marca (.intro-word): animacion de una sola pasada pedida por el usuario, no titular decorativo"
+      }
+    ]
+  }
+}

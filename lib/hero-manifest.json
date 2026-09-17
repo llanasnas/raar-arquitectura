@@ -1,0 +1,22 @@
+{
+  "source": "assets-src/hero/im10-hero-v1-1080p.mp4",
+  "duration": 12.041667,
+  "autoplaySeconds": 4,
+  "desktop": {
+    "dir": "/hero/desktop",
+    "count": 240,
+    "width": 1600,
+    "height": 900,
+    "autoplayEnd": 80
+  },
+  "mobile": {
+    "dir": "/hero/mobile",
+    "count": 120,
+    "width": 900,
+    "height": 1200,
+    "autoplayEnd": 40
+  },
+  "poster": "/hero/poster.jpg",
+  "posterMobile": "/hero/poster-mobile.jpg",
+  "generatedAt": "2026-09-15T09:26:57.212Z"
+}

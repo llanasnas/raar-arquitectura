@@ -1,26 +1,1724 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────────
+   RAAR · v2 «revista» — en construcción, se valida por bloques.
+   Papel liso, tinta casi negra y Poppins (la tipografía del cliente) para todo.
+   El protagonismo es de las imágenes y los vídeos: nada de cromado.
+
+   Debajo sigue el sistema v1 («vidrio y piedra»), que ahora solo viste
+   .v1-shell (la web archivada en /v1). Documentado en archive/DESIGN-v1.md.
+   Se borrará cuando la v2 cubra todas las páginas.
+   ───────────────────────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ── v2 (en construcción) ────────────────────────────────────
+     Paleta mínima: papel, tinta y un gris de apoyo. Todavía sin color de acción:
+     se decide cuando el cliente valide la dirección. */
+  --paper: #f5f4f1;
+  --carbon: #111110;
+  --carbon-2: #6b6b66;
+  --rule: rgb(17 17 16 / 0.16);
+  --gutter-2: clamp(20px, 2.2vw, 40px);
+  /* Medidas compartidas entre la portada y las tres aperturas: el logotipo aterriza
+     en `--brand-size` y la lámina se recoge exactamente en estos márgenes. */
+  /* el logotipo fijo vive en la banda de abajo, a la altura del menú: por eso es pequeño.
+     Ampliado por --intro-scale es el que se ve en el centro durante la apertura. */
+  --brand-size: clamp(104px, 10vw, 168px);
+  --panel-top: clamp(92px, 13svh, 190px);
+  --panel-bottom: clamp(100px, 17svh, 210px);
+  --intro-scale: 4.2;
+  /* Reloj de la apertura: las franjas suben en escalera y, cuando se ha ido la última,
+     el vídeo se recoge y el logotipo viaja. Todo cuelga de estas cuatro medidas. */
+  --lift-at: 2200ms;
+  --lift-step: 420ms;
+  --lift-last: calc(var(--lift-at) + 3 * var(--lift-step));
+  /* cuando el telón ha subido del todo: el vídeo se recoge y el logotipo viaja a la vez */
+  --brand-at: calc(var(--lift-last) + 960ms);
+  /* banda inferior de la portada: menú a la izquierda y logotipo a la derecha, sobre papel.
+     El vídeo se recoge hasta dejarla libre al final de la apertura. */
+  --bar-h: clamp(78px, 10svh, 118px);
+
+  /* ── v1 archivada (solo la usa .v1-shell y sus componentes) ── */
+  --stone: #f2f2ef;
+  --stone-2: #e9e9e5;
+  --stone-3: #dededa;
+  --white: #ffffff;
+  --ink: #1a1a18;
+  --ink-2: #4f4f4a;
+  --ink-3: #66665f;
+  --line: rgb(26 26 24 / 0.1);
+  --line-2: rgb(26 26 24 / 0.18);
+  --red: #d8321f;
+  --red-2: #b8281a;
+
+  --r-sm: 12px;
+  --r: 20px;
+  --r-lg: 28px;
+  --pill: 999px;
+
+  --glass-bg: rgb(255 255 255 / 0.58);
+  --glass-line: rgb(255 255 255 / 0.65);
+  --glass-blur: 22px;
+
+  --nav-h: 72px;
+  --gutter: clamp(16px, 4vw, 56px);
+  --container: 1400px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+/* Ajustes de móvil de los tokens. Van **fuera** de @layer a propósito: :root se define sin
+   capa arriba, y una regla dentro de una capa pierde contra ella por mucha media query que
+   lleve. Aquí se cayó una vez el tamaño del logotipo ampliado sin que se notara. */
+@media (max-width: 899px) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --intro-scale: 2.9;
+    /* el menú ocupa casi todo el ancho: el logotipo se pone encima y la banda crece */
+    --bar-h: clamp(112px, 15svh, 150px);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --color-stone: var(--stone);
+  --color-stone-2: var(--stone-2);
+  --color-stone-3: var(--stone-3);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-red: var(--red);
+  --color-red-2: var(--red-2);
+  --color-paper: var(--paper);
+  --color-carbon: var(--carbon);
+  --color-carbon-2: var(--carbon-2);
+  --font-sans: var(--font-poppins), "Helvetica Neue", Arial, sans-serif;
+  --radius-sm: var(--r-sm);
+  --radius-md: var(--r);
+  --radius-lg: var(--r-lg);
+  --shadow-soft: 0 10px 30px rgb(26 26 24 / 0.08), 0 1px 2px rgb(26 26 24 / 0.05);
+  --shadow-lift: 0 22px 50px rgb(26 26 24 / 0.14), 0 2px 6px rgb(26 26 24 / 0.06);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-quint: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  html, body { overflow-x: clip; }
+
+  /* v2 «revista»: papel liso, tinta casi negra, grotesca neutra. Sin degradados ni texturas:
+     el color lo ponen las imágenes y los vídeos. El sistema v1 vive ahora en .v1-shell. */
+  body {
+    background-color: var(--paper);
+    color: var(--carbon);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    font-feature-settings: "kern", "liga";
+    text-rendering: optimizeLegibility;
+  }
+
+  .v1-shell {
+    background-color: var(--stone);
+    /* daylight falling on stone: one soft highlight from above, nothing patterned */
+    background-image: radial-gradient(120% 55% at 50% -12%, rgb(255 255 255 / 0.9) 0%, rgb(255 255 255 / 0) 65%);
+    background-repeat: no-repeat;
+    color: var(--ink);
+    font-family: var(--font-poppins), "Helvetica Neue", Arial, sans-serif;
+  }
+
+  ::selection { background: var(--carbon); color: var(--paper); }
+  * { caret-color: var(--carbon); }
+  .v1-shell ::selection { background: var(--ink); color: var(--stone); }
+  .v1-shell * { caret-color: var(--red); }
+
+  /* v2: foco cuadrado en tinta. La v1 archivada conserva el suyo (rojo, con radio). */
+  :focus-visible {
+    outline: 2px solid var(--carbon);
+    outline-offset: 3px;
+    border-radius: 0;
+  }
+  .v1-shell :focus-visible {
+    outline-color: var(--red);
+    border-radius: var(--r-sm);
+  }
+
+  a { text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--paper); }
+  ::-webkit-scrollbar-thumb { background: rgb(17 17 16 / 0.22); border: 3px solid var(--paper); }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(17 17 16 / 0.42); }
+  html { scrollbar-color: rgb(17 17 16 / 0.28) var(--paper); scrollbar-width: thin; }
+
+  h1, h2, h3, h4 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+  strong { font-weight: 600; }
+  img, video, canvas { display: block; max-width: 100%; }
+  button { font: inherit; cursor: pointer; }
+  input, textarea, select { font: inherit; color: inherit; }
+  ::placeholder { color: var(--ink-3); opacity: 1; }
+}
+
+@layer components {
+  /* ═══ v2 ═════════════════════════════════════════════
+     Lo nuevo vive aquí arriba mientras se construye. Todo lo que hay debajo
+     pertenece a la v1 archivada (.v1-shell) y se irá borrando.
+     ═════════════════════════════════════════════════ */
+
+  /* Menú fijo abajo a la izquierda, sin fondo. El tono lo declara la sección
+     que queda debajo (data-menu="light|dark"); ver components/site/Menu.tsx. */
+  .menu {
+    position: fixed;
+    left: var(--gutter-2);
+    bottom: max(var(--gutter-2), env(safe-area-inset-bottom, 0px));
+    z-index: 60;
+    color: var(--carbon);
+    transition: color 320ms var(--ease-out-expo), text-shadow 320ms var(--ease-out-expo);
+  }
+  .menu[data-tone="light"] {
+    color: #fff;
+    /* sombra mínima: sostiene la letra blanca sobre una imagen clara sin verse como sombra */
+    text-shadow: 0 1px 18px rgb(0 0 0 / 0.55), 0 0 2px rgb(0 0 0 / 0.25);
+  }
+  .menu ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem clamp(1.4rem, 4vw, 4rem);
+  }
+  .menu a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.5em;
+    font-size: clamp(1rem, 1.2vw, 1.25rem);
+    font-weight: 500;
+    line-height: 1.22;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: inherit;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.22em;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-color 240ms var(--ease-out-expo);
+  }
+  .menu a:hover,
+  .menu a:focus-visible { text-decoration: underline; text-decoration-color: currentColor; }
+  .menu a:focus-visible { outline: 1px solid currentColor; outline-offset: 6px; border-radius: 0; }
+  /* marca del activo: cuadrada. En la v2 no hay ni una esquina redondeada. */
+  .menu-dot {
+    width: 0.28em;
+    height: 0.28em;
+    background: currentColor;
+    opacity: 0;
+    transform: translateY(-0.12em);
+  }
+  .menu a[aria-current="page"] .menu-dot { opacity: 1; }
+
+  /* ── Marca ──────────────────────────────────────────
+     El logotipo va como máscara CSS: toma el color del texto que lo rodea y puede animarse
+     de un color a otro. Fuente: el SVG del cliente, optimizado. */
+  .brandmark {
+    display: block;
+    width: var(--brand-w, 200px);
+    aspect-ratio: 1600 / 539;
+    background: currentColor;
+    -webkit-mask: url("/images/brand/logo-black.svg") no-repeat center / contain;
+    mask: url("/images/brand/logo-black.svg") no-repeat center / contain;
+  }
+
+  /* ── Logotipo fijo ──────────────────────────────────
+     Es el mismo elemento durante la apertura y después: arranca grande en el centro, viaja
+     a su esquina y se queda ahí mientras se hace scroll. No hay relevo, así que no
+     desaparece ni reaparece. El punto de partida se calcula desde la esquina donde ya está,
+     de modo que al terminar aterriza exacto sin medir nada en JS. */
+  .brand-fixed {
+    position: fixed;
+    /* por encima de la apertura (100), del vídeo que se recoge (90) y del menú (60) */
+    z-index: 110;
+    --brand-w: var(--brand-size);
+    color: var(--carbon);
+    transition: color 320ms var(--ease-out-expo), filter 320ms var(--ease-out-expo);
+  }
+  .brand-fixed[data-corner="tl"] {
+    top: var(--gutter-2);
+    left: var(--gutter-2);
+    transform-origin: top left;
+  }
+  /* misma línea de base que el menú: los dos apoyados en el borde inferior, uno en cada
+     esquina, como las dos piezas de una misma barra */
+  .brand-fixed[data-corner="br"] {
+    right: var(--gutter-2);
+    bottom: max(var(--gutter-2), env(safe-area-inset-bottom, 0px));
+    transform-origin: bottom right;
+  }
+  /* fuera de la apertura manda el tono de lo que tiene debajo, como en el menú */
+  .brand-fixed[data-tone="light"] {
+    color: #fff;
+    /* el vídeo tiene fotogramas muy claros: la sombra es lo que sostiene el blanco */
+    filter: drop-shadow(0 2px 16px rgb(0 0 0 / 0.6)) drop-shadow(0 0 2px rgb(0 0 0 / 0.35));
+  }
+
+  .brand-fixed[data-intro] {
+    color: #fff;
+    filter: drop-shadow(0 2px 20px rgb(0 0 0 / 0.5));
+  }
+  .brand-fixed[data-intro][data-corner="tl"] {
+    transform:
+      translate(
+        calc(50vw - var(--gutter-2) - 50% * var(--intro-scale)),
+        calc(50svh - var(--gutter-2) - 50% * var(--intro-scale))
+      )
+      scale(var(--intro-scale));
+  }
+  .brand-fixed[data-intro][data-corner="br"] {
+    transform:
+      translate(
+        calc(-50vw + var(--gutter-2) + 50% * var(--intro-scale)),
+        calc(-50svh + var(--gutter-2) + 50% * var(--intro-scale))
+      )
+      scale(var(--intro-scale));
+  }
+
+  /* El viaje va con el vídeo recogiéndose: el logotipo se coloca mientras la lámina deja
+     ver el papel. `intro-logo-land` es la animación que avisa de que ha terminado el viaje
+     (ver SiteBrand.tsx): a partir de ahí el color lo decide el tono. */
+  /* El logotipo pasa a tinta en cuanto el telón empieza a subir: detrás de él aparece papel
+     y en blanco no se leería. Luego viaja a su esquina.
+     Abajo a la derecha aterriza sobre el vídeo, así que a mitad de viaje vuelve a blanco y
+     enlaza con el tono que le toca estando ahí. Arriba a la izquierda se queda en tinta. */
+  .brand-fixed[data-intro="slats"] {
+    animation:
+      intro-logo-ink 350ms linear var(--lift-at) forwards,
+      intro-logo-land 1300ms var(--ease-quint) var(--brand-at) forwards;
+  }
+  @keyframes intro-logo-land { to { transform: translate(0, 0) scale(1); } }
+  @keyframes intro-logo-ink { to { color: var(--carbon); filter: drop-shadow(0 0 0 rgb(0 0 0 / 0)); } }
+  @keyframes intro-end { to { visibility: hidden; } }
+
+  /* ── Apertura · telón de obras ──────────────────────
+     Seis franjas: columnas en escritorio, filas en móvil. Las que no llevan foto son
+     ventanas al vídeo que está detrás. El overlay no pinta fondo: lo que tapa son las
+     propias franjas. Ver components/site/intro/SlatsIntro.tsx. */
+  .sintro {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    pointer-events: none;
+    animation: intro-end 1ms calc(var(--lift-last) + 950ms) forwards;
+  }
+  /* la ventana no pinta nada: deja ver el vídeo que está detrás */
+  .sintro-window { background: transparent; }
+  .sintro-slat {
+    position: relative;
+    overflow: hidden;
+    background: var(--carbon);
+    animation: slat-up 950ms var(--ease-quint) calc(var(--lift-at) + var(--lift) * var(--lift-step)) forwards;
+  }
+  /* La foto que entra se pone encima y sube de 0 a 1; la que sale se queda opaca debajo
+     hasta quedar tapada. Sin cruce a media opacidad no hay parpadeo negro. Ver SlatShow. */
+  .slat-photo {
+    object-fit: cover;
+    transition: opacity var(--fade, 700ms) var(--ease-out-expo);
+  }
+  @keyframes slat-up { to { transform: translateY(-101%); } }
+  /* en móvil son filas: salen de lado, que es el mismo gesto girado */
+  @keyframes slat-left { to { transform: translateX(-101%); } }
+
+  /* ── Portada ────────────────────────────────────────
+     Eslogan a la izquierda, vídeo a la derecha a toda altura. La portada mide
+     `100svh - --stage-gap`: ese hueco de abajo deja asomar la sección siguiente. */
+  .cover {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    /* la fila de abajo es la banda del menú y el logotipo: ahí no entra ni el vídeo ni
+       la sección siguiente, por eso la portada mide la pantalla entera */
+    grid-template-rows: 1fr var(--bar-h);
+    min-height: 100svh;
+  }
+  .cover-left {
+    display: flex;
+    flex-direction: column;
+    padding: var(--gutter-2) var(--gutter-2) calc(var(--gutter-2) + 4.5rem);
+  }
+  /* si el logotipo se queda arriba a la izquierda, el texto le reserva su altura
+     (539/1600 del ancho del logotipo); si se va abajo a la derecha, el texto sube */
+  .cover[data-brand="tl"] .cover-left { padding-top: calc(var(--gutter-2) + var(--brand-size) * 0.34); }
+  .cover-text {
+    margin-top: clamp(2.5rem, 11svh, 8rem);
+  }
+  .cover-slogan {
+    font-size: clamp(1.9rem, 3.4vw, 3.4rem);
+    font-weight: 400;
+    line-height: 1.07;
+    letter-spacing: -0.022em;
+    max-width: 16ch;
+  }
+  /* La frase del estudio, al pie de la columna. Las cuatro palabras marcadas son botones:
+     mandan sobre la lámina de la derecha (ver components/site/CoverBody.tsx). */
+  .cover-statement {
+    max-width: 32ch;
+    margin-top: auto;
+    padding-top: 2rem;
+    font-size: clamp(1rem, 1.25vw, 1.2rem);
+    line-height: 1.5;
+    color: var(--carbon-2);
+    text-wrap: pretty;
+  }
+  .cover-key {
+    position: relative;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    line-height: inherit;
+    color: var(--carbon);
+    transition: color 320ms var(--ease-out-expo), opacity 320ms var(--ease-out-expo);
+  }
+  /* el subrayado está siempre, tenue: dice que la palabra se puede tocar sin gritarlo */
+  .cover-key::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -0.14em;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.32;
+    transform: scaleX(1);
+    transform-origin: left;
+    transition: opacity 320ms var(--ease-out-expo), transform 480ms var(--ease-out-expo);
+  }
+  .cover-key:hover::after,
+  .cover-key:focus-visible::after,
+  .cover-key[data-active]::after { opacity: 1; }
+  /* cuando una palabra manda, las demás bajan de intensidad */
+  .cover-statement:has(.cover-key[data-active]) .cover-key:not([data-active]) { opacity: 0.5; }
+
+  /* La obra que responde a la palabra: entra sobre el vídeo y se asienta. */
+  .stage-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 620ms var(--ease-out-expo);
+  }
+  .stage-slide img { transform: scale(1.05); transition: transform 1400ms var(--ease-out-expo); }
+  .stage-slide[data-on] { opacity: 1; }
+  .stage-slide[data-on] img { transform: none; }
+  /* pie de la obra que manda ahora mismo; el hueco está reservado para que la frase no salte */
+  .cover-note {
+    min-height: 1.2em;
+    margin-top: 1.1rem;
+    opacity: 0;
+    transform: translateY(0.4rem);
+    transition:
+      opacity 420ms var(--ease-out-expo) 120ms,
+      transform 420ms var(--ease-out-expo) 120ms;
+  }
+  .cover-note[data-on] { opacity: 1; transform: none; }
+  .cover-sub {
+    margin-top: 1.3rem;
+    max-width: 34ch;
+    color: var(--carbon-2);
+    font-size: clamp(0.95rem, 1.1vw, 1.12rem);
+  }
+  /* La lámina del vídeo ocupa la mitad derecha. Durante el telón va a toda altura (tapa
+     la banda de abajo, para que no se vea lo que hay debajo de la portada) y al final se
+     recoge justo hasta dejar la banda libre.
+     Mientras se recoge es `position: fixed` y su caja final coincide exactamente con el
+     hueco que ocupa aquí, así que al soltar el fixed no hay salto y el vídeo sigue
+     reproduciendo: es el mismo nodo. */
+  .cover-stage {
+    position: relative;
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  .cover-stage[data-opening] {
+    position: fixed;
+    inset: 0 0 0 50%;
+    z-index: 90;
+    animation: stage-settle 1200ms var(--ease-quint) var(--brand-at) forwards;
+  }
+  @keyframes stage-settle {
+    to { inset: 0 0 var(--bar-h) 50%; }
+  }
+  .cover-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ═══ v2 · revista ═══════════════════════════════════
+     Lo que viene después de la portada en las tres propuestas de home.
+     Tipografía, retícula y entradas; los bloques propios de cada propuesta abajo. */
+
+  .wrap {
+    width: 100%;
+    max-width: 1680px;
+    margin-inline: auto;
+    padding-inline: var(--gutter-2);
+  }
+
+  .t-display {
+    font-size: clamp(2.1rem, 5.4vw, 5.2rem);
+    font-weight: 400;
+    line-height: 1.03;
+    letter-spacing: -0.025em;
+  }
+  .t-title {
+    font-size: clamp(1.5rem, 2.8vw, 2.8rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .t-lead {
+    font-size: clamp(1.02rem, 1.35vw, 1.3rem);
+    line-height: 1.45;
+    color: var(--carbon-2);
+  }
+  .t-body {
+    font-size: clamp(0.95rem, 1.05vw, 1.08rem);
+    line-height: 1.6;
+    color: var(--carbon-2);
+  }
+  .t-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--carbon-2);
+  }
+
+  /* Entradas al hacer scroll. El estado final es el de reposo: si el JS no llega, todo se ve
+     (ver components/site/v2/Reveal.tsx). */
+  .rv {
+    transition:
+      opacity 900ms var(--ease-out-expo) var(--rv-delay, 0ms),
+      transform 900ms var(--ease-out-expo) var(--rv-delay, 0ms),
+      transform 900ms var(--ease-out-expo) var(--rv-delay, 0ms);
+  }
+  .rv[data-rv="up"] { opacity: 0; transform: translateY(1.4rem); }
+  .rv[data-rv="line"] { opacity: 0; transform: translateY(0.6rem); }
+  .rv[data-rv="scale"] { opacity: 0; transform: scale(1.03); }
+  /* La lámina se descubre de arriba abajo y la foto se asienta: dos velocidades, como un
+     revelado, en vez de un fundido plano.
+     Ojo: el recorte va en la **imagen**, no en el elemento observado. Un elemento recortado a
+     cero no intersecta con nada, así que el IntersectionObserver no lo veía nunca entrar y las
+     láminas se quedaban invisibles para siempre. */
+  .rv[data-rv="wipe"] { background: transparent; }
+  .rv[data-rv="wipe"] img {
+    clip-path: inset(0 0 100% 0);
+    transform: scale(1.06);
+    transition:
+      clip-path 1100ms var(--ease-out-expo) var(--rv-delay, 0ms),
+      transform 1600ms var(--ease-out-expo) var(--rv-delay, 0ms);
+  }
+  .rv[data-rv="wipe"][data-in] img { clip-path: inset(0 0 0 0); transform: none; }
+  .rv[data-in] { opacity: 1; transform: none; }
+
+  /* ── Rótulo de sección ─────────────────────────────── */
+  .band {
+    display: grid;
+    gap: 0.7rem;
+    padding-block: clamp(5rem, 14vh, 11rem) clamp(2rem, 6vh, 4rem);
+  }
+  .band-title { max-width: 17ch; }
+  .band-lead { max-width: 54ch; margin-top: 0.4rem; }
+
+  /* ── A · pliegos ───────────────────────────────────── */
+  .spread {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.5rem, 3vw, 3.5rem);
+    padding-block: clamp(3.5rem, 11vh, 9rem);
+  }
+  /* Las dos columnas van a la misma fila explícitamente. Con colocación automática, la
+     ficha ocupaba la fila 1 y las láminas caían a la 2: la ficha quedaba en una fila de su
+     alto y el `sticky` no tenía recorrido donde pegarse. */
+  .spread-meta,
+  .spread-media { grid-row: 1; }
+  .spread[data-side="left"] .spread-media { grid-column: 1 / span 7; }
+  .spread[data-side="left"] .spread-meta { grid-column: 9 / span 4; }
+  .spread[data-side="right"] .spread-media { grid-column: 6 / span 7; }
+  .spread[data-side="right"] .spread-meta { grid-column: 1 / span 4; }
+  /* la ficha se queda mientras pasan las láminas: no hay que repetir el nombre en cada foto */
+  .spread-meta-inner {
+    position: sticky;
+    top: clamp(4rem, 16vh, 9rem);
+    display: grid;
+    gap: 0.9rem;
+    justify-items: start;
+  }
+  .spread-name { max-width: 16ch; }
+  .spread-summary { max-width: 34ch; }
+  .spread-facts {
+    display: grid;
+    gap: 0.25rem;
+    margin-top: 0.2rem;
+  }
+  .spread-media { display: grid; gap: clamp(1rem, 2.4vw, 2.4rem); }
+  .plate-2 {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  .plate-2-small {
+    aspect-ratio: 3 / 4;
+    width: min(60%, 420px);
+    justify-self: end;
+  }
+  .spread[data-side="right"] .plate-2-small { justify-self: start; }
+
+  /* ── B · cinta ─────────────────────────────────────── */
+  .strip {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
+    overflow: hidden;
+    /* la banda de abajo es del menú y el logotipo: la cinta no entra ahí */
+    padding-bottom: calc(var(--bar-h) + 2.5rem);
+  }
+  .strip-track {
+    display: flex;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    padding-inline: var(--gutter-2);
+    will-change: transform;
+  }
+  .strip-card { flex: 0 0 auto; width: min(34vw, 520px); }
+  .strip-plate {
+    position: relative;
+    display: block;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  .strip-plate img { transition: transform 1200ms var(--ease-out-expo); }
+  .strip-plate:hover img { transform: scale(1.03); }
+  .strip-caption { display: grid; gap: 0.3rem; margin-top: 1rem; }
+  .strip-name {
+    font-size: clamp(1.05rem, 1.5vw, 1.4rem);
+    font-weight: 400;
+    letter-spacing: -0.014em;
+    line-height: 1.15;
+    max-width: 26ch;
+  }
+  /* el raíl dice cuánto queda: sin él, un recorrido lateral largo se hace ciego */
+  .strip-rail {
+    position: absolute;
+    left: var(--gutter-2);
+    right: var(--gutter-2);
+    bottom: calc(var(--bar-h) + 1rem);
+    height: 1px;
+    background: var(--rule);
+  }
+  .strip-rail-fill {
+    display: block;
+    height: 100%;
+    background: var(--carbon);
+    transform: scaleX(var(--strip-progress, 0));
+    transform-origin: left;
+  }
+
+  /* ── C · índice ────────────────────────────────────── */
+  .index-block { padding-block: 0 clamp(4rem, 12vh, 9rem); }
+  .index-list { border-top: 1px solid var(--rule); }
+  .index-row {
+    display: grid;
+    grid-template-columns: 7rem 1fr auto;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding-block: clamp(0.9rem, 2.2vh, 1.5rem);
+    border-bottom: 1px solid var(--rule);
+    /* el desplazamiento va por transform, no por padding: animar padding reordena la fila
+       entera en cada fotograma y se nota en una lista larga */
+    transition: transform 520ms var(--ease-out-expo), opacity 320ms var(--ease-out-expo);
+  }
+  .index-name {
+    font-size: clamp(1.25rem, 2.6vw, 2.4rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  /* la fila se abre hacia dentro al recorrerla; las demás bajan de intensidad */
+  .index-row[data-active] { transform: translateX(clamp(0.5rem, 1.2vw, 1.2rem)); }
+  .index-block:has(.index-row[data-active]) .index-row:not([data-active]) { opacity: 0.45; }
+  .index-thumb { display: none; }
+  .index-peek {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: min(28vw, 400px);
+    aspect-ratio: 3 / 4;
+    pointer-events: none;
+    z-index: 40;
+  }
+  .index-peek img { opacity: 0; transition: opacity 340ms var(--ease-out-expo); }
+
+  /* ── Lámina a sangre con pie ───────────────────────── */
+  .feature {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 88svh;
+    overflow: hidden;
+    background: var(--carbon);
+    padding-bottom: calc(var(--bar-h) + 1rem);
+  }
+  .feature-caption {
+    position: relative;
+    color: #fff;
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+    text-shadow: 0 1px 24px rgb(0 0 0 / 0.5);
+  }
+  .feature-code { color: rgb(255 255 255 / 0.78); }
+  .feature-name {
+    font-size: clamp(1.5rem, 3vw, 2.9rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    max-width: 20ch;
+  }
+  .feature-link { margin-top: 0.4rem; }
+
+  /* ── Respiro tipográfico ───────────────────────────── */
+  .statement { padding-block: clamp(5rem, 16vh, 13rem); }
+  .statement-text {
+    font-size: clamp(1.35rem, 3vw, 2.9rem);
+    line-height: 1.14;
+    letter-spacing: -0.02em;
+    max-width: 22ch;
+    margin-inline: auto;
+  }
+
+  /* ── Cierre ────────────────────────────────────────── */
+  .closing {
+    display: grid;
+    gap: 0.6rem;
+    padding-block: clamp(4rem, 12vh, 9rem) calc(var(--bar-h) + 3rem);
+  }
+  .closing-areas { max-width: 20ch; }
+  .closing-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 1rem 2.5rem;
+    margin-top: clamp(1.5rem, 4vh, 3rem);
+  }
+  .closing-note { max-width: 32ch; }
+
+  .link-big {
+    font-size: clamp(1.5rem, 3.4vw, 3rem);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    text-decoration: underline;
+    text-underline-offset: 0.16em;
+    text-decoration-thickness: 1px;
+    transition: text-decoration-thickness 240ms var(--ease-out-expo);
+  }
+  .link-big:hover { text-decoration-thickness: 2px; }
+  .link-underline {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid currentColor;
+    transition: opacity 240ms var(--ease-out-expo);
+  }
+  .link-underline:hover { opacity: 0.6; }
+
+  @media (max-width: 899px) {
+    .spread {
+      grid-template-columns: 1fr;
+      gap: 1.6rem;
+      padding-block: clamp(2.5rem, 8vh, 4rem);
+    }
+    /* con [data-side] a propósito: la regla de escritorio lleva el atributo y gana por
+       especificidad, así que sin esto la pieza conserva `grid-column: 1 / span 7` dentro de
+       una rejilla de una columna y se queda en una tira de dos palabras de ancho. */
+    .spread[data-side] .spread-meta,
+    .spread[data-side] .spread-media { grid-row: auto; grid-column: 1; }
+    .spread-meta-inner { position: static; }
+    .plate-2-small { width: 74%; }
+
+    /* sin pin en móvil: clavar la pantalla y secuestrar el scroll se siente como un fallo,
+       así que la cinta es un carrusel que se pasa con el dedo */
+    .strip { min-height: auto; overflow: visible; padding-block: 1rem; }
+    .strip-track {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      padding-bottom: 0.5rem;
+    }
+    .strip-track::-webkit-scrollbar { display: none; }
+    .strip-card { width: 78vw; scroll-snap-align: start; }
+    .strip-rail { display: none; }
+
+    .index-row {
+      grid-template-columns: 1fr 84px;
+      grid-template-areas: "code thumb" "name thumb" "place thumb";
+      gap: 0.2rem 1rem;
+      align-items: start;
+    }
+    .index-code { grid-area: code; }
+    .index-name { grid-area: name; }
+    .index-place { grid-area: place; margin-top: 0.3rem; }
+    /* en móvil no hay cursor que perseguir: cada fila lleva su miniatura, como un sumario */
+    .index-thumb {
+      display: block;
+      grid-area: thumb;
+      position: relative;
+      width: 84px;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background: var(--carbon);
+    }
+    .index-peek { display: none; }
+    .index-block:has(.index-row[data-active]) .index-row:not([data-active]) { opacity: 1; }
+
+    .feature { min-height: 70svh; }
+    .statement-text { max-width: 18ch; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rv,
+    .rv[data-rv] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    /* [data-rv] a propósito: `.rv img` pierde por especificidad contra
+       `.rv[data-rv="wipe"] img`, y sin esto el revelado se quedaba recortado a cero para
+       siempre —la lámina en negro— justo para quien pide menos movimiento. */
+    .rv[data-rv] img { transform: none; clip-path: none; transition: none; }
+  }
+
+  /* ── D · cuadernillo ───────────────────────────────
+     Cada obra es una página pegada arriba; la siguiente sube por encima y la tapa. La de
+     debajo retrocede y se apaga (GSAP, solo en escritorio) para que se lea como una pila. */
+  .stack { position: relative; }
+  /* el folio: bloque de altura cero alineado a la derecha, pegado a media pantalla */
+  .stack-counter {
+    position: sticky;
+    top: 46svh;
+    z-index: 30;
+    display: block;
+    width: max-content;
+    height: 0;
+    margin-left: auto;
+    margin-right: var(--gutter-2);
+    writing-mode: vertical-rl;
+    color: #fff;
+    text-shadow: 0 1px 14px rgb(0 0 0 / 0.55);
+  }
+  .stack-page {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+  }
+  .stack-plate {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    /* papel, no tinta: si una foto tarda, la página se lee como papel en blanco y no como
+       un agujero negro en mitad del cuadernillo */
+    background: var(--paper);
+    transform-origin: 50% 40%;
+    will-change: transform;
+    /* valor de partida explícito: ver el comentario del fromTo en StackD.tsx */
+    filter: brightness(1);
+    /* la página que sube proyecta sombra sobre la de debajo: separa las dos en la unión sin
+       tener que oscurecer la de abajo entera */
+    box-shadow: 0 -34px 70px rgb(17 17 16 / 0.3);
+  }
+  .stack-img {
+    object-fit: cover;
+    transition: transform 1600ms var(--ease-out-expo);
+  }
+  /* al pasar por encima, la portada del reportaje deja ver la escena de dentro */
+  .stack-img-inside {
+    opacity: 0;
+    transition: opacity 700ms var(--ease-out-expo);
+  }
+  .stack-page:hover .stack-img { transform: scale(1.03); }
+  .stack-page:hover .stack-img-inside { opacity: 1; }
+  /* velo en el borde superior: el pie va arriba y algunas obras son muy claras */
+  .stack-shade {
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 38%;
+    background: linear-gradient(to bottom, rgb(0 0 0 / 0.42), rgb(0 0 0 / 0.12) 58%, transparent);
+    pointer-events: none;
+  }
+  /* El pie va arriba, no abajo: la página de debajo se queda pegada mientras la siguiente
+     sube, así que un pie al pie desaparece en cuanto empieza el relevo. Arriba se lee
+     durante toda la página, y además deja libre la banda del menú y el logotipo. */
+  .stack-caption {
+    text-shadow: 0 1px 18px rgb(0 0 0 / 0.45);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--gutter-2) + 0.2rem);
+    display: grid;
+    gap: 0.5rem;
+    justify-items: start;
+    color: #fff;
+  }
+  .stack-code { color: rgb(255 255 255 / 0.8); }
+  .stack-name {
+    font-size: clamp(1.5rem, 3.2vw, 3rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    max-width: 18ch;
+  }
+  .stack-summary {
+    max-width: 46ch;
+    color: rgb(255 255 255 / 0.82);
+    font-size: clamp(0.95rem, 1.05vw, 1.08rem);
+    line-height: 1.5;
+  }
+  .stack-link { margin-top: 0.4rem; }
+
+  /* ── D · interludio a dos velocidades ──────────────── */
+  .duo {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr 1fr;
+    align-items: center;
+    gap: clamp(1.5rem, 3vw, 3.5rem);
+    padding-block: clamp(5rem, 16vh, 12rem);
+    overflow: clip;
+  }
+  .duo-col { display: grid; gap: clamp(1.5rem, 3vw, 3rem); }
+  .duo-plate {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  .duo-cap {
+    position: absolute;
+    left: 0.7rem;
+    bottom: 0.55rem;
+    color: #fff;
+    text-shadow: 0 1px 12px rgb(0 0 0 / 0.5);
+  }
+  .duo-text {
+    font-size: clamp(1.2rem, 2.2vw, 2rem);
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    max-width: 24ch;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  @media (max-width: 899px) {
+    .stack-counter { display: none; }
+    .stack-page { height: 82svh; }
+    .stack-name { max-width: 14ch; }
+    .duo {
+      grid-template-columns: 1fr 1fr;
+      padding-block: clamp(3rem, 10vh, 6rem);
+    }
+    .duo-text {
+      grid-column: 1 / -1;
+      order: -1;
+      margin-inline: 0;
+      margin-bottom: 1.5rem;
+      text-align: left;
+      max-width: 20ch;
+    }
+  }
+
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+  }
+  .skip-link:focus {
+    left: var(--gutter-2);
+    top: var(--gutter-2);
+    z-index: 120;
+    background: var(--carbon);
+    color: var(--paper);
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+  }
+
+  /* Orden de salida de las franjas. Va aquí y no en línea porque un `--lift` en el atributo
+     style ganaría a la media query y en móvil el orden es otro. */
+  .sintro > :nth-child(1) { --lift: 3; }
+  .sintro > :nth-child(2) { --lift: 2; }
+  .sintro > :nth-child(3) { --lift: 0; }
+  .sintro > :nth-child(5) { --lift: 1; }
+
+  @media (max-width: 899px) {
+    /* Seis columnas en 390 px son tiras de 65 px donde no se lee ninguna foto: en móvil el
+       telón son seis filas que salen hacia la izquierda. El vídeo ocupa la parte de abajo,
+       así que la 5ª vuelve a caer por su mitad y lo parte, igual que en escritorio. */
+    .sintro {
+      grid-template-columns: 1fr;
+      grid-template-rows: repeat(6, 1fr);
+    }
+    .sintro-slat { animation-name: slat-left; }
+
+    /* Con Inicio son cuatro enlaces. Tienen que caber en **una** línea: si se parten en
+       dos, la segunda sube hasta donde está el logotipo y se pisan. */
+    .menu ul { gap: 0.3rem 0.95rem; }
+    .menu a { font-size: 0.85rem; letter-spacing: 0.04em; gap: 0.4em; }
+
+    /* el logotipo no cabe al lado del menú: se pone justo encima */
+    .brand-fixed[data-corner="br"] {
+      bottom: calc(max(var(--gutter-2), env(safe-area-inset-bottom, 0px)) + 2.6rem);
+    }
+
+    /* la portada se parte en filas: texto arriba, vídeo abajo y la banda al pie */
+    .cover {
+      grid-template-columns: 1fr;
+      grid-template-rows: 36svh 1fr var(--bar-h);
+    }
+    .cover-left { padding-bottom: 1rem; }
+    .cover-text { margin-top: 1.5rem; }
+    .cover-slogan { max-width: 20ch; }
+    /* durante el telón el vídeo llega hasta abajo del todo, igual que en escritorio: así no
+       se ve la sección siguiente por debajo */
+    .cover-stage[data-opening] { inset: 36svh 0 0 0; }
+    @keyframes stage-settle {
+      to { inset: 36svh 0 var(--bar-h) 0; }
+    }
+  }
+
+  /* Sin movimiento: ni persiana, ni viaje, ni recogida; la portada aparece montada. */
+  @media (prefers-reduced-motion: reduce) {
+    .stage-slide, .stage-slide img, .cover-note { transition: none; }
+    .stage-slide img { transform: none; }
+    .sintro { display: none; }
+    .brand-fixed[data-intro] { animation: none; transform: none; }
+  }
+
+  /* ═══ v2 · páginas interiores ════════════════════════
+     Proyectos, ficha de obra, estudio, servicios, contacto y legales, en el mismo papel que
+     la portada. Aquí no hay cabecera: la página empieza por su rótulo y reserva al final la
+     altura de la banda fija (--bar-h), porque el menú y el logotipo viven encima del
+     contenido y si no se comen la última línea. */
+  .page { padding-bottom: calc(var(--bar-h) + clamp(1.5rem, 5vh, 3rem)); }
+  /* Velo de papel detrás de la barra fija. En la portada no hace falta —el vídeo se recoge y
+     deja la banda libre—, pero en las páginas interiores hay láminas pasando por debajo del
+     menú todo el rato y la letra se pierde en cuanto la foto es oscura. Con el velo, el tono
+     de estas páginas es siempre tinta: no depende de la foto que toque.
+     Es un pseudoelemento a propósito: un nodo real lo leería `lib/use-tone.ts` o se comería
+     los clics de esa franja. */
+  .page::after {
+    content: "";
+    position: fixed;
+    inset: auto 0 0 0;
+    height: calc(var(--bar-h) + 1.5rem);
+    background: linear-gradient(to top, var(--paper) 24%, rgb(245 244 241 / 0.86) 52%, rgb(245 244 241 / 0) 100%);
+    pointer-events: none;
+    z-index: 55;
+  }
+
+  .page-head {
+    display: grid;
+    gap: 0.9rem;
+    padding-block: clamp(3.5rem, 12vh, 8rem) clamp(1.8rem, 5vh, 3rem);
+  }
+  .page-title { max-width: 15ch; }
+  .page-lead { max-width: 52ch; }
+
+  /* Filtros: en la v1 eran píldoras con fondo. Aquí son etiquetas mono y el activo se marca
+     con una línea debajo, como el sumario de una revista. */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.7rem clamp(1.2rem, 2.6vw, 2.6rem);
+    padding-block: 1rem;
+    border-block: 1px solid var(--rule);
+  }
+  .filter {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.45em;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid transparent;
+    color: var(--carbon-2);
+    transition: color 240ms var(--ease-out-expo), border-color 240ms var(--ease-out-expo);
+  }
+  .filter:hover { color: var(--carbon); }
+  .filter[aria-current] { color: var(--carbon); border-bottom-color: currentColor; }
+  .filter-n { font-variant-numeric: tabular-nums; opacity: 0.5; }
+
+  /* ── Rejilla de obra ───────────────────────────────
+     Doce columnas y un ritmo de siete posiciones que se repite: la página se lee como un
+     pliego y no como un catálogo. Ancho y proporción van juntos —la lámina ancha es
+     apaisada y la estrecha, vertical— para que ninguna quede estirada. */
+  .works {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(2.5rem, 8vh, 6rem) clamp(1.5rem, 3vw, 3.5rem);
+    padding-block: clamp(2.5rem, 8vh, 5rem);
+  }
+  .work { grid-column: span 6; --work-ar: 4 / 3; }
+  .work:nth-child(7n + 1) { grid-column: 1 / span 7; --work-ar: 4 / 3; }
+  .work:nth-child(7n + 2) { grid-column: 9 / span 4; --work-ar: 3 / 4; align-self: end; }
+  .work:nth-child(7n + 3) { grid-column: 1 / span 4; --work-ar: 3 / 4; }
+  .work:nth-child(7n + 4) { grid-column: 6 / span 7; --work-ar: 4 / 3; align-self: end; }
+  .work:nth-child(7n + 5) { grid-column: 2 / span 5; --work-ar: 1 / 1; }
+  .work:nth-child(7n + 6) { grid-column: 8 / span 5; --work-ar: 4 / 5; align-self: end; }
+  .work:nth-child(7n + 7) { grid-column: 3 / span 8; --work-ar: 16 / 9; }
+  .work-plate {
+    position: relative;
+    aspect-ratio: var(--work-ar);
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  /* el acercamiento va en una capa propia: el revelado ya anima el transform de la imagen y
+     si compartieran propiedad el hover heredaría su duración (1,6 s) y se sentiría pastoso */
+  .work-zoom {
+    position: absolute;
+    inset: 0;
+    transition: transform 1100ms var(--ease-out-expo);
+  }
+  .work-link:hover .work-zoom { transform: scale(1.035); }
+  .work-cap { display: grid; gap: 0.35rem; margin-top: clamp(0.8rem, 1.4vw, 1.2rem); }
+  .work-name {
+    font-size: clamp(1.05rem, 1.7vw, 1.6rem);
+    font-weight: 400;
+    letter-spacing: -0.018em;
+    line-height: 1.12;
+    max-width: 22ch;
+  }
+  .work-link:hover .work-name { text-decoration: underline; text-decoration-thickness: 1px; }
+  .work-sum { max-width: 42ch; }
+  /* una obra sin terminar no se enseña como terminada: en gris y dicho con todas las letras */
+  .work[data-wip] .work-zoom img { filter: grayscale(1); }
+  .work-tag { color: var(--carbon); }
+
+  /* ── Ficha de obra ─────────────────────────────────── */
+  .pj-head {
+    display: grid;
+    gap: 0.9rem;
+    padding-block: clamp(3rem, 10vh, 7rem) clamp(1.5rem, 4vh, 2.5rem);
+  }
+  .pj-title { max-width: 18ch; }
+  .pj-meta { display: flex; flex-wrap: wrap; gap: 0.3rem 1.6rem; }
+  /* lámina de apertura a sangre: ocupa casi la pantalla, como la doble página de un reportaje */
+  .pj-hero {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: clamp(300px, 78svh, 900px);
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  /* la apertura abre la lupa: el botón ocupa la lámina entera */
+  .pj-hero-btn {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: zoom-in;
+  }
+  /* una obra en obras, también en su ficha: en gris hasta que esté terminada */
+  .plate-wip {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  .plate-wip img { filter: grayscale(1); }
+
+  .sheet {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.5rem, 3vw, 3.5rem);
+    padding-block: clamp(2.5rem, 8vh, 5rem);
+  }
+  /* las dos columnas a la misma fila a mano: con colocación automática la ficha cae en una
+     fila propia y el sticky se queda sin recorrido (la misma trampa que en los pliegos) */
+  .sheet-facts,
+  .sheet-text { grid-row: 1; }
+  .sheet-facts { grid-column: 1 / span 3; }
+  .sheet-text { grid-column: 5 / span 7; }
+  .sheet-facts-inner {
+    position: sticky;
+    top: clamp(3rem, 12vh, 7rem);
+    display: grid;
+    gap: 1.1rem;
+  }
+  .facts { display: grid; gap: 0.15rem; }
+  .facts dd { margin-bottom: 0.85rem; }
+  .facts dd:last-child { margin-bottom: 0; }
+  .sheet-notes {
+    display: grid;
+    gap: 0.45rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+  .sheet-note {
+    position: relative;
+    padding-left: 1.6rem;
+    color: var(--carbon-2);
+    font-size: 0.95rem;
+  }
+  .sheet-note::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 0.9rem;
+    height: 1px;
+    background: var(--carbon-2);
+  }
+  .sheet-p {
+    font-size: clamp(1.02rem, 1.35vw, 1.3rem);
+    line-height: 1.5;
+    max-width: 58ch;
+    margin-top: 1.1rem;
+  }
+  .sheet-p:first-child { margin-top: 0; }
+
+  /* Galería y planos: la primera de cada tres va a todo el ancho, las demás en pareja. */
+  .gal {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.5rem, 3vw, 3rem);
+    padding-block: clamp(1.5rem, 5vh, 3rem);
+  }
+  .gal-item { grid-column: span 6; }
+  .gal-wide { grid-column: 1 / -1; --gal-ar: 16 / 9; }
+  .gal-plate {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: var(--gal-ar, 3 / 2);
+    overflow: hidden;
+    background: var(--carbon);
+    cursor: zoom-in;
+  }
+  /* los planos son trazo negro sobre blanco: se ven enteros y sobre su propio papel */
+  .gal-plate-plan { background: #fff; --gal-ar: 4 / 3; }
+  .gal-cap { margin-top: 0.6rem; }
+
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    padding-block: clamp(1.5rem, 5vh, 3rem);
+    border-top: 1px solid var(--rule);
+  }
+  .pager a { display: grid; gap: 0.4rem; }
+  .pager-next { justify-self: end; text-align: right; }
+  .pager-name {
+    font-size: clamp(1.05rem, 2vw, 1.8rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .pager a:hover .pager-name { text-decoration: underline; text-decoration-thickness: 1px; }
+
+  /* ── Texto largo (estudio, legales) ────────────────── */
+  .bleed {
+    position: relative;
+    width: 100%;
+    height: clamp(280px, 68svh, 820px);
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  .prose {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.2rem, 3vw, 3.5rem);
+    padding-block: clamp(3rem, 9vh, 6rem);
+  }
+  .prose > * { grid-column: 3 / span 8; }
+  .prose-lead {
+    font-size: clamp(1.3rem, 2.6vw, 2.4rem);
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+    max-width: 26ch;
+  }
+  /* el resto del texto a dos columnas, como la revista: baja la línea de 90 a 45 caracteres */
+  .cols-2 {
+    columns: 2;
+    column-gap: clamp(1.5rem, 3vw, 3.5rem);
+    margin-top: clamp(1.5rem, 4vh, 2.5rem);
+  }
+  .cols-2 p { break-inside: avoid; margin-bottom: 1.1rem; }
+  .cols-2 p:last-child { margin-bottom: 0; }
+
+  /* Ritmos compartidos por los bloques de las páginas interiores, para no repetir el mismo
+     clamp en cada sitio ni meterlo en el JSX. Nada de llamarlas `.block`: Tailwind tiene una
+     utilidad con ese nombre (display: block) y, al ir las utilidades en una capa posterior,
+     le ganaba a `display: grid` y dejaba la retícula plana. */
+  .vspace { padding-block: clamp(3rem, 9vh, 6rem); }
+  .vspace-list { margin-top: clamp(1.5rem, 4vh, 2.5rem); }
+  .vspace-note { margin-top: 1rem; max-width: 54ch; }
+
+  /* ── Proceso ───────────────────────────────────────── */
+  .steps { border-top: 1px solid var(--rule); }
+  .step {
+    display: grid;
+    grid-template-columns: 4.5rem 1fr 1.3fr;
+    gap: 0.5rem clamp(1rem, 2.5vw, 2.5rem);
+    align-items: baseline;
+    padding-block: clamp(1.1rem, 3vh, 2rem);
+    border-bottom: 1px solid var(--rule);
+  }
+  .step-title {
+    font-size: clamp(1.1rem, 2vw, 1.7rem);
+    font-weight: 400;
+    letter-spacing: -0.018em;
+    line-height: 1.12;
+  }
+  .step-free { display: inline-block; margin-left: 0.6rem; color: var(--carbon-2); }
+
+  /* ── Preguntas ─────────────────────────────────────── */
+  .faq { border-top: 1px solid var(--rule); }
+  .faq-item { border-bottom: 1px solid var(--rule); }
+  .faq-item summary {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding-block: clamp(1rem, 2.6vh, 1.6rem);
+    font-size: clamp(1.02rem, 1.7vw, 1.45rem);
+    letter-spacing: -0.014em;
+    line-height: 1.2;
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  /* el signo es mono y cuadrado: ni chevrones ni círculos */
+  .faq-item summary::after {
+    content: "+";
+    font-size: 1rem;
+    color: var(--carbon-2);
+  }
+  .faq-item[open] summary::after { content: "–"; color: var(--carbon); }
+  .faq-a {
+    max-width: 62ch;
+    padding-bottom: clamp(1rem, 2.6vh, 1.6rem);
+  }
+
+  /* ── Cierre de página ──────────────────────────────── */
+  .cta-2 {
+    display: grid;
+    gap: 0.7rem;
+    padding-block: clamp(3rem, 10vh, 7rem);
+    border-top: 1px solid var(--rule);
+  }
+  .cta-2-title { max-width: 16ch; }
+  .cta-2-lead { max-width: 46ch; }
+  .cta-2-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 1rem 2.5rem;
+    margin-top: clamp(1rem, 3vh, 2rem);
+  }
+
+  .foot {
+    display: grid;
+    gap: 1rem;
+    padding-top: clamp(1.5rem, 4vh, 2.5rem);
+    border-top: 1px solid var(--rule);
+  }
+  .foot-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem clamp(1.2rem, 3vw, 3rem);
+  }
+  .foot a { color: inherit; }
+  .foot a:hover { color: var(--carbon); text-decoration: underline; }
+
+  /* lista con reglas y guion: sustituye a los checks rojos de la v1 */
+  .list-rule { border-top: 1px solid var(--rule); }
+  .list-rule li {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .list-rule li::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 1.2rem;
+    height: 1px;
+    background: var(--carbon);
+    transform: translateY(-0.35em);
+  }
+
+  /* ── Servicios ─────────────────────────────────────── */
+  .srv {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.5rem, 3vw, 3.5rem);
+    padding-block: clamp(3rem, 9vh, 6rem);
+    border-top: 1px solid var(--rule);
+  }
+  .srv-media,
+  .srv-body { grid-row: 1; }
+  .srv-media { grid-column: 1 / span 6; }
+  .srv-body { grid-column: 8 / span 5; }
+  .srv[data-side="right"] .srv-media { grid-column: 7 / span 6; }
+  .srv[data-side="right"] .srv-body { grid-column: 1 / span 5; }
+  .srv-plate {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  .srv-body-inner {
+    position: sticky;
+    top: clamp(3rem, 12vh, 7rem);
+    display: grid;
+    gap: 0.8rem;
+    justify-items: start;
+  }
+  .srv-name { max-width: 14ch; }
+  .srv-text { max-width: 38ch; }
+  .srv-eg {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+    width: 100%;
+    margin-top: 0.8rem;
+  }
+  .srv-eg a { display: grid; gap: 0.45rem; }
+  .srv-eg-plate {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  .srv-eg-plate img { transition: transform 900ms var(--ease-out-expo); }
+  .srv-eg a:hover .srv-eg-plate img { transform: scale(1.05); }
+
+  /* ── Contacto y formulario ─────────────────────────── */
+  .contact {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    padding-block: clamp(1.5rem, 5vh, 3rem);
+  }
+  .contact-side,
+  .contact-main { grid-row: 1; }
+  .contact-side { grid-column: 1 / span 4; }
+  .contact-main { grid-column: 6 / span 7; }
+  .contact-list {
+    display: grid;
+    justify-items: start;
+    gap: 0.9rem;
+    margin-top: 1.2rem;
+  }
+  .link-line {
+    display: inline-block;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.15rem;
+    transition: border-color 240ms var(--ease-out-expo);
+  }
+  .link-line:hover { border-bottom-color: var(--carbon); }
+
+  .form-2 { display: grid; gap: clamp(1.2rem, 3vh, 1.8rem); }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.2rem, 2.5vw, 2rem);
+  }
+  .field-2 { display: grid; gap: 0.4rem; }
+  /* campos sin caja: una línea de papel pautado. La v1 tenía cajas blancas redondeadas. */
+  .field-2 input,
+  .field-2 select,
+  .field-2 textarea {
+    width: 100%;
+    padding: 0.55rem 0;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--rule);
+    border-radius: 0;
+    font-size: 1rem;
+    line-height: 1.4;
+    color: var(--carbon);
+    transition: border-color 240ms var(--ease-out-expo);
+  }
+  .field-2 input:hover,
+  .field-2 select:hover,
+  .field-2 textarea:hover { border-bottom-color: var(--carbon-2); }
+  .field-2 input:focus,
+  .field-2 select:focus,
+  .field-2 textarea:focus { border-bottom-color: var(--carbon); }
+  .field-2 textarea { resize: vertical; min-height: 6.5rem; }
+  .field-2 select { appearance: none; }
+  .field-sel { position: relative; }
+  .field-sel::after {
+    content: "↓";
+    position: absolute;
+    right: 0;
+    bottom: 0.55rem;
+    font-size: 0.8rem;
+    color: var(--carbon-2);
+    pointer-events: none;
+  }
+  /* el error no se dice con color (aquí no hay rojo): línea doble y una nota en mono */
+  .field-2 [aria-invalid="true"] { border-bottom-width: 2px; border-bottom-color: var(--carbon); }
+  .field-err { color: var(--carbon); }
+  .consent-2 {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    cursor: pointer;
+    color: var(--carbon-2);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .consent-2 input {
+    flex: 0 0 auto;
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.28rem;
+    accent-color: var(--carbon);
+    border-radius: 0;
+  }
+  .form-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+  }
+  /* botón cuadrado de tinta: el bloque que sustituye a la píldora roja de la v1 */
+  .btn-2 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 52px;
+    padding: 0 1.6rem;
+    border: 1px solid var(--carbon);
+    border-radius: 0;
+    background: var(--carbon);
+    color: var(--paper);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: background-color 240ms var(--ease-out-expo), color 240ms var(--ease-out-expo);
+  }
+  .btn-2:hover { background: transparent; color: var(--carbon); }
+  .btn-2[disabled],
+  .btn-2[aria-disabled="true"] { opacity: 0.45; cursor: not-allowed; }
+  .btn-2-ghost { background: transparent; color: var(--carbon); }
+  .btn-2-ghost:hover { background: var(--carbon); color: var(--paper); }
+
+  /* mapa: en gris, para que no meta el color de Google/OSM en una página de papel y tinta */
+  .map {
+    display: block;
+    width: 100%;
+    height: clamp(260px, 46vh, 440px);
+    border: 0;
+    filter: grayscale(1) contrast(1.05);
+  }
+
+  /* la lupa sobre fondo oscuro: las etiquetas mono van en blanco */
+  .lightbox-count { color: #fff; font-variant-numeric: tabular-nums; }
+  .lightbox-cap { flex: 1; text-align: center; color: rgb(255 255 255 / 0.75); }
+
+  /* ── Legales y 404 ─────────────────────────────────── */
+  .legal { display: grid; gap: clamp(1.5rem, 4vh, 2.5rem); max-width: 68ch; }
+  .legal h2 {
+    font-size: clamp(1.05rem, 1.7vw, 1.45rem);
+    font-weight: 400;
+    letter-spacing: -0.014em;
+    margin-bottom: 0.5rem;
+  }
+  .legal p { color: var(--carbon-2); margin-top: 0.7rem; }
+
+  @media (max-width: 899px) {
+    /* una obra por fila: las siete posiciones del pliego necesitan ancho para leerse */
+    .works { grid-template-columns: 1fr; gap: clamp(2rem, 6vh, 3rem); }
+    .works > .work:nth-child(n) { grid-column: 1; align-self: auto; --work-ar: 4 / 3; }
+    .works > .work:nth-child(3n + 2) { --work-ar: 3 / 4; }
+
+    .pj-hero { height: clamp(260px, 56svh, 520px); }
+    .sheet,
+    .contact,
+    .srv,
+    .prose {
+      grid-template-columns: 1fr;
+      gap: 1.6rem;
+      padding-block: clamp(2rem, 7vh, 3rem);
+    }
+    .sheet-facts,
+    .sheet-text,
+    .contact-side,
+    .contact-main,
+    .srv[data-side] .srv-media,
+    .srv[data-side] .srv-body,
+    .prose > * { grid-row: auto; grid-column: 1; }
+    .sheet-facts-inner,
+    .srv-body-inner { position: static; }
+    .gal-item { grid-column: 1 / -1; }
+    .cols-2 { columns: 1; }
+    .step { grid-template-columns: 3rem 1fr; }
+    .step-text { grid-column: 2; }
+    .form-row { grid-template-columns: 1fr; }
+    .pager { grid-template-columns: 1fr; }
+    .pager-next { justify-self: start; text-align: left; }
+    .bleed { height: clamp(240px, 48svh, 420px); }
+  }
+
+  /* ── type ─────────────────────────────────────────── */
+  .display-1 { font-weight: 500; font-size: clamp(2rem, 5vw, 4.4rem); line-height: 1.04; letter-spacing: -0.025em; }
+  .display-2 { font-weight: 500; font-size: clamp(1.65rem, 3vw, 2.7rem); line-height: 1.1; letter-spacing: -0.02em; }
+  .display-3 { font-weight: 500; font-size: clamp(1.3rem, 1.8vw, 1.7rem); line-height: 1.2; letter-spacing: -0.015em; }
+  .accent { font-style: italic; font-weight: 400; }
+  .title { font-weight: 500; letter-spacing: -0.015em; line-height: 1.15; }
+  .lead { font-size: clamp(1.05rem, 1.35vw, 1.3rem); line-height: 1.5; color: var(--ink-2); }
+  .measure { max-width: 66ch; }
+  /* small tracked label: codes, places, field names */
+  .label { font-size: 0.76rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .code { font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+  /* ── surfaces ─────────────────────────────────────── */
+  .glass {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    border: 1px solid var(--glass-line);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), 0 8px 30px rgb(26 26 24 / 0.12);
+    color: var(--ink);
+  }
+  .glass-dark {
+    background: rgb(26 26 24 / 0.42);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+    border: 1px solid rgb(255 255 255 / 0.18);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 8px 30px rgb(0 0 0 / 0.25);
+    color: var(--white);
+  }
+  .bubble { border-radius: var(--pill); }
+
+  /* lightbox: full-viewport native dialog over a dark, blurred backdrop */
+  .lightbox {
+    position: fixed; inset: 0; width: 100vw; height: 100dvh; max-width: none; max-height: none;
+    margin: 0; padding: 0; border: 0; background: transparent; color: var(--white); overflow: hidden;
+  }
+  .lightbox::backdrop {
+    background: rgb(26 26 24 / 0.88);
+    -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+  }
+  /* La lupa solo la usa la ficha de obra, que ya es v2: cuadrada y sin cristal. */
+  .lightbox-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 44px; height: 44px; border-radius: 0;
+    background: rgb(17 17 16 / 0.55); border: 1px solid rgb(255 255 255 / 0.3); color: #fff;
+    transition: background-color 220ms var(--ease-out-expo), color 220ms var(--ease-out-expo);
+  }
+  .lightbox-btn:hover { background: #fff; color: var(--carbon); }
+  .lightbox-btn:active { transform: scale(0.96); }
+  @media (min-width: 768px) { .lightbox-btn { width: 48px; height: 48px; } }
+  .card { background: var(--white); border-radius: var(--r); box-shadow: var(--shadow-soft); }
+  .plate { border-radius: var(--r); overflow: hidden; background: var(--stone-2); }
+  .hairline { border-top: 1px solid var(--line); }
+
+  /* service sketches (ServiceArt): hidden strokes until GSAP draws them; static under reduced motion */
+  @media (prefers-reduced-motion: no-preference) {
+    .art [data-draw] { stroke-dasharray: 100; stroke-dashoffset: 100; }
+    .art [data-fade] { opacity: 0; }
+  }
+
+  /* ── justified: rows of plates at one height, each as wide as its image is. Width grows with the
+     ratio (--ratio), so a wide image takes more of the row than a square one and nothing is cropped. ── */
+  .justified { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 3rem 1.5rem; --jrow: 240px; }
+  .justified > li { flex: var(--ratio) 1 calc(var(--ratio) * var(--jrow)); min-width: 0; }
+  .justified::after { content: ""; flex: 999 1 0; }
+  @media (max-width: 639px) { .justified > li { flex-basis: 100%; } } /* phones: one full-width plate per row */
+  @media (min-width: 1024px) { .justified { gap: 3.5rem 1.75rem; --jrow: 300px; } }
+
+  /* ── mosaic: plates of different heights flowing down columns ── */
+  .mosaic { columns: 1; column-gap: 1.5rem; margin-bottom: -1.5rem; }
+  .mosaic > * { break-inside: avoid; margin-bottom: 1.5rem; }
+  @media (min-width: 640px) { .mosaic { columns: 2; } }
+  @media (min-width: 1024px) { .mosaic { columns: 3; column-gap: 1.75rem; margin-bottom: -1.75rem; } .mosaic > * { margin-bottom: 1.75rem; } }
+
+  /* tile text: a caption under the plate by default; where hover exists, a glass note rising over the image instead */
+  .tile-note { display: none; }
+  @media (hover: hover) {
+    .tile-caption { display: none; }
+    .tile-note { display: block; opacity: 0; transform: translateY(12px); transition: opacity 500ms var(--ease-out-expo), transform 600ms var(--ease-out-expo); }
+    .tile-arrow { transition: transform 400ms var(--ease-out-expo); }
+    .tile:hover .tile-note, .tile:focus-visible .tile-note { opacity: 1; transform: translateY(0); }
+    .tile:hover .tile-arrow { transform: translateX(3px); }
+  }
+  @media (hover: hover) and (prefers-reduced-motion: reduce) {
+    .tile-note { transform: none; transition: opacity 200ms linear; }
+    .tile-arrow, .tile:hover .tile-arrow { transform: none; transition: none; }
+  }
+
+  /* ── controls ─────────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem;
+    min-height: 48px; padding: 0 1.5rem; border-radius: var(--pill);
+    font-weight: 500; font-size: 0.98rem; line-height: 1; letter-spacing: -0.005em;
+    border: 1px solid transparent; text-decoration: none; cursor: pointer; white-space: nowrap;
+    transition: background-color 220ms var(--ease-out-expo), color 220ms var(--ease-out-expo), border-color 220ms var(--ease-out-expo), transform 260ms var(--ease-quint), box-shadow 260ms var(--ease-out-expo);
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(0) scale(0.985); }
+  .btn-red { background: var(--red); color: var(--white); box-shadow: 0 6px 18px rgb(216 50 31 / 0.28); }
+  .btn-red:hover { background: var(--red-2); box-shadow: 0 10px 26px rgb(216 50 31 / 0.32); }
+  .btn-ink { background: var(--ink); color: var(--stone); }
+  .btn-ink:hover { background: #000; }
+  .btn-glass { background: var(--glass-bg); color: var(--ink); border-color: var(--glass-line); -webkit-backdrop-filter: blur(var(--glass-blur)); backdrop-filter: blur(var(--glass-blur)); box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.55), 0 6px 20px rgb(26 26 24 / 0.1); }
+  .btn-glass:hover { background: rgb(255 255 255 / 0.8); }
+  .btn-outline { background: transparent; color: var(--ink); border-color: var(--line-2); }
+  .btn-outline:hover { background: var(--ink); color: var(--stone); border-color: var(--ink); }
+  .btn-sm { min-height: 40px; padding: 0 1.1rem; font-size: 0.92rem; }
+  .btn[disabled], .btn[aria-disabled="true"] { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: none; }
+
+  .chip-pill { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 36px; padding: 0 0.95rem; border-radius: var(--pill); border: 1px solid var(--line-2); background: rgb(255 255 255 / 0.6); font-size: 0.9rem; transition: background-color 180ms, color 180ms, border-color 180ms; }
+  .chip-pill:hover { background: var(--white); }
+  .chip-pill[aria-current] { background: var(--ink); color: var(--stone); border-color: var(--ink); }
+
+  .field { width: 100%; background: var(--white); border: 1px solid var(--line-2); border-radius: var(--r-sm); padding: 0.9rem 1rem; line-height: 1.3; min-height: 48px; transition: border-color 160ms, box-shadow 160ms; }
+  .field:hover { border-color: var(--ink-3); }
+  .field:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 4px rgb(216 50 31 / 0.12); }
+  .field[aria-invalid="true"] { border-color: var(--red); }
+
+  .link-red { color: var(--red); text-decoration: underline; text-decoration-color: rgb(216 50 31 / 0.4); }
+  .link-red:hover { text-decoration-color: var(--red); }
+  .tabular { font-variant-numeric: tabular-nums; }
+}
+
+/* scroll hint: slow exponential nudge, never a bounce */
+@keyframes hint-nudge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+.hero-hint-arrow { animation: hint-nudge 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+@media (prefers-reduced-motion: reduce) { .hero-hint-arrow { animation: none; } }
+
+@layer utilities {
+  .scrim-b { background: linear-gradient(to top, rgb(26 26 24 / 0.72), rgb(26 26 24 / 0.45) 45%, transparent 85%); }
+  .text-balance { text-wrap: balance; }
 }

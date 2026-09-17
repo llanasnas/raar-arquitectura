@@ -1,0 +1,686 @@
+[
+  {
+    "path": "assets/apple-icon-180x180.png",
+    "bytes": 3105,
+    "w": 180,
+    "h": 180,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "P"
+  },
+  {
+    "path": "assets/images/AR07/RENDER  ACCESO FINAL SIN ESCALA (1).jpg",
+    "bytes": 3524788,
+    "w": 3840,
+    "h": 2160,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/AR07/RENDER  EXTERIOR (1).jpg",
+    "bytes": 6049607,
+    "w": 3840,
+    "h": 2121,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/AR07/RENDER INTERIOR (1).jpg",
+    "bytes": 3883828,
+    "w": 3840,
+    "h": 2160,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/AR07/arino exterior.jpg",
+    "bytes": 6652094,
+    "w": 3840,
+    "h": 2121,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/AR07/gif ariño bo.gif",
+    "bytes": 4711471,
+    "w": 1020,
+    "h": 1020,
+    "format": "GIF",
+    "frames": 144,
+    "mode": "P"
+  },
+  {
+    "path": "assets/images/AR07/planta.jpg",
+    "bytes": 42723,
+    "w": 1020,
+    "h": 1020,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/AR07/planta2.jpg",
+    "bytes": 56749,
+    "w": 1020,
+    "h": 1020,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/AR07/planta3.jpg",
+    "bytes": 56728,
+    "w": 1020,
+    "h": 1020,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/AR07/planta4.jpg",
+    "bytes": 49896,
+    "w": 1020,
+    "h": 1020,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/CO38/RENDER FRONTAL.jpg",
+    "bytes": 1497878,
+    "w": 2200,
+    "h": 1100,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/CO38/co38.gif",
+    "bytes": 31543439,
+    "w": 4252,
+    "h": 4252,
+    "format": "GIF",
+    "frames": 144,
+    "mode": "P"
+  },
+  {
+    "path": "assets/images/CO38/planta FINAL.jpg",
+    "bytes": 294460,
+    "w": 3952,
+    "h": 4252,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/GG01/GG PORTADA.jpg",
+    "bytes": 2479199,
+    "w": 3840,
+    "h": 1952,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/GG01/GG01 bo.gif",
+    "bytes": 55592387,
+    "w": 3952,
+    "h": 4252,
+    "format": "GIF",
+    "frames": 192,
+    "mode": "P"
+  },
+  {
+    "path": "assets/images/GG01/RENDER ACCESO.jpg",
+    "bytes": 1474735,
+    "w": 2700,
+    "h": 2160,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/GG01/RENDER PATIO.jpg",
+    "bytes": 753238,
+    "w": 1500,
+    "h": 1130,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/GG01/RENDER TERRAZA.jpg",
+    "bytes": 436809,
+    "w": 1500,
+    "h": 1130,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/GG01/RENDER TRASERA .jpg",
+    "bytes": 567633,
+    "w": 1500,
+    "h": 1130,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/GG01/planta.jpg",
+    "bytes": 1503613,
+    "w": 3952,
+    "h": 4252,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/GG01/planta2.jpg",
+    "bytes": 1819617,
+    "w": 3952,
+    "h": 4252,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/GG01/planta3.jpg",
+    "bytes": 1970157,
+    "w": 3952,
+    "h": 4252,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/GG01/planta4.jpg",
+    "bytes": 1962966,
+    "w": 3952,
+    "h": 4252,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/IM10/COCINA.png",
+    "bytes": 1636524,
+    "w": 1635,
+    "h": 920,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/IM10/COMEDOR.png",
+    "bytes": 2078951,
+    "w": 1635,
+    "h": 920,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/IM10/FACHADA.jpg",
+    "bytes": 5779255,
+    "w": 3840,
+    "h": 2160,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/IM10/HABPP1.png",
+    "bytes": 6452112,
+    "w": 2131,
+    "h": 1500,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/IM10/OFICINA.png",
+    "bytes": 2018901,
+    "w": 1635,
+    "h": 897,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/IM10/SALAF.jpg",
+    "bytes": 866833,
+    "w": 1635,
+    "h": 920,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/IM10/pb.png",
+    "bytes": 281756,
+    "w": 9923,
+    "h": 7016,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "LA"
+  },
+  {
+    "path": "assets/images/MO07/0.jpg",
+    "bytes": 1469257,
+    "w": 9415,
+    "h": 4933,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/MO07/1.jpg",
+    "bytes": 858790,
+    "w": 9415,
+    "h": 4933,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/MO07/2.jpg",
+    "bytes": 800254,
+    "w": 9415,
+    "h": 4933,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/MO07/3.jpg",
+    "bytes": 880810,
+    "w": 9415,
+    "h": 4933,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/MO07/CUBIERTA2.png",
+    "bytes": 5194407,
+    "w": 1802,
+    "h": 1200,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/MO07/Escena1.png",
+    "bytes": 4239925,
+    "w": 1200,
+    "h": 1703,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/MO07/Escena12.png",
+    "bytes": 2587848,
+    "w": 1440,
+    "h": 959,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/MO07/Escena7.png",
+    "bytes": 4499009,
+    "w": 1800,
+    "h": 1200,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/MO07/mo07.gif",
+    "bytes": 149817,
+    "w": 785,
+    "h": 1112,
+    "format": "GIF",
+    "frames": 10,
+    "mode": "P"
+  },
+  {
+    "path": "assets/images/PE17/Escena1.png",
+    "bytes": 7053051,
+    "w": 2252,
+    "h": 1500,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/PE17/Escena2.png",
+    "bytes": 7101649,
+    "w": 2252,
+    "h": 1500,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/PE17/Escena3.png",
+    "bytes": 7021400,
+    "w": 2252,
+    "h": 1500,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/PE17/HABITACIONFINAL.jpg",
+    "bytes": 2631269,
+    "w": 2828,
+    "h": 2121,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/PE17/p1.jpg",
+    "bytes": 315556,
+    "w": 4961,
+    "h": 3508,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/PE17/pb.jpg",
+    "bytes": 307076,
+    "w": 4961,
+    "h": 3508,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/TO39/CERAMICA.jpg",
+    "bytes": 2823328,
+    "w": 3185,
+    "h": 2121,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/TO39/GIFTO39.gif",
+    "bytes": 37255792,
+    "w": 4252,
+    "h": 4252,
+    "format": "GIF",
+    "frames": 128,
+    "mode": "P"
+  },
+  {
+    "path": "assets/images/TO39/RECEPCION.jpg",
+    "bytes": 2522559,
+    "w": 2828,
+    "h": 2121,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/TO39/SALAPP.jpg",
+    "bytes": 3256010,
+    "w": 3769,
+    "h": 2121,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/TO39/YOGA.jpg",
+    "bytes": 2371315,
+    "w": 2828,
+    "h": 2121,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/VI02/Escena9.png",
+    "bytes": 4016962,
+    "w": 1802,
+    "h": 1200,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/VI02/HAB2.png",
+    "bytes": 4014192,
+    "w": 1800,
+    "h": 1200,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/VI02/HABPP1.png",
+    "bytes": 4791022,
+    "w": 1802,
+    "h": 1200,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/VI02/OFI.png",
+    "bytes": 4437791,
+    "w": 1800,
+    "h": 1200,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/VI02/ZS.png",
+    "bytes": 4301388,
+    "w": 1800,
+    "h": 1200,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/VI02/ZS1.png",
+    "bytes": 4190014,
+    "w": 1802,
+    "h": 1200,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/VI02/ZS2.png",
+    "bytes": 2719822,
+    "w": 1440,
+    "h": 960,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/VI02/p1.jpg",
+    "bytes": 841635,
+    "w": 9923,
+    "h": 7016,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/VI02/p2.jpg",
+    "bytes": 766416,
+    "w": 9923,
+    "h": 7016,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/VI02/pb.jpg",
+    "bytes": 837108,
+    "w": 9923,
+    "h": 7016,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/logo definitiu blanc.png",
+    "bytes": 18773,
+    "w": 2444,
+    "h": 824,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/logo definitiu.png",
+    "bytes": 39337,
+    "w": 2444,
+    "h": 824,
+    "format": "PNG",
+    "frames": 1,
+    "mode": "RGBA"
+  },
+  {
+    "path": "assets/images/profil.jpg",
+    "bytes": 186927,
+    "w": 640,
+    "h": 483,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "assets/images/space 2.jpg",
+    "bytes": 302160,
+    "w": 1920,
+    "h": 1080,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img1.jpg",
+    "bytes": 278910,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img10.jpg",
+    "bytes": 170369,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img11.jpg",
+    "bytes": 171548,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img12.jpg",
+    "bytes": 117409,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img2.jpg",
+    "bytes": 186083,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img3.jpg",
+    "bytes": 210178,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img4.jpg",
+    "bytes": 184058,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img5.jpg",
+    "bytes": 196572,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img6.jpg",
+    "bytes": 234587,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img7.jpg",
+    "bytes": 198383,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img8.jpg",
+    "bytes": 203122,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  },
+  {
+    "path": "images/portfolio-img9.jpg",
+    "bytes": 163976,
+    "w": 500,
+    "h": 500,
+    "format": "JPEG",
+    "frames": 1,
+    "mode": "RGB"
+  }
+]

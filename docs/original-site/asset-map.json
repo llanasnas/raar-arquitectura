@@ -1,0 +1,391 @@
+{
+  "mapped": [
+    {
+      "original": "assets/images/logo definitiu.png",
+      "new": "public/images/brand/logo-black.png",
+      "bytes": 39337
+    },
+    {
+      "original": "assets/images/logo definitiu blanc.png",
+      "new": "public/images/brand/logo-white.png",
+      "bytes": 18773
+    },
+    {
+      "original": "assets/apple-icon-180x180.png",
+      "new": "public/images/brand/apple-icon-180x180.png",
+      "bytes": 3105
+    },
+    {
+      "original": "assets/images/space 2.jpg",
+      "new": "public/images/home/hero-space.jpg",
+      "bytes": 302160
+    },
+    {
+      "original": "assets/images/profil.jpg",
+      "new": "public/images/about/team-aerial.jpg",
+      "bytes": 186927
+    },
+    {
+      "original": "images/portfolio-img3.jpg",
+      "new": "public/images/projects/ar07/thumb.jpg",
+      "bytes": 210178
+    },
+    {
+      "original": "images/portfolio-img2.jpg",
+      "new": "public/images/projects/co38/thumb.jpg",
+      "bytes": 186083
+    },
+    {
+      "original": "images/portfolio-img1.jpg",
+      "new": "public/images/projects/gg01/thumb.jpg",
+      "bytes": 278910
+    },
+    {
+      "original": "images/portfolio-img6.jpg",
+      "new": "public/images/projects/im10/thumb.jpg",
+      "bytes": 234587
+    },
+    {
+      "original": "images/portfolio-img7.jpg",
+      "new": "public/images/projects/to39/thumb.jpg",
+      "bytes": 198383
+    },
+    {
+      "original": "images/portfolio-img5.jpg",
+      "new": "public/images/projects/vi02/thumb.jpg",
+      "bytes": 196572
+    },
+    {
+      "original": "images/portfolio-img4.jpg",
+      "new": "public/images/projects/mo07/thumb.jpg",
+      "bytes": 184058
+    },
+    {
+      "original": "images/portfolio-img8.jpg",
+      "new": "public/images/projects/pe17/thumb.jpg",
+      "bytes": 203122
+    },
+    {
+      "original": "images/portfolio-img9.jpg",
+      "new": "public/images/projects/gv75/thumb.jpg",
+      "bytes": 163976
+    },
+    {
+      "original": "images/portfolio-img10.jpg",
+      "new": "public/images/projects/se08/thumb.jpg",
+      "bytes": 170369
+    },
+    {
+      "original": "images/portfolio-img11.jpg",
+      "new": "public/images/projects/pr37/thumb.jpg",
+      "bytes": 171548
+    },
+    {
+      "original": "images/portfolio-img12.jpg",
+      "new": "public/images/projects/gr16/thumb.jpg",
+      "bytes": 117409
+    },
+    {
+      "original": "assets/images/AR07/arino exterior.jpg",
+      "new": "public/images/projects/ar07/hero.jpg",
+      "bytes": 6652094
+    },
+    {
+      "original": "assets/images/AR07/gif ariño bo.gif",
+      "new": "public/images/projects/ar07/concept.gif",
+      "bytes": 4711471
+    },
+    {
+      "original": "assets/images/AR07/RENDER  ACCESO FINAL SIN ESCALA (1).jpg",
+      "new": "public/images/projects/ar07/render-01-acceso.jpg",
+      "bytes": 3524788
+    },
+    {
+      "original": "assets/images/AR07/RENDER  EXTERIOR (1).jpg",
+      "new": "public/images/projects/ar07/render-02-exterior.jpg",
+      "bytes": 6049607
+    },
+    {
+      "original": "assets/images/AR07/RENDER INTERIOR (1).jpg",
+      "new": "public/images/projects/ar07/render-03-interior.jpg",
+      "bytes": 3883828
+    },
+    {
+      "original": "assets/images/AR07/planta.jpg",
+      "new": "public/images/projects/ar07/plan-01.jpg",
+      "bytes": 42723
+    },
+    {
+      "original": "assets/images/AR07/planta2.jpg",
+      "new": "public/images/projects/ar07/plan-02.jpg",
+      "bytes": 56749
+    },
+    {
+      "original": "assets/images/AR07/planta3.jpg",
+      "new": "public/images/projects/ar07/plan-03.jpg",
+      "bytes": 56728
+    },
+    {
+      "original": "assets/images/AR07/planta4.jpg",
+      "new": "public/images/projects/ar07/plan-04.jpg",
+      "bytes": 49896
+    },
+    {
+      "original": "assets/images/CO38/RENDER FRONTAL.jpg",
+      "new": "public/images/projects/co38/render-01-frontal.jpg",
+      "bytes": 1497878
+    },
+    {
+      "original": "assets/images/CO38/co38.gif",
+      "new": "public/images/projects/co38/concept.gif",
+      "bytes": 31543439
+    },
+    {
+      "original": "assets/images/CO38/planta FINAL.jpg",
+      "new": "public/images/projects/co38/plan-01.jpg",
+      "bytes": 294460
+    },
+    {
+      "original": "assets/images/GG01/GG PORTADA.jpg",
+      "new": "public/images/projects/gg01/hero.jpg",
+      "bytes": 2479199
+    },
+    {
+      "original": "assets/images/GG01/GG01 bo.gif",
+      "new": "public/images/projects/gg01/concept.gif",
+      "bytes": 55592387
+    },
+    {
+      "original": "assets/images/GG01/RENDER PATIO.jpg",
+      "new": "public/images/projects/gg01/render-01-patio.jpg",
+      "bytes": 753238
+    },
+    {
+      "original": "assets/images/GG01/RENDER TRASERA .jpg",
+      "new": "public/images/projects/gg01/render-02-trasera.jpg",
+      "bytes": 567633
+    },
+    {
+      "original": "assets/images/GG01/RENDER TERRAZA.jpg",
+      "new": "public/images/projects/gg01/render-03-terraza.jpg",
+      "bytes": 436809
+    },
+    {
+      "original": "assets/images/GG01/RENDER ACCESO.jpg",
+      "new": "public/images/projects/gg01/render-04-acceso.jpg",
+      "bytes": 1474735
+    },
+    {
+      "original": "assets/images/GG01/planta.jpg",
+      "new": "public/images/projects/gg01/plan-01.jpg",
+      "bytes": 1503613
+    },
+    {
+      "original": "assets/images/GG01/planta2.jpg",
+      "new": "public/images/projects/gg01/plan-02.jpg",
+      "bytes": 1819617
+    },
+    {
+      "original": "assets/images/GG01/planta3.jpg",
+      "new": "public/images/projects/gg01/plan-03.jpg",
+      "bytes": 1970157
+    },
+    {
+      "original": "assets/images/GG01/planta4.jpg",
+      "new": "public/images/projects/gg01/plan-04.jpg",
+      "bytes": 1962966
+    },
+    {
+      "original": "assets/images/IM10/FACHADA.jpg",
+      "new": "public/images/projects/im10/hero.jpg",
+      "bytes": 5779255
+    },
+    {
+      "original": "assets/images/IM10/SALAF.jpg",
+      "new": "public/images/projects/im10/render-01-sala.jpg",
+      "bytes": 866833
+    },
+    {
+      "original": "assets/images/IM10/COCINA.png",
+      "new": "public/images/projects/im10/render-02-cocina.png",
+      "bytes": 1636524
+    },
+    {
+      "original": "assets/images/IM10/COMEDOR.png",
+      "new": "public/images/projects/im10/render-03-comedor.png",
+      "bytes": 2078951
+    },
+    {
+      "original": "assets/images/IM10/OFICINA.png",
+      "new": "public/images/projects/im10/render-04-oficina.png",
+      "bytes": 2018901
+    },
+    {
+      "original": "assets/images/IM10/HABPP1.png",
+      "new": "public/images/projects/im10/render-05-habitacion-principal.png",
+      "bytes": 6452112
+    },
+    {
+      "original": "assets/images/IM10/pb.png",
+      "new": "public/images/projects/im10/plan-01-planta-baja.png",
+      "bytes": 281756
+    },
+    {
+      "original": "assets/images/TO39/GIFTO39.gif",
+      "new": "public/images/projects/to39/concept.gif",
+      "bytes": 37255792
+    },
+    {
+      "original": "assets/images/TO39/SALAPP.jpg",
+      "new": "public/images/projects/to39/render-01-sala.jpg",
+      "bytes": 3256010
+    },
+    {
+      "original": "assets/images/TO39/RECEPCION.jpg",
+      "new": "public/images/projects/to39/render-02-recepcion.jpg",
+      "bytes": 2522559
+    },
+    {
+      "original": "assets/images/TO39/YOGA.jpg",
+      "new": "public/images/projects/to39/render-03-yoga.jpg",
+      "bytes": 2371315
+    },
+    {
+      "original": "assets/images/TO39/CERAMICA.jpg",
+      "new": "public/images/projects/to39/render-04-ceramica.jpg",
+      "bytes": 2823328
+    },
+    {
+      "original": "assets/images/VI02/ZS2.png",
+      "new": "public/images/projects/vi02/hero.png",
+      "bytes": 2719822
+    },
+    {
+      "original": "assets/images/VI02/ZS1.png",
+      "new": "public/images/projects/vi02/render-01-zona-social-1.png",
+      "bytes": 4190014
+    },
+    {
+      "original": "assets/images/VI02/ZS.png",
+      "new": "public/images/projects/vi02/render-02-zona-social-2.png",
+      "bytes": 4301388
+    },
+    {
+      "original": "assets/images/VI02/OFI.png",
+      "new": "public/images/projects/vi02/render-03-oficina.png",
+      "bytes": 4437791
+    },
+    {
+      "original": "assets/images/VI02/HABPP1.png",
+      "new": "public/images/projects/vi02/render-04-habitacion-principal.png",
+      "bytes": 4791022
+    },
+    {
+      "original": "assets/images/VI02/HAB2.png",
+      "new": "public/images/projects/vi02/render-05-habitacion-2.png",
+      "bytes": 4014192
+    },
+    {
+      "original": "assets/images/VI02/Escena9.png",
+      "new": "public/images/projects/vi02/render-06-escena-9.png",
+      "bytes": 4016962
+    },
+    {
+      "original": "assets/images/VI02/pb.jpg",
+      "new": "public/images/projects/vi02/plan-01-planta-baja.jpg",
+      "bytes": 837108
+    },
+    {
+      "original": "assets/images/VI02/p1.jpg",
+      "new": "public/images/projects/vi02/plan-02-planta-1.jpg",
+      "bytes": 841635
+    },
+    {
+      "original": "assets/images/VI02/p2.jpg",
+      "new": "public/images/projects/vi02/plan-03-planta-2.jpg",
+      "bytes": 766416
+    },
+    {
+      "original": "assets/images/MO07/mo07.gif",
+      "new": "public/images/projects/mo07/concept.gif",
+      "bytes": 149817
+    },
+    {
+      "original": "assets/images/MO07/Escena1.png",
+      "new": "public/images/projects/mo07/render-01-escena-1.png",
+      "bytes": 4239925
+    },
+    {
+      "original": "assets/images/MO07/Escena7.png",
+      "new": "public/images/projects/mo07/render-02-escena-7.png",
+      "bytes": 4499009
+    },
+    {
+      "original": "assets/images/MO07/Escena12.png",
+      "new": "public/images/projects/mo07/render-03-escena-12.png",
+      "bytes": 2587848
+    },
+    {
+      "original": "assets/images/MO07/CUBIERTA2.png",
+      "new": "public/images/projects/mo07/render-04-cubierta.png",
+      "bytes": 5194407
+    },
+    {
+      "original": "assets/images/MO07/0.jpg",
+      "new": "public/images/projects/mo07/plan-01.jpg",
+      "bytes": 1469257
+    },
+    {
+      "original": "assets/images/MO07/1.jpg",
+      "new": "public/images/projects/mo07/plan-02.jpg",
+      "bytes": 858790
+    },
+    {
+      "original": "assets/images/MO07/2.jpg",
+      "new": "public/images/projects/mo07/plan-03.jpg",
+      "bytes": 800254
+    },
+    {
+      "original": "assets/images/MO07/3.jpg",
+      "new": "public/images/projects/mo07/plan-04.jpg",
+      "bytes": 880810
+    },
+    {
+      "original": "assets/images/PE17/Escena1.png",
+      "new": "public/images/projects/pe17/render-01-escena-1.png",
+      "bytes": 7053051
+    },
+    {
+      "original": "assets/images/PE17/Escena2.png",
+      "new": "public/images/projects/pe17/render-02-escena-2.png",
+      "bytes": 7101649
+    },
+    {
+      "original": "assets/images/PE17/Escena3.png",
+      "new": "public/images/projects/pe17/render-03-escena-3.png",
+      "bytes": 7021400
+    },
+    {
+      "original": "assets/images/PE17/HABITACIONFINAL.jpg",
+      "new": "public/images/projects/pe17/render-04-habitacion.jpg",
+      "bytes": 2631269
+    },
+    {
+      "original": "assets/images/PE17/p1.jpg",
+      "new": "public/images/projects/pe17/plan-02-planta-1.jpg",
+      "bytes": 315556
+    },
+    {
+      "original": "assets/images/PE17/pb.jpg",
+      "new": "public/images/projects/pe17/plan-01-planta-baja.jpg",
+      "bytes": 307076
+    }
+  ],
+  "broken_on_live_site": {
+    "assets/favicon.ico": "favicon (referenced in every <head>)",
+    "assets/images/TO39/pb.png": "TO39 planta baja (referenced in worksto39.html plans carousel)",
+    "assets/images/TO39/p1.png": "TO39 planta 1 (referenced in worksto39.html plans carousel)",
+    "assets/images/ariño/RENDER INTERIOR (1).jpg": "CO38 carousel item 1 (points to non-existent folder 'ariño/'; AR07 image intended?)",
+    "assets/images/ariño/RENDER  EXTERIOR (1).jpg": "CO38 carousel item 3 (same broken folder)"
+  }
+}

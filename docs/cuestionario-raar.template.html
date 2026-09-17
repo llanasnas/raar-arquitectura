@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cuestionario · RAAR arquitectura</title>
+<style>
+  @font-face { font-family: "Poppins"; font-weight: 400; font-style: normal; src: url(data:font/ttf;base64,__FONT_REGULAR__) format("truetype"); }
+  @font-face { font-family: "Poppins"; font-weight: 500; font-style: normal; src: url(data:font/ttf;base64,__FONT_MEDIUM__) format("truetype"); }
+
+  :root {
+    --stone: #F2F2EF; --stone-2: #E9E9E5; --white: #fff;
+    --ink: #1A1A18; --ink-2: #4F4F4A; --ink-3: #66665F;
+    --line: rgb(26 26 24 / .10); --line-2: rgb(26 26 24 / .18);
+    --red: #D8321F; --red-2: #B8281A; --red-soft: rgb(216 50 31 / .12);
+    --glass-bg: rgb(255 255 255 / .58); --glass-line: rgb(255 255 255 / .65); --glass-blur: 22px;
+    --r-sm: 12px; --r: 20px; --r-lg: 28px; --pill: 999px;
+    --gutter: clamp(16px, 4vw, 40px);
+  }
+  * { box-sizing: border-box; }
+  html { color-scheme: light; scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--stone); color: var(--ink);
+    font-family: "Poppins", "Helvetica Neue", Arial, sans-serif; font-size: 16px; line-height: 1.55;
+    padding-inline: var(--gutter); padding-block: 24px 140px;
+    -webkit-font-smoothing: antialiased; min-height: 100vh;
+  }
+  ::selection { background: var(--ink); color: var(--stone); }
+  :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; border-radius: 8px; }
+
+  .bg { position: fixed; inset: -6%; z-index: -1; background: url(__BG__) center / cover no-repeat; filter: blur(28px) saturate(115%); transform: scale(1.06); }
+  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(242 242 239 / .55), rgb(242 242 239 / .78) 60%, rgb(242 242 239 / .9)); }
+
+  .wrap { max-width: 860px; margin: 0 auto; display: grid; gap: 32px; }
+  .glass {
+    background: var(--glass-bg); border: 1px solid var(--glass-line); border-radius: var(--r-lg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%); backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .55), 0 8px 30px rgb(26 26 24 / .12);
+  }
+
+  /* header */
+  .head { padding: 28px clamp(20px, 4vw, 40px) 30px; display: grid; gap: 18px; }
+  .head-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .logo { height: 44px; width: auto; display: block; }
+  .label { font-size: .74rem; font-weight: 500; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
+  h1 { font-weight: 500; font-size: clamp(1.9rem, 4.2vw, 2.7rem); line-height: 1.08; letter-spacing: -.025em; margin: 0; text-wrap: balance; }
+  .head p { margin: 0; color: var(--ink-2); max-width: 60ch; text-wrap: pretty; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: var(--pill); background: rgb(255 255 255 / .7); border: 1px solid var(--glass-line); font-size: .9rem; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .pill b { font-weight: 500; }
+  .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--red); display: inline-block; font-style: normal; }
+
+  /* sections */
+  section { padding: 28px clamp(18px, 4vw, 36px) 32px; display: grid; gap: 22px; }
+  .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  h2 { font-weight: 500; font-size: clamp(1.35rem, 2.2vw, 1.7rem); line-height: 1.15; letter-spacing: -.02em; margin: 0; }
+  .sec-n { font-size: .8rem; color: var(--ink-3); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .intro { margin: -10px 0 0; color: var(--ink-2); font-size: .95rem; }
+
+  .f { display: grid; gap: 8px; }
+  .qhead { display: flex; align-items: flex-start; gap: 8px; position: relative; }
+  .qhead .q { font-weight: 500; line-height: 1.35; text-wrap: pretty; }
+  .hint { font-size: .86rem; color: var(--ink-3); margin-top: -4px; }
+
+  /* info tooltip: why we ask this */
+  .info { flex: none; width: 22px; height: 22px; margin-top: 1px; border-radius: 50%; border: 1px solid var(--line-2); background: rgb(255 255 255 / .7); color: var(--ink-3); font: inherit; font-size: .78rem; font-weight: 500; line-height: 1; display: inline-flex; align-items: center; justify-content: center; cursor: help; padding: 0; transition: background 160ms, color 160ms, border-color 160ms; }
+  .info:hover, .info.on { background: var(--ink); color: var(--stone); border-color: var(--ink); }
+  .tip { position: absolute; left: 0; right: 0; top: calc(100% + 8px); z-index: 6; padding: 12px 14px 12px 16px; border-radius: 16px; font-size: .88rem; line-height: 1.45; color: var(--ink-2); opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity 160ms, transform 160ms, visibility 160ms; background: rgb(255 255 255 / .9); border: 1px solid var(--glass-line); box-shadow: 0 12px 30px rgb(26 26 24 / .16); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+  .tip::before { content: "Por qué lo preguntamos"; display: block; font-size: .7rem; font-weight: 500; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px; }
+  .qhead:has(.info:hover) .tip, .qhead:has(.info:focus-visible) .tip, .qhead:has(.info.on) .tip { opacity: 1; visibility: visible; transform: none; }
+
+  .in {
+    width: 100%; min-height: 48px; padding: 12px 14px; border-radius: var(--r-sm);
+    border: 1px solid var(--line-2); background: rgb(255 255 255 / .72); color: var(--ink);
+    font: inherit; line-height: 1.4; transition: border-color 160ms, box-shadow 160ms, background 160ms;
+  }
+  .in:focus { outline: none; border-color: var(--red); background: var(--white); box-shadow: 0 0 0 4px var(--red-soft); }
+  .in::placeholder { color: var(--ink-3); opacity: .8; }
+  textarea.in { min-height: 96px; resize: vertical; }
+  select.in { appearance: none; -webkit-appearance: none; padding-right: 40px; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231A1A18' stroke-width='1.5'><path d='M6 9l6 6 6-6'/></svg>"); background-repeat: no-repeat; background-position: right 14px center; }
+  input[type="date"].in { max-width: 240px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { position: relative; }
+  .chip input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+  .chip span { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; border-radius: var(--pill); border: 1px solid var(--line-2); background: rgb(255 255 255 / .65); font-size: .93rem; transition: background 160ms, color 160ms, border-color 160ms; }
+  .chip input:checked + span { background: var(--ink); color: var(--stone); border-color: var(--ink); }
+  .chip input:focus-visible + span { outline: 2px solid var(--red); outline-offset: 3px; }
+  .chip:hover span { border-color: var(--ink); }
+  .other { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
+  .other .in { min-height: 40px; padding: 8px 14px; max-width: 420px; }
+  .other .plus { flex: none; font-size: .86rem; color: var(--ink-3); }
+
+  /* stub projects (only a thumbnail on the old site) */
+  .stubs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .stub { display: grid; gap: 6px; text-align: center; }
+  .stub img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; display: block; box-shadow: 0 4px 14px rgb(26 26 24 / .12); }
+  .stub b { font-weight: 500; font-size: .82rem; letter-spacing: .05em; }
+  .src { font-size: .84rem; color: var(--ink-3); line-height: 1.45; }
+
+  /* projects table */
+  .tbl { overflow-x: auto; border-radius: var(--r); border: 1px solid var(--glass-line); background: rgb(255 255 255 / .45); }
+  table { border-collapse: collapse; width: 100%; min-width: 820px; font-size: .92rem; }
+  th, td { text-align: left; padding: 8px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { font-size: .72rem; font-weight: 500; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+  th:first-child, td:first-child { padding-left: 14px; }
+  tr:last-child td { border-bottom: 0; }
+  td .code { font-weight: 500; letter-spacing: .05em; white-space: nowrap; }
+  td .name { display: block; color: var(--ink-3); font-size: .8rem; line-height: 1.3; max-width: 180px; }
+  td:last-child { min-width: 220px; }
+  td .in { min-height: 40px; padding: 8px 10px; font-size: .9rem; }
+  td select.in { padding-right: 32px; background-position: right 10px center; }
+  .w-s { width: 78px; } .w-m { width: 130px; }
+
+  /* style picker */
+  .styles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+  .style { position: relative; border-radius: 18px; overflow: hidden; background: rgb(255 255 255 / .6); border: 2px solid transparent; cursor: pointer; transition: border-color 160ms, transform 220ms cubic-bezier(.16,1,.3,1), box-shadow 300ms; }
+  .style:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgb(26 26 24 / .16); }
+  .style input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; width: 100%; height: 100%; }
+  .style:has(input:checked) { border-color: var(--ink); }
+  .style:has(input:focus-visible) { outline: 2px solid var(--red); outline-offset: 3px; }
+  .style img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; display: block; }
+  .style .cap { padding: 10px 12px 12px; display: grid; gap: 2px; pointer-events: none; }
+  .style .cap b { font-weight: 500; font-size: .92rem; }
+  .style .cap small { font-size: .78rem; color: var(--ink-3); line-height: 1.35; }
+  .style .zoom { position: absolute; top: 8px; right: 8px; width: 32px; height: 32px; border-radius: 50%; border: 0; background: rgb(255 255 255 / .85); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; cursor: zoom-in; padding: 0; box-shadow: 0 2px 8px rgb(26 26 24 / .2); }
+  .style .zoom svg { width: 16px; height: 16px; }
+  .style .check { position: absolute; top: 8px; left: 8px; width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: var(--stone); display: none; align-items: center; justify-content: center; pointer-events: none; }
+  .style:has(input:checked) .check { display: inline-flex; }
+  .style .check svg { width: 14px; height: 14px; }
+  @media (hover: hover) { .style .zoom { display: none; } }
+
+  /* big preview */
+  .peek { position: fixed; inset: 0; z-index: 50; display: none; align-items: center; justify-content: center; padding: 24px; background: rgb(26 26 24 / .55); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+  .peek.on { display: flex; }
+  .peek .box { max-width: min(1100px, 100%); max-height: 100%; display: grid; gap: 10px; border-radius: 22px; padding: 12px; background: rgb(255 255 255 / .9); box-shadow: 0 30px 80px rgb(0 0 0 / .35); pointer-events: auto; }
+  .peek img { width: 100%; max-height: calc(100vh - 140px); object-fit: contain; border-radius: 14px; display: block; background: #fff; }
+  .peek .cap { display: flex; justify-content: space-between; gap: 16px; align-items: baseline; padding: 0 6px 2px; flex-wrap: wrap; }
+  .peek .cap b { font-weight: 500; }
+  .peek .cap span { color: var(--ink-3); font-size: .9rem; }
+  .peek .close { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgb(255 255 255 / .9); cursor: pointer; display: none; align-items: center; justify-content: center; }
+  .peek.sticky .close { display: inline-flex; }
+  .peek.hover, .peek.hover * { pointer-events: none; }
+
+  /* color picker */
+  .swatches { display: flex; flex-wrap: wrap; gap: 12px; }
+  .sw { position: relative; width: 96px; display: grid; gap: 6px; justify-items: center; cursor: pointer; }
+  .sw input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; width: 100%; height: 100%; }
+  .sw i { width: 52px; height: 52px; border-radius: 50%; display: block; box-shadow: inset 0 1px 0 rgb(255 255 255 / .35), 0 6px 14px rgb(26 26 24 / .18); border: 3px solid rgb(255 255 255 / .9); transition: transform 220ms cubic-bezier(.16,1,.3,1); }
+  .sw:hover i { transform: scale(1.06); }
+  .sw:has(input:checked) i { outline: 2px solid var(--ink); outline-offset: 3px; }
+  .sw:has(input:focus-visible) i { outline: 2px solid var(--red); outline-offset: 3px; }
+  .sw b { font-weight: 500; font-size: .8rem; text-align: center; line-height: 1.2; }
+  .sw small { font-size: .72rem; color: var(--ink-3); letter-spacing: .04em; }
+  .sw.custom input[type="color"] { position: static; opacity: 1; width: 52px; height: 52px; border-radius: 50%; border: 3px solid rgb(255 255 255 / .9); padding: 0; background: none; box-shadow: 0 6px 14px rgb(26 26 24 / .18); overflow: hidden; }
+  .sw.custom input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+  .sw.custom input[type="color"]::-webkit-color-swatch { border: 0; border-radius: 50%; }
+  .sw.custom.on input[type="color"] { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  /* bottom bar */
+  .bar { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 10; display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 18px; border-radius: var(--pill); max-width: calc(100vw - 32px); }
+  .bar .prog { display: flex; align-items: center; gap: 10px; font-size: .9rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .track { width: 90px; height: 4px; border-radius: 999px; background: rgb(26 26 24 / .12); overflow: hidden; }
+  .track i { display: block; height: 100%; width: 100%; transform: scaleX(0); transform-origin: left; background: var(--red); transition: transform 300ms cubic-bezier(.16,1,.3,1); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 46px; padding: 0 1.3rem; border-radius: var(--pill); border: 1px solid transparent; font: inherit; font-weight: 500; font-size: .95rem; cursor: pointer; white-space: nowrap; transition: transform 220ms cubic-bezier(.16,1,.3,1), background 220ms, box-shadow 300ms; }
+  .btn:active { transform: scale(.985); }
+  .btn-red { background: var(--red); color: #fff; box-shadow: 0 8px 20px rgb(216 50 31 / .25); }
+  .btn-red:hover { background: var(--red-2); transform: translateY(-1px); }
+  .btn-ghost { background: transparent; color: var(--ink-2); }
+  .btn-ghost:hover { background: rgb(255 255 255 / .6); color: var(--ink); }
+  .btn svg { width: 18px; height: 18px; }
+  .toast { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); padding: 10px 18px; border-radius: var(--pill); font-size: .9rem; opacity: 0; transition: opacity 250ms; pointer-events: none; z-index: 11; }
+  .toast.on { opacity: 1; }
+
+  @media (max-width: 640px) {
+    .bar { padding: 8px; gap: 6px; }
+    .bar .prog span { display: none; }
+    .track { width: 56px; }
+    .btn-ghost { padding: 0 .8rem; }
+    .stubs { grid-template-columns: repeat(2, 1fr); }
+    .sw { width: 80px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .btn, .track i, .toast, .tip, .style, .sw i { transition: none; } }
+  @media print {
+    .bg, .bar, .toast, .peek, .info { display: none !important; }
+    body { padding: 0; background: #fff; }
+    .glass { background: #fff; border-color: #ddd; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+
+<div class="wrap">
+  <header class="glass head">
+    <div class="head-top">
+      <img class="logo" src="__LOGO__" alt="RAAR arquitectura" width="900" height="303">
+      <span class="pill"><i></i><b id="p-done">0</b>&nbsp;de <span id="p-total">0</span></span>
+    </div>
+    <div>
+      <div class="label">Nueva web · reunión</div>
+      <h1>Lo que necesitamos saber de vosotros</h1>
+    </div>
+    <p>Preguntas cortas sobre el estudio, lo que hacéis y cómo trabajáis. Lo técnico (SEO, dominio, textos) lo resolvemos nosotros. Cada pregunta lleva una <b>i</b> con el porqué. Rellenad lo que sepáis; al final, <b>Enviar</b> genera un PDF con las respuestas.</p>
+  </header>
+
+  <form id="form" novalidate></form>
+</div>
+
+<div class="glass bar">
+  <div class="prog"><span>Respondido</span><div class="track"><i id="p-bar"></i></div><span id="p-pct">0 %</span></div>
+  <button class="btn btn-ghost" type="button" id="clear">Vaciar</button>
+  <button class="btn btn-red" type="button" id="send">
+    Enviar
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 10l6 6 6-6M4 20h16"/></svg>
+  </button>
+</div>
+<div class="glass toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="peek" id="peek" aria-hidden="true">
+  <button class="close" type="button" id="peek-close" aria-label="Cerrar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <div class="box"><img id="peek-img" alt=""><div class="cap"><b id="peek-name"></b><span id="peek-desc"></span></div></div>
+</div>
+
+<script>__JSPDF__</script>
+<script>
+const LOGO_PDF = "__LOGO_PDF__";
+const LOGO_RATIO = __LOGO_RATIO__;
+const FONT_R = "__FONT_REGULAR__";
+const FONT_M = "__FONT_MEDIUM__";
+const STYLE_IMG = __STYLES__;   // { id: { thumb, big } }
+const STUB_IMG = __STUBS__;     // { gv75, se08, pr37, gr16 }
+
+const PROJECTS = [
+  ["IM10", "Reforma y ampliación de una casa en Sarrià · hero"],
+  ["VI02", "Casa entre medianeras, La Garriga"],
+  ["AR07", "Dos casas pareadas, Sant Cugat"],
+  ["MO07 / MO23", "Antiguo taller convertido en casa de tres niveles · ¿qué código?"],
+  ["PE17", "Piso en Gràcia con bóveda catalana"],
+  ["TO39", "Nave industrial en Gràcia"],
+  ["CO38", "Espai Co-38, edificio centenario"],
+  ["GG01", "Casa de una planta, Gironès"],
+];
+
+const STYLES = [
+  { id: "glass", name: "Glassmorphism", desc: "Cristal translúcido con desenfoque sobre la imagen. Ligero y actual. Es el de la propuesta." },
+  { id: "clay", name: "Claymorphism", desc: "Formas blandas y abultadas, sombras suaves, colores cálidos. Amable, cercano." },
+  { id: "flat", name: "Flat", desc: "Colores planos, sin sombras, bloques rotundos. Directo, sin adornos." },
+  { id: "bento", name: "Bento grid", desc: "Módulos de distintos tamaños en una rejilla. Ordenado; mucha información de un vistazo." },
+  { id: "neu", name: "Neumorphism", desc: "Relieve suave: todo nace del mismo fondo con luz y sombra. Sobrio, táctil." },
+  { id: "swiss", name: "Editorial / Swiss", desc: "Blanco, tipografía grande, retícula y líneas finas. Serio, de revista de arquitectura." },
+  { id: "brut", name: "Neo-brutalismo", desc: "Bordes negros gruesos, sombras duras, colores vivos. Rompedor, poco habitual en arquitectura." },
+  { id: "dark", name: "Oscuro cinematográfico", desc: "Fondo oscuro, imagen a sangre, texto blanco. Dramático, lujo." },
+];
+
+const COLORS = [
+  { name: "Rojo teja", hex: "#D8321F", note: "El actual" },
+  { name: "Terracota", hex: "#B85C38" },
+  { name: "Ocre", hex: "#C99A3C" },
+  { name: "Verde oliva", hex: "#6E7B4E" },
+  { name: "Verde salvia", hex: "#7C9A8A" },
+  { name: "Azul pizarra", hex: "#3F5A78" },
+  { name: "Gris cálido", hex: "#8A877C" },
+  { name: "Negro", hex: "#1A1A18", note: "Sin color de acento" },
+];
+
+// type: text | area | radio | check | date | table | styles | color
+const SECTIONS = [
+  { id: "estudio", title: "El estudio", qs: [
+    { id: "socios", t: "Socios: nombre completo, titulación y nº de colegiado", type: "area", hint: "Uno por línea.", why: "Un cliente que va a gastar seis cifras quiere saber quién firma. Nombres y colegiación dan confianza y Google los valora como señal de autoridad." },
+    { id: "publicar-socios", t: "¿Publicamos nombres y fotos de los socios?", type: "radio", opts: ["Sí, nombres y fotos", "Solo nombres", "No"], why: "Las webs con caras y nombres reciben más contactos: la gente contrata a personas, no a logos. Decidís hasta dónde." },
+    { id: "fundacion", t: "Año de fundación y qué significa RAAR", type: "text", why: "Los años de trayectoria y el origen del nombre son la historia corta que cuenta la página del estudio." },
+    { id: "legal", t: "Razón social, NIF y domicilio social", type: "area", hint: "Para el aviso legal y la política de privacidad.", why: "Obligatorio por ley en cualquier web con formulario (LSSI y RGPD). Sin esto no se puede publicar." },
+    { id: "idioma", t: "Idiomas de la web", type: "radio", opts: ["Castellano", "Catalán", "Castellano y catalán", "Castellano, catalán e inglés"], why: "Cada idioma es una web completa que traducir y mantener. Empezamos por el que usa vuestro cliente habitual." },
+  ]},
+  { id: "hacer", title: "Qué hacéis", qs: [
+    { id: "servicios", t: "Servicios que ofrecéis", type: "check", opts: ["Reforma integral", "Obra nueva", "Rehabilitación de naves y locales", "Interiorismo", "Ampliaciones", "Licencias y legalizaciones"], other: "Otro servicio que no esté en la lista", why: "Cada servicio será una página propia: es lo que la gente busca en Google («reforma integral Barcelona») y lo que decide si os escribe." },
+    { id: "prioridad", t: "¿Qué tipo de encargo queréis que llegue más?", type: "text", why: "La portada y el vídeo del hero empujan hacia un tipo de cliente. Mejor que sea el que más os interesa, no el más frecuente." },
+    { id: "no-hacemos", t: "¿Qué no hacéis o no queréis que os pidan?", type: "text", why: "Evita consultas que os hacen perder tiempo. Lo que no aparece en la web no se pide." },
+    { id: "zona", t: "Zona de trabajo: municipios, comarcas, hasta dónde", type: "text", why: "Google muestra estudios por zona. Los municipios que nombréis son los que os traerán visitas locales." },
+    { id: "presupuesto", t: "Presupuesto de obra habitual y mínimo", type: "text", hint: "Un rango orientativo. No se publica si no queréis.", why: "Nos permite escribir para el cliente adecuado y filtrar en el formulario. No se publica sin vuestro permiso." },
+    { id: "alcance", t: "Qué incluye un encargo", type: "check", opts: ["Estudio previo", "Proyecto básico y de ejecución", "Licencias", "Dirección de obra", "Control de costes", "Interiorismo y materiales"], why: "La sección «Cómo trabajamos» explica las fases. Si prometemos algo que no hacéis, el cliente se lleva un chasco." },
+    { id: "constructora", t: "¿Trabajáis con el constructor que ya tiene el cliente?", type: "radio", opts: ["Sí", "Preferimos los nuestros", "Depende"], why: "Es una de las dudas más frecuentes antes de llamar. La respondemos en la web para quitar frenos." },
+  ]},
+  { id: "visita", title: "La primera visita", intro: "Toda la web invita a pedirla. Necesitamos que sea exactamente lo que ofrecéis.", qs: [
+    { id: "gratis", t: "¿La primera visita es gratuita?", type: "radio", opts: ["Sí, siempre", "Solo en Barcelona y alrededores", "No"], why: "Es el botón principal de toda la web («Pide tu primera visita gratuita»). Si tiene condiciones, hay que decirlas." },
+    { id: "visita-que", t: "Qué pasa en la visita y qué recibe el cliente después", type: "area", hint: "Duración, si se toman medidas, si hay propuesta de honorarios por escrito…", why: "Saber qué va a pasar quita el miedo a llamar. Lo explicamos paso a paso en la web con vuestras palabras." },
+    { id: "respuesta", t: "Tiempo de respuesta a quien os escribe", type: "radio", opts: ["El mismo día", "1–2 días laborables", "Una semana"], why: "Lo escribimos junto al formulario como compromiso. Un plazo claro y cumplido vale más que cualquier promesa." },
+  ]},
+  { id: "clientes", title: "Clientes y confianza", qs: [
+    { id: "origen", t: "¿Cómo os llegan los clientes hoy?", type: "check", opts: ["Recomendación", "Instagram", "Google", "Constructoras", "Inmobiliarias", "Otros"], why: "Nos dice de dónde vendrá el tráfico y qué canal reforzar. Si es recomendación, la web debe convencer a quien ya viene con vuestro nombre." },
+    { id: "diferencia", t: "¿Qué os diferencia de otros estudios? En vuestras palabras", type: "area", why: "Es el mensaje principal de la portada. Vuestras palabras funcionan mejor que cualquier frase que inventemos." },
+    { id: "testimonios", t: "Clientes que aceptarían dar un testimonio", type: "area", hint: "Nombre y proyecto. Con dos o tres basta.", why: "Las opiniones de clientes reales son lo que más convence a quien está comparando estudios. Nunca las inventamos." },
+    { id: "prensa", t: "Premios, prensa o publicaciones donde hayáis salido", type: "text", why: "Un premio o una publicación es una prueba externa de calidad. Los citamos en la página del estudio con enlace si lo hay." },
+  ]},
+  { id: "proyectos", title: "Proyectos", intro: "Estado real de cada obra y permiso para publicarla.", qs: [
+    { id: "tabla", type: "table", why: "El estado (proyecto, en obra, terminada) y el año se muestran en cada ficha. El permiso del propietario nos protege a todos: renders, planos y ubicación son datos suyos." },
+    { id: "otros-proyectos", t: "GV75, SE08, PR37, GR16: ¿qué son? ¿Se publican?", type: "text", stubs: true, why: "Aparecen en vuestra web actual sin ficha. O les damos contenido o los quitamos; una tarjeta vacía resta." },
+    { id: "codigos", t: "Los códigos (AR_07…) en la web", type: "radio", opts: ["Visibles", "Solo internos"], why: "Ahora salen en tarjetas, direcciones y fichas. Si son solo internos, usamos el nombre de la casa." },
+    { id: "hero", t: "Hero con IM10 y vídeo generado con IA a partir de vuestros renders", type: "radio", opts: ["Adelante", "Adelante, indicando que es una recreación", "Preferimos otra cosa"], why: "El vídeo lo genera una IA a partir de vuestros renders y puede inventar detalles que no están en el proyecto. Queremos vuestro visto bueno." },
+  ]},
+  { id: "contacto", title: "Contacto y operación", qs: [
+    { id: "email", t: "Email(s) donde deben llegar los formularios y quién responde", type: "text", why: "Cada formulario enviado llega a esa dirección. Si nadie lo mira, se pierden clientes." },
+    { id: "telefono", t: "Teléfono o WhatsApp para la web, y horario", type: "text", why: "Muchos clientes de vivienda prefieren WhatsApp. El número y el horario aparecen en la web y en Google." },
+    { id: "dominio", t: "¿Quién gestiona el dominio raar-arquitectura.eu y el correo?", type: "text", why: "Para publicar hay que apuntar el dominio a la nueva web sin tocar el correo. Necesitamos saber a quién pedirlo." },
+    { id: "actualizar", t: "Actualizaciones de la web", type: "radio", opts: ["Nos pasáis el material y lo subimos", "Queremos editar nosotros"], why: "Define si hace falta un panel de edición o basta con enviarnos las fotos y textos de cada proyecto nuevo." },
+    { id: "fecha", t: "Fecha objetivo de lanzamiento", type: "date", why: "Para organizar entregas de material, revisiones y publicación." },
+  ]},
+  { id: "diseno", title: "Diseño", intro: "Después de ver la web en pantalla. Pasad el ratón por una imagen para verla grande.", qs: [
+    { id: "estilo", t: "Estilo visual que más os gusta", type: "styles", why: "Mismo contenido en ocho estilos distintos. Elegir uno nos da una base clara para botones, tarjetas, sombras y fondos." },
+    { id: "color", t: "Color corporativo", type: "color", why: "Un solo color de acento para botones y enlaces. El resto de la web va en piedra y tinta para que manden las imágenes." },
+    { id: "comentarios", t: "Comentarios: colores, tipografía, tono, vídeo, lo que sea", type: "area", why: "Todo lo que os chirríe o os guste. Cuanto antes lo digáis, más barato es cambiarlo." },
+  ]},
+  { id: "material", title: "Material que necesitamos", intro: "Lo que hace falta para publicar. Marcad lo que tenéis; lo que falte lo resolvemos juntos.", qs: [
+    { id: "logo", t: "Logo en vectorial (SVG, AI, EPS o PDF)", type: "radio", opts: ["Lo tenemos en vectorial", "Solo en PNG o JPG", "Hay que redibujarlo"], why: "Va en la cabecera de cristal, en el favicon y en la imagen que sale al compartir la web por WhatsApp. Un PNG se ve borroso en pantallas nítidas y no se puede recolorear; un vectorial se ve perfecto a cualquier tamaño." },
+    { id: "identidad", t: "Manual de identidad, tipografía o colores ya definidos", type: "radio", opts: ["Sí, lo enviamos", "Solo el logo", "No hay"], why: "Si existe, la web lo respeta. Si no, la propuesta usa Poppins y un único color de acento, y lo cerramos en la sección de diseño." },
+    { id: "fotos-obra", t: "Fotos de obra terminada: proyectos y fotógrafo", type: "area", hint: "Originales, en la máxima resolución y sin marca de agua. Nombre del fotógrafo si hay que acreditarlo.", why: "Una foto de obra real vale más que diez renders: demuestra que lo construido está a la altura del dibujo. Las necesitamos en original: las de WhatsApp o Instagram vienen comprimidas y se ven mal a pantalla completa." },
+    { id: "renders-planos", t: "Renders y planos de cada proyecto en la mejor calidad que tengáis", type: "radio", opts: ["Los tenemos todos", "Solo de algunos", "Hay que buscarlos"], hint: "Renders a 3000 px o más. Planos en PDF (o DWG exportado a PDF); sin cotas si no queréis publicarlas.", why: "Ahora trabajamos con las imágenes de la web antigua, ya comprimidas. Con los originales las láminas y el visor se ven nítidos, y el vídeo del hero puede regenerarse con más calidad." },
+    { id: "fotos-equipo", t: "Fotos del equipo y del estudio", type: "radio", opts: ["Las tenemos", "Hay que hacerlas", "No queremos"], why: "La página «Estudio» con caras y espacio de trabajo genera más confianza que un texto solo. Si no las hay, se puede organizar una sesión o prescindir." },
+    { id: "textos", t: "Textos que ya tengáis", type: "check", opts: ["Memoria o presentación del estudio", "Descripciones de proyectos", "Dosier o portfolio en PDF", "Los de la web actual valen", "Nada: lo escribimos con vosotros"], why: "Vuestros textos nos dan el tono y los datos. No hace falta que estén pulidos: los reescribimos para la web." },
+    { id: "redes", t: "Redes sociales y perfiles a enlazar", type: "text", hint: "Instagram, LinkedIn, Pinterest, Houzz, ficha de Google…", why: "Aparecen en el pie y en contacto. La ficha de Google Business es la que más visitas locales trae: si no existe, la creamos." },
+    { id: "accesos", t: "Accesos que podréis facilitar", type: "check", opts: ["Panel del dominio (DNS)", "Hosting actual", "Google Business Profile", "Google Analytics / Search Console", "Correo que recibirá los formularios"], hint: "Aquí no pongáis contraseñas. Solo marcad lo que tenéis; las pedimos por un canal seguro.", why: "Para publicar hay que apuntar el dominio y verificar la web en Google. Sin estos accesos el lanzamiento se retrasa." },
+    { id: "entrega", t: "¿Cómo nos hacéis llegar el material?", type: "radio", opts: ["WeTransfer", "Google Drive o Dropbox", "Pendrive en la reunión"], other: "Otro medio", why: "Fotos y renders pesan; el correo los comprime o los rechaza. Una carpeta compartida sirve también para el material de proyectos futuros." },
+  ]},
+];
+
+const KEY = "raar-cuestionario-v2";
+// null-prototype: an id like "constructor" must never resolve to Object.prototype
+let state = Object.create(null);
+try { Object.assign(state, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const svgCheck = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>';
+const svgZoom = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></svg>';
+
+/* ── render ── */
+const form = document.getElementById("form");
+let n = 0;
+const qhead = (q) => `<div class="qhead"><span class="q" id="lab-${q.id}">${esc(q.t)}</span>${q.why ? `<button type="button" class="info" aria-label="Por qué lo preguntamos" aria-describedby="tip-${q.id}">i</button><div class="tip" role="tooltip" id="tip-${q.id}">${esc(q.why)}</div>` : ""}</div>`;
+
+SECTIONS.forEach((sec) => {
+  const el = document.createElement("section");
+  el.className = "glass";
+  el.id = sec.id;
+  let h = `<div class="sec-head"><h2>${esc(sec.title)}</h2><span class="sec-n" data-n="${sec.id}"></span></div>`;
+  if (sec.intro) h += `<p class="intro">${esc(sec.intro)}</p>`;
+  sec.qs.forEach((q) => {
+    n++;
+    const v = state[q.id];
+    h += `<div class="f">`;
+    if (q.type === "table") {
+      h += qhead({ id: q.id, t: "Estado de cada proyecto", why: q.why });
+      h += `<div class="tbl"><table><thead><tr><th>Proyecto</th><th>Estado</th><th>Año</th><th>m²</th><th>Publicar</th><th>Nota</th></tr></thead><tbody>`;
+      PROJECTS.forEach(([code, name], i) => {
+        const k = `p${i}`;
+        const pv = state[k] || {};
+        h += `<tr>
+          <td><span class="code">${esc(code)}</span><span class="name">${esc(name)}</span></td>
+          <td><select class="in w-m" data-p="${k}" data-f="estado" aria-label="Estado ${esc(code)}"><option value="">—</option>${["Proyecto", "En obra", "Terminada", "Parado"].map((o) => `<option ${pv.estado === o ? "selected" : ""}>${o}</option>`).join("")}</select></td>
+          <td><input class="in w-s" data-p="${k}" data-f="ano" inputmode="numeric" aria-label="Año ${esc(code)}" value="${esc(pv.ano || "")}"></td>
+          <td><input class="in w-s" data-p="${k}" data-f="m2" inputmode="numeric" aria-label="m² ${esc(code)}" value="${esc(pv.m2 || "")}"></td>
+          <td><select class="in w-m" data-p="${k}" data-f="publicar" aria-label="Publicar ${esc(code)}"><option value="">—</option>${["Sí, todo", "Sin planos", "No"].map((o) => `<option ${pv.publicar === o ? "selected" : ""}>${o}</option>`).join("")}</select></td>
+          <td><input class="in" data-p="${k}" data-f="nota" aria-label="Nota ${esc(code)}" value="${esc(pv.nota || "")}" placeholder="Nombre público, colaboradores…"></td>
+        </tr>`;
+      });
+      h += `</tbody></table></div></div>`;
+      return;
+    }
+    h += qhead(q);
+    if (q.hint) h += `<div class="hint">${esc(q.hint)}</div>`;
+    if (q.stubs) {
+      h += `<div class="stubs">${["gv75", "se08", "pr37", "gr16"].map((id) => `<figure class="stub" style="margin:0"><img src="${STUB_IMG[id]}" alt="Miniatura ${id.toUpperCase()} en la web actual"><b>${id.toUpperCase()}</b></figure>`).join("")}</div>`;
+      h += `<p class="src" style="margin:0">Sacados de vuestra web actual: en la página <i>Works</i> aparecen estas cuatro miniaturas con la etiqueta «PROCESSING», sin título, sin ficha y sin ubicación. Solo tenemos el código y la imagen.</p>`;
+    }
+    if (q.type === "radio" || q.type === "check") {
+      h += `<div class="chips" role="group" aria-labelledby="lab-${q.id}">`;
+      q.opts.forEach((o) => {
+        const checked = q.type === "radio" ? v === o : Array.isArray(v) && v.includes(o);
+        h += `<label class="chip"><input type="${q.type === "radio" ? "radio" : "checkbox"}" name="${q.id}" value="${esc(o)}" ${checked ? "checked" : ""}><span>${esc(o)}</span></label>`;
+      });
+      h += `</div>`;
+      if (q.other) h += `<div class="other"><span class="plus">+</span><input class="in" type="text" id="${q.id}-otro" name="${q.id}-otro" placeholder="${esc(q.other)}" value="${esc(state[q.id + "-otro"] || "")}" aria-label="${esc(q.other)}"></div>`;
+    } else if (q.type === "styles") {
+      h += `<div class="styles" role="radiogroup" aria-labelledby="lab-${q.id}">`;
+      STYLES.forEach((s) => {
+        h += `<label class="style" data-style="${s.id}"><input type="radio" name="${q.id}" value="${s.id}" ${v === s.id ? "checked" : ""}><img src="${STYLE_IMG[s.id].thumb}" alt="${esc(s.name)}"><span class="check">${svgCheck}</span><button type="button" class="zoom" data-zoom="${s.id}" aria-label="Ver ${esc(s.name)} en grande">${svgZoom}</button><span class="cap"><b>${esc(s.name)}</b><small>${esc(s.desc)}</small></span></label>`;
+      });
+      h += `</div>`;
+    } else if (q.type === "color") {
+      const custom = v && !COLORS.some((c) => c.hex === v);
+      h += `<div class="swatches" role="radiogroup" aria-labelledby="lab-${q.id}">`;
+      COLORS.forEach((c) => {
+        h += `<label class="sw"><input type="radio" name="${q.id}" value="${c.hex}" ${v === c.hex ? "checked" : ""}><i style="background:${c.hex}"></i><b>${esc(c.name)}</b><small>${c.note ? esc(c.note) : c.hex}</small></label>`;
+      });
+      h += `<label class="sw custom ${custom ? "on" : ""}"><input type="color" id="${q.id}-custom" value="${custom ? v : "#8A5A44"}" aria-label="Otro color"><b>Otro</b><small id="${q.id}-hex">${custom ? v.toUpperCase() : "elige"}</small></label>`;
+      h += `</div>`;
+    } else if (q.type === "area") {
+      h += `<textarea class="in" id="${q.id}" name="${q.id}" aria-labelledby="lab-${q.id}">${esc(v || "")}</textarea>`;
+    } else {
+      h += `<input class="in" type="${q.type === "date" ? "date" : "text"}" id="${q.id}" name="${q.id}" aria-labelledby="lab-${q.id}" value="${esc(v || "")}">`;
+    }
+    h += `</div>`;
+  });
+  el.innerHTML = h;
+  form.appendChild(el);
+});
+document.getElementById("p-total").textContent = n;
+
+/* ── state ── */
+const el = (s) => document.querySelector(s);
+function answered(q) {
+  if (q.type === "table") return PROJECTS.some((_, i) => { const v = state[`p${i}`]; return v && Object.values(v).some(Boolean); });
+  const v = state[q.id];
+  if (Array.isArray(v)) return v.length > 0 || !!(state[q.id + "-otro"] || "").trim();
+  return !!(v && String(v).trim()) || !!(state[q.id + "-otro"] || "").trim();
+}
+function refresh() {
+  let done = 0;
+  SECTIONS.forEach((sec) => {
+    const d = sec.qs.filter(answered).length;
+    done += d;
+    el(`[data-n="${sec.id}"]`).textContent = `${d} / ${sec.qs.length}`;
+  });
+  el("#p-done").textContent = done;
+  const pct = Math.round((done / n) * 100);
+  el("#p-pct").textContent = pct + " %";
+  el("#p-bar").style.transform = `scaleX(${pct / 100})`;
+}
+
+form.addEventListener("input", onChange);
+form.addEventListener("change", onChange);
+function onChange(e) {
+  const t = e.target;
+  if (t.dataset.p) {
+    state[t.dataset.p] = state[t.dataset.p] || Object.create(null);
+    state[t.dataset.p][t.dataset.f] = t.value;
+  } else if (t.type === "color") {
+    const id = t.id.replace(/-custom$/, "");
+    state[id] = t.value.toUpperCase();
+    form.querySelectorAll(`input[name="${id}"]`).forEach((r) => (r.checked = false));
+    t.closest(".sw").classList.add("on");
+    el(`#${id}-hex`).textContent = t.value.toUpperCase();
+  } else if (t.type === "radio") {
+    state[t.name] = t.value;
+    if (t.closest(".swatches")) { const c = el(`#${t.name}-custom`); c.closest(".sw").classList.remove("on"); el(`#${t.name}-hex`).textContent = "elige"; }
+  } else if (t.type === "checkbox") {
+    state[t.name] = [...form.querySelectorAll(`input[name="${t.name}"]:checked`)].map((c) => c.value);
+  } else if (t.name) {
+    state[t.name] = t.value;
+  }
+  save(); refresh();
+}
+refresh();
+
+/* info tooltips: hover on desktop, tap on touch */
+form.addEventListener("click", (e) => {
+  const b = e.target.closest(".info");
+  document.querySelectorAll(".info.on").forEach((x) => { if (x !== b) x.classList.remove("on"); });
+  if (b) b.classList.toggle("on");
+});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") { document.querySelectorAll(".info.on").forEach((x) => x.classList.remove("on")); hidePeek(); } });
+
+/* style preview: hover opens, leaving closes; tap on the zoom button keeps it open */
+const peek = el("#peek");
+function showPeek(id, sticky) {
+  const s = STYLES.find((x) => x.id === id);
+  el("#peek-img").src = STYLE_IMG[id].big; el("#peek-img").alt = s.name;
+  el("#peek-name").textContent = s.name; el("#peek-desc").textContent = s.desc;
+  peek.classList.add("on"); peek.classList.toggle("sticky", !!sticky); peek.classList.toggle("hover", !sticky);
+  peek.setAttribute("aria-hidden", "false");
+}
+function hidePeek() { peek.classList.remove("on", "sticky", "hover"); peek.setAttribute("aria-hidden", "true"); }
+if (window.matchMedia("(hover: hover)").matches) {
+  form.addEventListener("mouseover", (e) => { const c = e.target.closest(".style"); if (c) showPeek(c.dataset.style, false); });
+  form.addEventListener("mouseout", (e) => { const c = e.target.closest(".style"); if (c && !c.contains(e.relatedTarget)) hidePeek(); });
+}
+form.addEventListener("click", (e) => { const z = e.target.closest("[data-zoom]"); if (z) { e.preventDefault(); showPeek(z.dataset.zoom, true); } });
+peek.addEventListener("click", (e) => { if (peek.classList.contains("sticky") && !e.target.closest(".box")) hidePeek(); });
+el("#peek-close").addEventListener("click", hidePeek);
+// preload the big images so the first hover is instant
+window.addEventListener("load", () => STYLES.forEach((s) => { const i = new Image(); i.src = STYLE_IMG[s.id].big; }));
+
+document.getElementById("clear").addEventListener("click", () => {
+  if (!confirm("¿Vaciar todas las respuestas?")) return;
+  state = Object.create(null); save();
+  form.querySelectorAll("input, textarea, select").forEach((i) => { if (i.type === "radio" || i.type === "checkbox") i.checked = false; else if (i.type !== "color") i.value = ""; });
+  form.querySelectorAll(".sw.custom").forEach((s) => s.classList.remove("on"));
+  refresh();
+});
+
+function toast(msg) { const t = el("#toast"); t.textContent = msg; t.classList.add("on"); setTimeout(() => t.classList.remove("on"), 2600); }
+
+/* ── PDF ── */
+function answerOf(q) {
+  const v = state[q.id];
+  if (q.type === "styles") { const s = STYLES.find((x) => x.id === v); return s ? `${s.name} — ${s.desc}` : ""; }
+  if (q.type === "color") { if (!v) return ""; const c = COLORS.find((x) => x.hex === v); return c ? `${c.name} · ${c.hex}` : `Otro · ${v}`; }
+  if (Array.isArray(v)) { const extra = (state[q.id + "-otro"] || "").trim(); return [...v, ...(extra ? [extra] : [])].join(" · "); }
+  if (q.type === "date" && v) { const [y, m, d] = v.split("-"); return `${d}/${m}/${y}`; }
+  return (v || "").trim();
+}
+const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+
+document.getElementById("send").addEventListener("click", () => {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: "mm", format: "a4", compress: true });
+  doc.setLineHeightFactor(1.4);
+  doc.addFileToVFS("Poppins-Regular.ttf", FONT_R); doc.addFont("Poppins-Regular.ttf", "Poppins", "normal");
+  doc.addFileToVFS("Poppins-Medium.ttf", FONT_M); doc.addFont("Poppins-Medium.ttf", "Poppins", "bold");
+
+  const INK = [26, 26, 24], INK2 = [79, 79, 74], INK3 = [102, 102, 95], STONE = [242, 242, 239], LINE = [222, 222, 218], RED = [216, 50, 31];
+  const W = 210, M = 18, CW = W - 2 * M, BOTTOM = 277;
+  let y = 0;
+  const today = new Date();
+  const dateStr = today.toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
+  const fileDate = today.toISOString().slice(0, 10);
+  const font = (style, size, color) => { doc.setFont("Poppins", style); doc.setFontSize(size); doc.setTextColor(...color); };
+  const ensure = (h) => { if (y + h > BOTTOM) { doc.addPage(); y = 22; } };
+
+  const lw = 34, lh = lw / LOGO_RATIO;
+  doc.addImage(LOGO_PDF, "PNG", M, 16, lw, lh);
+  font("normal", 8.5, INK3);
+  doc.text(dateStr, W - M, 21, { align: "right" });
+  doc.text("Cuestionario · nueva web", W - M, 25.5, { align: "right" });
+  y = 46;
+  font("bold", 24, INK);
+  doc.text("Lo que necesitamos", M, y); y += 10.5;
+  doc.text("saber de vosotros", M, y); y += 8;
+  font("normal", 10.5, INK2);
+  doc.text("Respuestas de RAAR arquitectura para el diseño y los textos de la nueva web.", M, y); y += 5;
+  doc.setDrawColor(...RED); doc.setLineWidth(0.9);
+  doc.line(M, y + 2, M + 14, y + 2); y += 14;
+  let done = 0; SECTIONS.forEach((s) => (done += s.qs.filter(answered).length));
+  font("normal", 9, INK3);
+  doc.text(`${done} de ${n} preguntas respondidas`, M, y); y += 10;
+
+  SECTIONS.forEach((sec) => {
+    ensure(58); // never leave a section band alone at the foot of a page
+    doc.setFillColor(...STONE);
+    doc.roundedRect(M, y - 1, CW, 11, 3, 3, "F");
+    font("bold", 12, INK);
+    doc.text(sec.title, M + 5, y + 6.2);
+    font("normal", 8.5, INK3);
+    doc.text(`${sec.qs.filter(answered).length} / ${sec.qs.length}`, W - M - 5, y + 6.2, { align: "right" });
+    y += 17;
+
+    sec.qs.forEach((q) => {
+      if (q.type === "table") { drawTable(); return; }
+      const ans = answerOf(q);
+      font("bold", 8.6, INK3);
+      const ql = doc.splitTextToSize(q.t.toUpperCase(), CW);
+      font("normal", 10.5, ans ? INK : INK3);
+      const swatch = q.type === "color" && state[q.id] ? 7 : 0;
+      const al = doc.splitTextToSize(ans || "—", CW - swatch);
+      const h = ql.length * 4.25 + al.length * 5.2 + 6 + (q.type === "styles" && state[q.id] ? 40 : 0);
+      ensure(h);
+      font("bold", 8.6, INK3);
+      doc.text(ql, M, y); y += ql.length * 4.25 + 1.2;
+      if (swatch) { doc.setFillColor(...hexRgb(state[q.id])); doc.circle(M + 2.2, y - 1.2, 2.2, "F"); }
+      font("normal", 10.5, ans ? INK : INK3);
+      doc.text(al, M + swatch, y); y += al.length * 5.2 + 2;
+      if (q.type === "styles" && state[q.id]) {
+        // the chosen style, as a small picture
+        const iw = 60, ih = iw / 1.5;
+        doc.addImage(STYLE_IMG[state[q.id]].thumb, "JPEG", M, y, iw, ih);
+        doc.setDrawColor(...LINE); doc.setLineWidth(0.25); doc.roundedRect(M, y, iw, ih, 2, 2, "S");
+        y += ih + 3;
+      }
+      y += 3.5;
+    });
+    y += 4;
+  });
+
+  function drawTable() {
+    const cols = [{ w: 30, h: "Proyecto" }, { w: 26, h: "Estado" }, { w: 16, h: "Año" }, { w: 16, h: "m²" }, { w: 24, h: "Publicar" }, { w: CW - 112, h: "Nota" }];
+    const header = () => {
+      font("bold", 7.6, INK3);
+      let x = M;
+      cols.forEach((c) => { doc.text(c.h.toUpperCase(), x, y); x += c.w; });
+      y += 2.2; doc.setDrawColor(...LINE); doc.setLineWidth(0.25); doc.line(M, y, W - M, y); y += 5;
+    };
+    ensure(14); header();
+    PROJECTS.forEach(([code], i) => {
+      const v = state[`p${i}`] || {};
+      font("normal", 9.2, INK);
+      const noteLines = doc.splitTextToSize(v.nota || "—", cols[5].w - 3);
+      const rh = Math.max(1, noteLines.length) * 4.55 + 3.6;
+      if (y + rh > BOTTOM) { doc.addPage(); y = 22; header(); }
+      let x = M;
+      const cell = (txt, w, bold, color) => { font(bold ? "bold" : "normal", 9.2, color || INK); doc.text(String(txt), x, y); x += w; };
+      cell(code, cols[0].w, true);
+      cell(v.estado || "—", cols[1].w, false, v.estado ? INK : INK3);
+      cell(v.ano || "—", cols[2].w, false, v.ano ? INK : INK3);
+      cell(v.m2 || "—", cols[3].w, false, v.m2 ? INK : INK3);
+      cell(v.publicar || "—", cols[4].w, false, v.publicar ? INK : INK3);
+      font("normal", 9.2, v.nota ? INK : INK3); doc.text(noteLines, x, y);
+      y += rh; doc.setDrawColor(...LINE); doc.line(M, y - 2.6, W - M, y - 2.6);
+    });
+    y += 6;
+  }
+
+  const pages = doc.getNumberOfPages();
+  for (let p = 1; p <= pages; p++) {
+    doc.setPage(p);
+    font("normal", 7.8, INK3);
+    doc.text("RAAR arquitectura · Cuestionario nueva web · " + dateStr, M, 289);
+    doc.text(`${p} / ${pages}`, W - M, 289, { align: "right" });
+  }
+  doc.setProperties({ title: "Cuestionario nueva web · RAAR arquitectura", author: "RAAR arquitectura", subject: "Respuestas de la reunión" });
+  doc.save(`RAAR-cuestionario-${fileDate}.pdf`);
+  toast("PDF generado.");
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ampliaciones · nueva web · RAAR arquitectura</title>
+<style>
+  @font-face { font-family: "Poppins"; font-weight: 400; font-style: normal; src: url(data:font/ttf;base64,__FONT_REGULAR__) format("truetype"); }
+  @font-face { font-family: "Poppins"; font-weight: 500; font-style: normal; src: url(data:font/ttf;base64,__FONT_MEDIUM__) format("truetype"); }
+
+  :root {
+    --stone: #F2F2EF; --stone-2: #E9E9E5; --white: #fff;
+    --ink: #1A1A18; --ink-2: #4F4F4A; --ink-3: #66665F;
+    --line: rgb(26 26 24 / .10); --line-2: rgb(26 26 24 / .18);
+    --red: #D8321F;
+    --glass-bg: rgb(255 255 255 / .58); --glass-line: rgb(255 255 255 / .65); --glass-blur: 22px;
+    --r-sm: 12px; --r: 20px; --r-lg: 28px; --pill: 999px;
+    --gutter: clamp(16px, 4vw, 40px);
+  }
+  * { box-sizing: border-box; }
+  html { color-scheme: light; }
+  body {
+    margin: 0; background: var(--stone); color: var(--ink);
+    font-family: "Poppins", "Helvetica Neue", Arial, sans-serif; font-size: 16px; line-height: 1.55;
+    padding-inline: var(--gutter); padding-block: 24px 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--ink); color: var(--stone); }
+
+  .bg { position: fixed; inset: -6%; z-index: -1; background: url(__BG__) center / cover no-repeat; filter: blur(28px) saturate(115%); transform: scale(1.06); }
+  .bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(242 242 239 / .6), rgb(242 242 239 / .82) 55%, rgb(242 242 239 / .92)); }
+
+  .wrap { max-width: 960px; margin: 0 auto; display: grid; gap: 36px; }
+  .glass {
+    background: var(--glass-bg); border: 1px solid var(--glass-line); border-radius: var(--r-lg);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%); backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / .55), 0 8px 30px rgb(26 26 24 / .12);
+  }
+  .label { font-size: .74rem; font-weight: 500; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); }
+  p { margin: 0; text-wrap: pretty; }
+  ul { margin: 0; padding-left: 1.1em; }
+  li { margin: 0; }
+  li + li { margin-top: 4px; }
+  b, strong { font-weight: 500; }
+
+  /* header */
+  .head { padding: 28px clamp(20px, 4vw, 44px) 36px; display: grid; gap: 22px; }
+  .head-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .logo { height: 44px; width: auto; display: block; }
+  h1 { font-weight: 500; font-size: clamp(2rem, 4.6vw, 3rem); line-height: 1.06; letter-spacing: -.028em; margin: 0; text-wrap: balance; max-width: 16ch; }
+  .lead { color: var(--ink-2); max-width: 62ch; font-size: 1.05rem; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: var(--pill); background: rgb(255 255 255 / .7); border: 1px solid var(--glass-line); font-size: .9rem; font-weight: 500; white-space: nowrap; }
+  .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--red); display: inline-block; }
+
+  .included { display: grid; gap: 10px; padding-top: 6px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { display: inline-flex; align-items: center; gap: 8px; min-height: 38px; padding: 0 14px 0 10px; border-radius: var(--pill); border: 1px solid var(--line-2); background: rgb(255 255 255 / .65); font-size: .9rem; }
+  .chip svg { width: 16px; height: 16px; flex: none; }
+
+  .legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; padding-top: 10px; border-top: 1px solid var(--line); }
+  .legend > div { display: grid; gap: 4px; font-size: .88rem; color: var(--ink-2); }
+  .legend .tag { justify-self: start; }
+
+  /* tags: ink for recommended, outline for the rest — never red */
+  .tag { display: inline-flex; align-items: center; min-height: 28px; padding: 0 12px; border-radius: var(--pill); font-size: .74rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--ink); color: var(--ink); background: transparent; white-space: nowrap; }
+  .tag.rec { background: var(--ink); color: var(--stone); }
+  .tag.later { border-color: var(--line-2); color: var(--ink-3); }
+
+  /* block cover */
+  .block { display: grid; gap: 20px; }
+  .cover { position: relative; border-radius: var(--r-lg); overflow: hidden; aspect-ratio: 16 / 6; box-shadow: 0 14px 40px rgb(26 26 24 / .18); }
+  .cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cover .note { position: absolute; left: clamp(16px, 3vw, 32px); bottom: clamp(16px, 3vw, 32px); max-width: min(520px, calc(100% - 32px)); padding: 18px 22px 20px; border-radius: var(--r); display: grid; gap: 6px; }
+  .cover .note .label { color: var(--ink-2); }
+  .cover h2 { margin: 0; font-weight: 500; font-size: clamp(1.5rem, 3vw, 2.1rem); line-height: 1.1; letter-spacing: -.024em; }
+  .block > .lead { padding: 0 6px; }
+
+  /* service card */
+  .svc { padding: clamp(20px, 3vw, 32px); display: grid; gap: 20px; }
+  .svc-head { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start; }
+  .ico { width: 52px; height: 52px; border-radius: 16px; background: var(--ink); color: var(--stone); display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .ico svg { width: 26px; height: 26px; }
+  .svc-title { display: grid; gap: 6px; }
+  .svc-title .n { font-size: .74rem; font-weight: 500; letter-spacing: .09em; color: var(--ink-3); }
+  .svc h3 { margin: 0; font-weight: 500; font-size: clamp(1.25rem, 2.4vw, 1.55rem); line-height: 1.15; letter-spacing: -.02em; }
+  .svc .claim { color: var(--ink-2); font-size: 1.02rem; max-width: 58ch; }
+  .svc-body { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; }
+  .col { display: grid; gap: 16px; align-content: start; }
+  .part { display: grid; gap: 6px; }
+  .part .label { margin-bottom: 2px; }
+  .part p, .part li { font-size: .95rem; color: var(--ink-2); }
+  .part li::marker { color: var(--ink-3); }
+  .dia { border-radius: var(--r); background: rgb(255 255 255 / .5); border: 1px solid var(--glass-line); padding: 14px clamp(12px, 3vw, 40px); }
+  .dia svg { width: 100%; height: auto; display: block; }
+  .steps { display: grid; gap: 8px; counter-reset: s; padding: 0; list-style: none; }
+  .steps li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; font-size: .95rem; color: var(--ink-2); }
+  .steps li::before { counter-increment: s; content: counter(s); width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line-2); background: rgb(255 255 255 / .7); display: inline-flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 500; color: var(--ink); }
+  .note { font-size: .86rem; color: var(--ink-3); padding: 10px 14px; border-radius: var(--r-sm); background: rgb(255 255 255 / .45); border: 1px dashed var(--line-2); }
+
+  .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .meta > div { display: grid; gap: 3px; align-content: start; padding: 12px 14px; border-radius: 16px; background: rgb(255 255 255 / .55); }
+  .meta .label { font-size: .68rem; }
+  .meta b { font-weight: 500; font-size: 1.02rem; letter-spacing: -.01em; }
+  .meta small { font-size: .8rem; color: var(--ink-3); line-height: 1.35; }
+  .meta .tagcell { align-content: center; justify-items: start; }
+
+  /* summary + packs + roadmap */
+  .sec { padding: clamp(20px, 3vw, 32px); display: grid; gap: 18px; }
+  .sec h2 { margin: 0; font-weight: 500; font-size: clamp(1.4rem, 2.6vw, 1.8rem); line-height: 1.12; letter-spacing: -.022em; }
+  .tbl { overflow-x: auto; border-radius: var(--r); border: 1px solid var(--glass-line); background: rgb(255 255 255 / .45); }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: .9rem; }
+  th, td { text-align: left; padding: 10px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: .7rem; font-weight: 500; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; }
+  th:first-child, td:first-child { padding-left: 16px; }
+  th:last-child, td:last-child { padding-right: 16px; }
+  tr:last-child td { border-bottom: 0; }
+  td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td .sub { display: block; color: var(--ink-3); font-size: .8rem; }
+
+  .packs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .pack { border-radius: var(--r); background: rgb(255 255 255 / .6); border: 1px solid var(--glass-line); padding: 20px; display: grid; gap: 12px; align-content: start; }
+  .pack h3 { margin: 0; font-weight: 500; font-size: 1.15rem; letter-spacing: -.015em; }
+  .pack p { font-size: .9rem; color: var(--ink-2); }
+  .pack ul { list-style: none; padding: 0; display: grid; gap: 6px; }
+  .pack li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; font-size: .92rem; align-items: start; }
+  .pack li svg { width: 18px; height: 18px; margin-top: 2px; }
+  .pack .price { padding-top: 10px; border-top: 1px solid var(--line); display: grid; gap: 2px; }
+  .pack .price b { font-size: 1.3rem; font-weight: 500; letter-spacing: -.02em; }
+  .pack .price small { color: var(--ink-3); font-size: .82rem; }
+
+  .road { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .step { display: grid; gap: 8px; padding: 16px; border-radius: var(--r); background: rgb(255 255 255 / .55); border: 1px solid var(--glass-line); }
+  .step .k { width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: var(--stone); display: inline-flex; align-items: center; justify-content: center; font-size: .82rem; font-weight: 500; }
+  .step b { font-size: .95rem; }
+  .step span { font-size: .84rem; color: var(--ink-2); line-height: 1.4; }
+
+  .foot { padding: 20px clamp(20px, 4vw, 44px); display: grid; gap: 8px; font-size: .84rem; color: var(--ink-3); }
+
+  @media (max-width: 720px) {
+    .svc-body { grid-template-columns: 1fr; }
+    .meta { grid-template-columns: repeat(2, 1fr); }
+    .cover { aspect-ratio: 4 / 3; }
+    h1 { max-width: none; }
+  }
+
+  @page { size: A4; margin: 12mm 11mm; }
+  @media print {
+    html { font-size: 12.5px; } /* every size is in rem: this is the print scale */
+    body { padding: 0; background: #fff; line-height: 1.45; }
+    .bg { display: none !important; }
+    /* no grid anywhere in the page flow: Chrome mispaints/overlaps grid items across page boundaries */
+    .wrap { display: block; max-width: none; }
+    .wrap > * + * { margin-top: 16px; }
+    .block { display: block; }
+    .block > * + * { margin-top: 14px; }
+    .glass { background: #fff; border-color: #dcdcd7; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    /* page 1 is a cover: title at the top, what is included and the legend at the foot */
+    .head { padding: 8px 6px 18px; min-height: 266mm; align-content: space-between; break-after: page; }
+    /* continuous flow: a card may span two pages, but never breaks inside a part, a diagram or the meta strip */
+    .block { break-before: auto; }
+    /* cards without a diagram fit one page and move whole; diagram cards are taller and open a fresh page */
+
+    .cover { aspect-ratio: 16 / 5; box-shadow: none; break-inside: avoid; break-after: avoid; }
+    .block > .lead { break-inside: avoid; break-after: avoid; }
+    p, li { orphans: 3; widows: 3; }
+    .cover .note { background: rgb(255 255 255 / .9); }
+    /* the card itself must be block flow: a grid container fragments with overlaps in Chrome */
+    .svc { break-inside: auto; padding: 16px 18px; display: block; }
+    .svc > * + * { margin-top: 12px; }
+    .part { display: block; }
+    .part > .label { display: block; margin-bottom: 4px; }
+    .part > ul, .part > ol { margin-top: 0; }
+    /* Chrome fragments grids unreliably (overlaps): the two-column body, the diagram and the meta strip stay whole */
+    .svc-head, .part, .part-dia, .meta, .note, .pack, .step, .tbl tr { break-inside: avoid; }
+    /* Chrome cannot fragment a two-column body cleanly (grid and floats overlap, multicol spawns overflow columns and
+       scales the page). Cards without a diagram fit one page: they keep the two columns and move whole. Diagram cards
+       are longer and must break, so their body flows as a single narrower column. */
+    .svc:not(:has(.part-dia)) { break-inside: avoid; }
+    .svc:has(.part-dia) .svc-body { display: block; }
+    .svc:has(.part-dia) .col { display: block; max-width: 150mm; }
+    .svc:has(.part-dia) .col .part { margin-bottom: 12px; }
+    .svc-head { break-after: avoid; }
+    .part-dia { display: block; }
+    .part-dia .label { display: block; margin-bottom: 8px; }
+    .svc-body { gap: 14px; }
+    .dia { width: 160mm; max-width: 100%; margin-inline: auto; padding: 10px 24px; } /* explicit width: auto margins would shrink a grid item to the SVG intrinsic 300px */
+    .meta { grid-template-columns: 1fr 1.5fr 1fr 1fr; }
+    .sec { display: block; }
+    .sec > * + * { margin-top: 14px; }
+    /* packs + roadmap open a fresh page: pushed across a boundary, Chrome laid the packs out but never painted them */
+    .sec:has(.packs) { break-before: page; }
+    .road, .foot { break-inside: avoid; }
+    .packs { grid-template-columns: repeat(3, 1fr); }
+    .road { grid-template-columns: repeat(5, 1fr); gap: 8px; }
+    .step { padding: 12px; }
+    .meta > div, .dia, .pack, .step, .note, .tbl { background: #F6F6F3; }
+    .lead { font-size: .98rem; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+<div class="bg" aria-hidden="true"></div>
+<main class="wrap" id="doc"></main>
+
+<script>
+/* ── AJUSTAR AQUÍ ────────────────────────────────────────────────────────────
+   RATE: tu tarifa por día. Cada servicio lleva `days` (esfuerzo estimado);
+   el precio «desde» se calcula days × RATE. Los costes externos son de terceros. */
+const RATE = 200;
+const DATE = "Septiembre de 2026";
+
+const COVERS = __COVERS__;
+
+const ICONS = {
+  cms: '<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/>',
+  landings: '<path d="M12 21s-6-5.3-6-10a6 6 0 0 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2"/>',
+  ia: '<path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4z"/><path d="M12 7v6M9 10h6"/>',
+  voz: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/><path d="M15 4a5 5 0 0 1 5 5M15 7.5a1.5 1.5 0 0 1 1.5 1.5"/>',
+  agenda: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="m9 15 2 2 4-4"/>',
+  estimador: '<path d="M4 7h9M18 7h2M4 12h3M12 12h8M4 17h11M20 17h0"/><circle cx="15.5" cy="7" r="2"/><circle cx="9.5" cy="12" r="2"/><circle cx="17.5" cy="17" r="2"/>',
+  leads: '<circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="12" r="2"/><path d="M7 6c4 0 4 6 10 6M7 18c4 0 4-6 10-6"/>',
+  newsletter: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m3 8 9 6 9-6"/>',
+  analitica: '<path d="M5 20v-8M11 20V5M17 20v-5M3 20h18"/>',
+  area: '<rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.5"/>',
+  video: '<rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/>',
+  fichas: '<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M12 4v16"/><path d="m8.5 10-2 2 2 2M15.5 10l2 2-2 2"/>',
+  mant: '<path d="M14.7 6.3a4 4 0 0 0-5.3 5.3L4 17a2 2 0 0 0 3 3l5.4-5.4a4 4 0 0 0 5.3-5.3l-2.3 2.3-2.4-2.4z"/>',
+  check: '<path d="M5 12l5 5L20 7"/>',
+};
+const icon = (k, sw = 1.5) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[k]}</svg>`;
+
+/* ── diagramas (SVG propios, trazo 1.5, sin color de acción) ── */
+const AH = '<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5 0 10z" fill="#1A1A18"/></marker></defs>';
+const node = (x, y, w, h, t, s, dark) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="${dark ? "#1A1A18" : "#fff"}" stroke="${dark ? "#1A1A18" : "rgba(26,26,24,.2)"}" stroke-width="1"/><text x="${x + w / 2}" y="${y + (s ? h / 2 - 3 : h / 2 + 4)}" text-anchor="middle" font-size="12.5" font-weight="500" fill="${dark ? "#F2F2EF" : "#1A1A18"}">${t}</text>${s ? `<text x="${x + w / 2}" y="${y + h / 2 + 13}" text-anchor="middle" font-size="10" fill="${dark ? "#C9C9C2" : "#66665F"}">${s}</text>` : ""}`;
+const arrow = (x1, y1, x2, y2, both) => `<path d="M${x1} ${y1} L${x2} ${y2}" stroke="#1A1A18" stroke-width="1.5" fill="none" marker-end="url(#ah)" ${both ? 'marker-start="url(#ah)"' : ""}/>`;
+const cap = (x, y, t, anchor = "middle") => `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="10.5" fill="#66665F">${t}</text>`;
+
+const DIA = {
+  cms: () => `<svg viewBox="0 0 640 150">${AH}
+    ${node(20, 45, 170, 62, "Panel de edición", "RAAR sube un proyecto o un post")}
+    ${arrow(190, 76, 233, 76)}
+    ${node(235, 45, 170, 62, "Base de datos", "textos · imágenes · planos · zonas")}
+    ${arrow(405, 76, 448, 76)}
+    ${node(450, 45, 170, 62, "Web", "ficha · tarjeta · blog · sitemap", true)}
+    ${cap(320, 135, "Plantillas dinámicas: cada registro nuevo se convierte en página con la misma calidad.")}
+  </svg>`,
+
+  landings: () => {
+    const zonas = ["Sarrià", "Sant Cugat", "Maresme", "Andorra"], servs = ["Reforma integral", "Obra nueva", "Rehabilitación"];
+    const on = new Set(["0-0", "0-1", "0-3", "1-1", "1-3", "2-0", "2-2"]);
+    let s = `<svg viewBox="0 0 640 235">`;
+    zonas.forEach((z, j) => (s += `<text x="${215 + j * 108}" y="34" text-anchor="middle" font-size="11.5" font-weight="500" fill="#1A1A18">${z}</text>`));
+    servs.forEach((sv, i) => {
+      s += `<text x="18" y="${74 + i * 52}" font-size="11.5" font-weight="500" fill="#1A1A18">${sv}</text>`;
+      zonas.forEach((z, j) => {
+        const x = 170 + j * 108, y = 50 + i * 52, k = on.has(`${i}-${j}`);
+        s += k
+          ? `<rect x="${x}" y="${y}" width="90" height="38" rx="11" fill="#1A1A18"/><path d="M${x + 36} ${y + 12}h14a3 3 0 0 1 3 3v9a3 3 0 0 1-3 3h-14a3 3 0 0 1-3-3v-9a3 3 0 0 1 3-3z M${x + 37} ${y + 19}h12" fill="none" stroke="#F2F2EF" stroke-width="1.4"/>`
+          : `<rect x="${x}" y="${y}" width="90" height="38" rx="11" fill="none" stroke="rgba(26,26,24,.2)" stroke-dasharray="3 3"/><text x="${x + 45}" y="${y + 23}" text-anchor="middle" font-size="11" fill="#9A9A92">—</text>`;
+      });
+    });
+    s += cap(320, 222, "Una página solo donde hay obra o interés real: entre 8 y 12, no 200. Google ignora las copias.");
+    return s + "</svg>";
+  },
+
+  ia: () => `<svg viewBox="0 0 640 270">${AH}
+    ${node(20, 22, 190, 58, "Visitante", "«¿Hacéis reformas en Sant Cugat?»")}
+    <rect x="20" y="108" width="190" height="140" rx="14" fill="#fff" stroke="rgba(26,26,24,.2)"/>
+    <text x="115" y="130" text-anchor="middle" font-size="12.5" font-weight="500" fill="#1A1A18">Fichas de conocimiento</text>
+    ${["negocio · servicios", "proceso · primera visita", "zonas · presupuestos", "preguntas frecuentes", "tono · límites"].map((t, i) => `<rect x="34" y="${140 + i * 20}" width="162" height="14" rx="5" fill="#F2F2EF"/><text x="115" y="${150.5 + i * 20}" text-anchor="middle" font-size="9.5" fill="#4F4F4A">${t}.md</text>`).join("")}
+    ${arrow(210, 51, 258, 120)}
+    ${arrow(210, 178, 258, 150)}
+    ${node(260, 100, 150, 72, "Modelo", "Claude Haiku 4.5 · pequeño y rápido", true)}
+    ${cap(335, 192, "cada conversación queda")}
+    ${cap(335, 205, "registrada para mejorar las fichas")}
+    ${arrow(410, 128, 448, 60)}
+    ${node(450, 22, 170, 62, "Respuesta", "«Sí: dos obras en Sant Cugat…»")}
+    ${arrow(535, 84, 535, 158)}
+    ${node(450, 160, 170, 62, "Formulario prerellenado", "zona · tipo · plazo → visita")}
+    ${cap(320, 258, "La inteligencia vive en las fichas: se corrige editando una ficha, no cambiando de modelo.")}
+  </svg>`,
+
+  voz: () => `<svg viewBox="0 0 640 262">${AH}
+    ${node(20, 92, 140, 62, "Llamada", "fijo o número nuevo")}
+    ${arrow(160, 123, 198, 123)}
+    ${node(200, 78, 200, 90, "Recepcionista de voz", "escucha · pregunta · propone hora", true)}
+    ${cap(300, 186, "mismas fichas que el chat")}
+    ${arrow(400, 105, 438, 56)}
+    ${arrow(400, 123, 438, 136)}
+    ${arrow(400, 141, 438, 216)}
+    ${node(440, 26, 180, 58, "Calendario", "Cal.com · Calendly · Google")}
+    ${node(440, 106, 180, 58, "Panel RAAR", "llamadas · transcripciones · citas")}
+    ${node(440, 186, 180, 58, "Aviso a RAAR", "WhatsApp o email con resumen")}
+  </svg>`,
+
+  area: () => `<svg viewBox="0 0 640 175">${AH}
+    ${node(20, 56, 150, 62, "Cliente", "entra con su clave")}
+    ${arrow(172, 87, 213, 87, true)}
+    <rect x="215" y="30" width="210" height="114" rx="14" fill="#1A1A18"/>
+    <text x="320" y="56" text-anchor="middle" font-size="12.5" font-weight="500" fill="#F2F2EF">Área privada del proyecto</text>
+    ${["Fases: estudio · proyecto · licencia · obra", "Documentos de cada fase", "Fotos de obra · mensajes"].map((t, i) => `<text x="320" y="${80 + i * 18}" text-anchor="middle" font-size="10" fill="#C9C9C2">${t}</text>`).join("")}
+    ${arrow(427, 87, 468, 87, true)}
+    ${node(470, 56, 150, 62, "RAAR", "sube desde el panel")}
+  </svg>`,
+};
+
+/* ── contenido ── */
+const BLOCKS = [
+  { id: "encontrar", title: "Que os encuentren", cover: "b1", lead: "La web sale con las páginas necesarias. Estas dos ampliaciones hacen que crezca sola y que aparezca donde buscan vuestros clientes.", items: [
+    { id: "cms", icon: "cms", tag: "rec", title: "CMS y contenido dinámico", claim: "Subís un proyecto o un artículo desde un panel; la web genera la ficha, la tarjeta y la entrada del blog sola.",
+      what: "Un panel de edición propio (Payload, software libre) conectado a una base de datos. Cada proyecto y cada artículo es un registro: nombre, código, zona, tipo, estado, textos en los tres idiomas, renders, planos, fotos de obra. Las plantillas de ficha y de post se generan a partir de esos datos, con la misma estructura y calidad siempre.",
+      brings: ["No dependéis de nadie para publicar una obra nueva o un artículo.", "Nada se descoloca: la plantilla manda, vosotros ponéis el contenido.", "Filtros, proyectos relacionados y sitemap se actualizan solos; Google ve la web viva.", "Es la base de otras ampliaciones: landings por zona, área privada, newsletter."],
+      dia: "cms",
+      needs: ["Decidir quién edita (uno o dos accesos).", "Media hora de formación; el panel es sencillo.", "Material de cada proyecto en original."],
+      days: 1.5, ext: "0 €", extNote: "Base de datos gratuita hasta un volumen alto de contenido." },
+    { id: "landings", icon: "landings", tag: "rec", title: "Landings por servicio y zona", claim: "Una página para cada «reforma integral en Sant Cugat» u «obra nueva en Andorra» que alguien escriba en Google.",
+      what: "Google responde a búsquedas locales con páginas que hablan exactamente de ese servicio en ese lugar. Cruzamos vuestros servicios con las zonas donde trabajáis o queréis trabajar: barrios de Barcelona, Sant Cugat y el Vallès, el Maresme, Andorra. Cada cruce con sentido tiene su página: un proyecto real de la zona, lo que cambia allí (licencias del ayuntamiento, trámites en Andorra, tipología de vivienda habitual), preguntas frecuentes locales y el botón de primera visita.",
+      brings: ["Aparecer en búsquedas que hoy no os encuentran: la mayoría lleva el nombre de un municipio.", "Visitas ya decididas: saben qué quieren y dónde.", "Andorra tiene poca competencia digital en arquitectura de calidad.", "Se miden una a una: sabéis qué zona trae clientes."],
+      dia: "landings",
+      needs: ["Lista de zonas por prioridad: dónde queréis más encargos.", "Un proyecto o referencia por zona.", "Particularidades que conozcáis de cada sitio: trámites, plazos, tipos de obra."],
+      days: 1, ext: "0 €", note: "Con el CMS, la zona es un campo más del proyecto y las landings se alimentan solas." },
+  ]},
+  { id: "escribir", title: "Que os escriban", cover: "b2", lead: "Cada visita que se va sin escribir es un cliente que no volverá. Estas ampliaciones quitan fricción entre mirar y pedir la primera visita.", items: [
+    { id: "ia", icon: "ia", tag: "rec", title: "Asistente IA en la web", claim: "Responde a las 23:40, cuando la gente mira reformas. Cualifica y deja el formulario relleno.",
+      what: "Un chat discreto en la esquina de la web. Detrás no hay un modelo genérico: hay una base de conocimiento propia en fichas de texto (quiénes sois, qué hacéis y qué no, cómo es la primera visita, zonas, presupuestos orientativos, preguntas frecuentes, tono, qué no debe responder). El modelo es pequeño y barato; la inteligencia vive en las fichas. Cuando algo se responde mal, se corrige la ficha, no el modelo. Cada conversación queda registrada para mejorarlas.",
+      brings: ["Atención 24 h sin coste de personal: la mayoría de las visitas son fuera de horario.", "Cualifica antes de que os llegue: zona, tipo de obra, plazo, presupuesto aproximado.", "Termina en acción: rellena el formulario de primera visita con lo hablado, o pasa a WhatsApp.", "Responde en castellano, catalán o inglés según escriba el visitante.", "No inventa: lo que no está en las fichas lo deriva a vosotros."],
+      dia: "ia",
+      needs: ["Dos horas de entrevista para escribir las fichas; mucho ya sale del cuestionario.", "Reglas de cualificación: presupuesto mínimo, zonas, qué no hacéis.", "Revisar las conversaciones las dos primeras semanas y ajustar."],
+      days: 1.5, ext: "3–10 €/mes", extNote: "Uso del modelo para unas 300 conversaciones; sin cuota fija. Tarifa actual de Anthropic con las fichas en caché." },
+    { id: "voz", icon: "voz", tag: "vol", title: "Recepcionista de voz", claim: "Contesta cuando estáis en obra, cualifica y reserva la primera visita en vuestro calendario.",
+      what: "Un agente de voz con las mismas fichas que el asistente de chat. Atiende el teléfono (todas las llamadas, o solo las que no cogéis), se presenta como asistente, entiende qué quiere la persona, hace las preguntas de cualificación, consulta vuestra disponibilidad y reserva. Después os llega un aviso con el resumen y la transcripción. Puede conectarse a Calendly o Cal.com, o a un panel propio donde veis llamadas, transcripciones, citas y su estado.",
+      brings: ["Ninguna llamada perdida: quien no encuentra respuesta llama al siguiente estudio.", "Reserva directa: menos idas y venidas de «¿qué día os va bien?».", "Panel con todas las llamadas: quién llamó, qué quería, qué se acordó.", "Filtra con educación lo que no encaja (fuera de zona, presupuesto insuficiente) sin quitaros tiempo."],
+      dia: "voz",
+      needs: ["Número virtual nuevo o desvío del actual fuera de horario y cuando no cogéis.", "Plataforma de voz (Vapi, Retell o ElevenLabs): pasa la voz a texto, consulta al modelo y responde con voz natural. Se paga por minuto.", "Calendario conectado: Cal.com (gratis), Calendly (plan de pago para integraciones) o Google Calendar. O el panel propio.", "Horario y reglas: cuándo atiende, qué huecos ofrece, cuándo pasa a una persona.", "Aviso al inicio de la llamada (asistente automático, se graba) y política de privacidad actualizada. Datos alojados en la UE.", "Dos semanas de escucha de grabaciones para afinar guion y voz."],
+      days: 2, ext: "≈ 0,10–0,20 €/min", extNote: "Más número virtual (≈ 2 €/mes). 100 llamadas de 3 min ≈ 30–60 €/mes. Panel propio: 0 €; Calendly ≈ 10 €/mes.", note: "Tarifas por minuto orientativas; se confirman con la plataforma elegida al contratar." },
+    { id: "agenda", icon: "agenda", tag: "rec", title: "Agenda online de primera visita", claim: "El visitante elige día y hora en un calendario; a vosotros os aparece en el vuestro.",
+      what: "Un calendario embebido en la página de contacto y como paso final del formulario, con los huecos que decidáis ofrecer. Sincroniza con Google Calendar u Outlook, envía confirmación y recordatorio, y permite reprogramar sin escribiros. Cal.com es software libre y gratuito; Calendly si ya lo usáis.",
+      brings: ["Convierte mejor que «os llamamos»: la cita queda cerrada en el momento.", "Menos correos para cuadrar agendas.", "Recordatorio automático: menos visitas fallidas.", "Es la misma agenda que usaría el recepcionista de voz."],
+      how: ["Definís huecos (por ejemplo, martes y jueves por la tarde) y duración.", "Se embebe en contacto y al final del formulario.", "Confirmación y recordatorio por email; opcional por WhatsApp."],
+      needs: ["Calendario en Google u Outlook.", "Huecos y duración de la visita.", "Zona de desplazamiento por franja, si aplica."],
+      days: 0.5, ext: "0 €", extNote: "Cal.com. Calendly: ≈ 10 €/mes." },
+    { id: "estimador", icon: "estimador", tag: "vol", title: "Estimador orientativo", claim: "«¿Cuánto cuesta reformar mi piso?» Un rango honesto a cambio de un contacto.",
+      what: "Cuatro pasos: tipo de obra, metros, estado actual, nivel de acabados. Devuelve un rango orientativo con vuestras horquillas y explica de qué depende. Para ver el detalle, deja el email o pide la primera visita. Los datos llegan con el lead: sabéis qué proyecto tiene en la cabeza antes de la visita.",
+      brings: ["Es la pregunta que todos se hacen y casi nadie responde: quien la responde se queda el contacto.", "Ajusta expectativas: quien busca una reforma de 15 000 € lo sabe antes de la visita.", "Leads con contexto: metros, tipo, acabados, presupuesto esperado."],
+      how: ["Vuestras horquillas por m² y tipo; no se publican como tarifa, solo como rango.", "Formulario de cuatro pasos con resultado inmediato.", "Email con el detalle y botón de primera visita."],
+      needs: ["Horquillas de precio por tipo de obra y nivel de acabados.", "Qué no queréis estimar así."],
+      days: 1, ext: "0 €" },
+  ]},
+  { id: "perder", title: "Que no se pierda nadie", cover: "b3", lead: "Una reforma se decide en meses. Estas ampliaciones ordenan lo que llega y mantienen vivo el contacto.", items: [
+    { id: "leads", icon: "leads", tag: "rec", title: "Automatización de leads", claim: "Cada formulario, chat o llamada acaba en el mismo sitio, con respuesta automática y aviso si nadie contesta.",
+      what: "Todo lo que entra (formulario, asistente, agenda, recepcionista) se registra en una hoja o tablero (Google Sheets, Notion o un CRM sencillo) con origen, zona, tipo y estado. El cliente recibe una respuesta inmediata con lo que va a pasar. Si a las 24 h nadie ha marcado el lead como atendido, aviso. Resumen semanal por email.",
+      brings: ["El compromiso de respuesta de la web se cumple aunque estéis en obra.", "Nada se pierde en la bandeja de entrada.", "Sabéis de dónde viene cada cliente: la web, el chat, una landing concreta.", "Historial: leads al mes, cuántos pasan a visita, cuántos a encargo."],
+      how: ["Registro único de leads con estado.", "Autorespuesta con vuestro texto y plazo de respuesta.", "Aviso a las 24 h y resumen semanal."],
+      needs: ["Dónde queréis verlo: hoja, Notion o CRM.", "Texto de la autorespuesta.", "Quién atiende cada tipo de lead."],
+      days: 0.5, ext: "0 €" },
+    { id: "newsletter", icon: "newsletter", tag: "later", title: "Campañas de email con Brevo", claim: "Una lista propia de clientes y contactos, y campañas que llegan cuando toca: sin depender de Instagram.",
+      what: "Brevo es una plataforma de email marketing con plan gratuito. Conectamos el formulario y el asistente para que cada contacto entre en la lista con su origen y su interés (reforma, obra nueva, zona). Desde ahí: una campaña trimestral (la obra del trimestre, un consejo, un antes y después), automatizaciones (bienvenida con una guía breve «Qué saber antes de reformar», seguimiento a los quince días de una primera visita sin respuesta) y envíos puntuales a segmentos: clientes pasados, contactos de Andorra, quien pidió presupuesto y no cerró.",
+      brings: ["Quien se fue sin decidir os recuerda cuando llega el momento; una reforma se decide en meses.", "Clientes pasados: recomendación y segundas obras con un correo al año.", "Se mide: aperturas, clics, quién volvió a la web.", "Lista propia: ningún algoritmo decide quién ve vuestro contenido."],
+      how: ["Cuenta de Brevo, lista y segmentos; alta desde la web y el asistente.", "Plantilla de correo en vuestra estética y guía breve en PDF como gancho.", "Dos automatizaciones y una campaña trimestral; el contenido lo ponéis vosotros o lo escribimos juntos."],
+      needs: ["Dos o tres ideas de contenido al año.", "Revisar cada envío antes de salir.", "Consentimiento en los formularios (ya previsto en la web)."],
+      days: 1, ext: "0 €", extNote: "Plan gratuito de Brevo: hasta 300 envíos al día, contactos sin límite. De pago solo con mucho volumen." },
+    { id: "area", icon: "area", tag: "later", title: "Área privada de cliente", claim: "Cada cliente entra con su clave y ve cómo va su obra: fases, documentos, fotos, siguiente paso.",
+      what: "Un espacio por proyecto, sobre el mismo CMS. El cliente ve la línea de tiempo (estudio previo, proyecto, licencia, obra, entrega), los documentos de cada fase (planos, presupuestos, actas de visita), fotos de obra y mensajes. Vosotros subís desde el panel; el cliente recibe aviso. Al terminar, el mismo espacio le pide reseña y fotos.",
+      brings: ["Menos correos de «¿cómo va?»: la respuesta está ahí.", "Percepción de estudio ordenado y transparente; se nota en las recomendaciones.", "Todo el proyecto en un sitio, también para vosotros.", "Cierre natural: reseña y testimonio al entregar."],
+      dia: "area",
+      needs: ["Definir fases y qué documentos van en cada una.", "Disciplina de subir material; quincenal basta.", "Cláusula de privacidad para el acceso."],
+      days: 3, ext: "1–5 €/mes", extNote: "Almacenamiento de documentos y fotos.", note: "Requiere el CMS." },
+  ]},
+  { id: "impresionar", title: "Que impresione", cover: "b4", lead: "Lo que ya tenéis, contado mejor.", items: [
+    { id: "video", icon: "video", tag: "vol", title: "Vídeo por proyecto", claim: "El vídeo del hero, para cada obra: un recorrido de doce segundos generado a partir de vuestros renders.",
+      what: "Igual que el de IM10: un clip cinematográfico por proyecto, generado a partir de los renders, ampliado a 1080p y montado en la ficha. Se indica que es una recreación.",
+      brings: ["Las fichas dejan de ser una galería estática.", "Material para redes y para presentaciones a clientes.", "Coste marginal bajo por clip."],
+      how: ["Selección de tres a cinco renders por proyecto.", "Generación y ampliación; dos o tres intentos por clip.", "Montaje en la ficha con reproducción al hacer scroll."],
+      needs: ["Renders en buena calidad.", "Visto bueno por clip."],
+      days: 0.25, per: "por proyecto", ext: "3–5 € por clip" },
+  ]},
+  { id: "seguir", title: "Que siga funcionando", cover: "b5", lead: "Una web es software: se actualiza, se vigila y crece.", items: [
+    { id: "mant", icon: "mant", tag: "rec", title: "Mantenimiento y evolución", claim: "Actualizaciones, copias, vigilancia y una bolsa de horas para cambios pequeños.",
+      what: "Cuota mensual: actualizaciones de seguridad y de la plataforma, copias de la base de datos, comprobación de formularios y rendimiento, subida de proyectos nuevos si no queréis hacerlo vosotros, cambios pequeños de texto o imagen, y el informe mensual de analítica.",
+      brings: ["La web no se queda vieja ni rota.", "Un interlocutor para todo lo digital.", "Los cambios pequeños no se acumulan."],
+      how: ["Revisión mensual programada.", "Bolsa de dos horas de cambios; lo que sobra se guarda durante el trimestre.", "Aviso inmediato si algo falla."],
+      needs: ["Un canal, email o WhatsApp, para pedir cambios."],
+      days: 0.25, per: "al mes", ext: "0 €", extNote: "Alojamiento incluido en el plan actual; ≈ 20 €/mes si el tráfico crece mucho." },
+  ]},
+];
+
+const TAGS = { rec: "Recomendado", vol: "Cuando haya volumen", later: "Más adelante" };
+const TAG_HELP = { rec: "Rendimiento claro desde el primer mes.", vol: "Tiene sentido con tráfico o llamadas suficientes.", later: "Requiere otras piezas o material que aún no existe." };
+const PACKS = [
+  { title: "Visibilidad", desc: "Para que la web crezca y aparezca por zonas.", items: ["cms", "landings"] },
+  { title: "Conversión", desc: "Para que quien llega pida la primera visita.", items: ["ia", "agenda", "leads"] },
+  { title: "Completa", desc: "Todo lo recomendado, en el orden del plan.", items: ["cms", "landings", "ia", "agenda", "leads"] },
+];
+const ROAD = [
+  ["Mes 1", "Orden", "Automatización de leads y agenda. Dos días de trabajo; todo lo que entra queda registrado."],
+  ["Mes 2", "Base", "CMS: proyectos y blog desde el panel. Migramos lo que ya está publicado."],
+  ["Mes 3", "Alcance", "Landings por servicio y zona, alimentadas desde el CMS."],
+  ["Mes 4", "Atención", "Asistente IA con las fichas escritas a partir de lo aprendido en los meses anteriores."],
+  ["Después", "Volumen", "Recepcionista de voz, estimador, área privada y vídeo por proyecto cuando el tráfico lo pida."],
+];
+
+/* ── render ── */
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const eur = (n) => Math.round(n).toLocaleString("de-DE") + " €"; // de-DE: 1.000 also for four digits
+const price = (it) => eur(it.days * RATE);
+const dayStr = (d) => (d < 0.5 ? "2 horas" : d < 1 ? "Medio día" : d === 1 ? "1 día" : `${String(d).replace(".", ",")} días`);
+const ALL = BLOCKS.flatMap((b) => b.items);
+const byId = Object.fromEntries(ALL.map((i) => [i.id, i]));
+
+let h = "";
+h += `<header class="glass head">
+  <div class="head-top"><img class="logo" src="__LOGO__" alt="RAAR arquitectura" width="900" height="303"><span class="pill"><i></i>${esc(DATE)}</span></div>
+  <div>
+    <div class="label">Nueva web · ampliaciones opcionales</div>
+    <h1>Lo que la web puede hacer después</h1>
+  </div>
+  <p class="lead">La web que estamos construyendo sale completa. Este documento recoge lo que podría venir después: once ampliaciones, cada una con lo que aporta, lo que requiere de vosotros y lo que cuesta. Ninguna es necesaria para lanzar. Todas se pueden añadir cuando el negocio las pida, en el orden que tenga sentido.</p>
+  <div class="included">
+    <div class="label">Ya incluido en el presupuesto actual</div>
+    <div class="chips">${["Web completa con proyectos, servicios y estudio", "Formulario de contacto", "Botón de WhatsApp", "Blog estático", "Castellano, catalán e inglés", "Analítica y Google Search Console", "SEO inicial y GEO (visibilidad en respuestas de IA)"].map((t) => `<span class="chip">${icon("check", 2)}${esc(t)}</span>`).join("")}</div>
+  </div>
+  <div class="legend">
+    ${Object.keys(TAGS).map((k) => `<div><span class="tag ${k}">${TAGS[k]}</span><span>${TAG_HELP[k]}</span></div>`).join("")}
+    <div><span class="label">Esfuerzo · coste externo · desde</span><span>Días de trabajo estimados · servicios de terceros que se pagan aparte, sin margen · precio orientativo sin IVA.</span></div>
+  </div>
+</header>`;
+
+let n = 0;
+BLOCKS.forEach((b, bi) => {
+  h += `<section class="block" id="${b.id}">
+    <div class="cover"><img src="${COVERS[b.cover]}" alt=""><div class="glass note"><span class="label">Bloque ${bi + 1}</span><h2>${esc(b.title)}</h2></div></div>
+    <p class="lead">${esc(b.lead)}</p>`;
+  b.items.forEach((it) => {
+    n++;
+    h += `<article class="glass svc" id="${it.id}">
+      <div class="svc-head"><span class="ico">${icon(it.icon)}</span><div class="svc-title"><span class="n">${String(n).padStart(2, "0")}</span><h3>${esc(it.title)}</h3><p class="claim">${esc(it.claim)}</p></div></div>
+      ${it.dia ? `<div class="part part-dia"><span class="label">Cómo funciona</span><div class="dia">${DIA[it.dia]()}</div></div>` : ""}
+      <div class="svc-body">
+        <div class="col">
+          <div class="part"><span class="label">Qué es</span><p>${esc(it.what)}</p></div>
+          <div class="part"><span class="label">Qué os aporta</span><ul>${it.brings.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>
+        </div>
+        <div class="col">
+          ${it.dia ? "" : `<div class="part"><span class="label">Cómo funciona</span><ol class="steps">${it.how.map((x) => `<li><span>${esc(x)}</span></li>`).join("")}</ol></div>`}
+          <div class="part"><span class="label">Qué necesitamos de vosotros</span><ul>${it.needs.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>
+          ${it.note ? `<div class="note">${esc(it.note)}</div>` : ""}
+        </div>
+      </div>
+      <div class="meta">
+        <div><span class="label">Esfuerzo</span><b>${dayStr(it.days)}</b>${it.per ? `<small>${esc(it.per)}</small>` : ""}</div>
+        <div><span class="label">Coste externo</span><b>${esc(it.ext)}</b>${it.extNote ? `<small>${esc(it.extNote)}</small>` : ""}</div>
+        <div><span class="label">Desde</span><b>${price(it)}</b><small>${it.per ? esc(it.per) : "sin IVA"}</small></div>
+        <div class="tagcell"><span class="tag ${it.tag}">${TAGS[it.tag]}</span></div>
+      </div>
+    </article>`;
+  });
+  h += `</section>`;
+});
+
+h += `<section class="glass sec"><h2>Resumen</h2><div class="tbl"><table>
+  <thead><tr><th>Ampliación</th><th>Esfuerzo</th><th>Coste externo</th><th>Desde</th><th>Cuándo</th></tr></thead><tbody>
+  ${ALL.map((it, i) => `<tr><td><b>${String(i + 1).padStart(2, "0")} · ${esc(it.title)}</b><span class="sub">${esc(it.claim)}</span></td><td class="num">${dayStr(it.days)}${it.per ? `<span class="sub">${esc(it.per)}</span>` : ""}</td><td>${esc(it.ext)}</td><td class="num">${price(it)}${it.per ? `<span class="sub">${esc(it.per)}</span>` : ""}</td><td>${TAGS[it.tag]}</td></tr>`).join("")}
+  </tbody></table></div>
+  <p class="note">Precios orientativos sin IVA, calculados sobre el esfuerzo estimado; se cierran con el alcance definitivo. Los costes externos (modelos de IA, plataformas de voz, alojamiento) son de terceros y se pagan directamente, sin margen.</p>
+</section>`;
+
+h += `<section class="glass sec"><h2>Tres combinaciones</h2><div class="packs">
+  ${PACKS.map((p) => { const its = p.items.map((id) => byId[id]); const sum = its.reduce((s, it) => s + it.days * RATE, 0); return `<div class="pack"><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p><ul>${its.map((it) => `<li>${icon("check", 2)}<span>${esc(it.title)}</span></li>`).join("")}</ul><div class="price"><b>${eur(sum)}</b><small>${String(its.reduce((s, it) => s + it.days, 0)).replace(".", ",")} días · sin IVA · más el mantenimiento mensual si lo queréis</small></div></div>`; }).join("")}
+</div></section>`;
+
+h += `<section class="glass sec"><h2>Un orden que tiene sentido</h2><div class="road">
+  ${ROAD.map(([k, t, d], i) => `<div class="step"><span class="k">${i + 1}</span><b>${esc(k)} · ${esc(t)}</b><span>${esc(d)}</span></div>`).join("")}
+</div></section>`;
+
+h += `<footer class="foot"><span>Propuesta preparada para RAAR arquitectura · ${esc(DATE)}. Documento orientativo: cada ampliación se presupuesta en detalle antes de empezar.</span></footer>`;
+
+document.getElementById("doc").innerHTML = h;
+</script>
+</body>
+</html>

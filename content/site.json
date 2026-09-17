@@ -1,0 +1,92 @@
+{
+  "_comment": "Datos globales extraídos de https://www.raar-arquitectura.eu (snapshot 2026-09-14). Fuente única para nav, contacto, redes y marca. Los textos están en inglés porque la web original solo existe en inglés (el botón 'ES' del menú no funciona).",
+  "brand": {
+    "name": "RAAR arquitectura",
+    "shortName": "RAAR",
+    "tagline_original": "We design, DREAMS / ETERNITY / ATEMPORALITY / ARCHITECTURE",
+    "domain": "https://www.raar-arquitectura.eu",
+    "logo": {
+      "black": "/images/brand/logo-black.png",
+      "white": "/images/brand/logo-white.png",
+      "appleIcon": "/images/brand/apple-icon-180x180.png",
+      "description": "Wordmark 'RAAR' en mayúsculas geométricas cortadas horizontalmente por una franja blanca (las letras aparecen 'partidas' en dos mitades), con 'arquitectura' en minúscula ligera bajo la R final. 2444x824 px, fondo transparente."
+    },
+    "authorMeta": "Hugo Fernandez",
+    "footerCopyright_original": "© UNTITLED | Website created by RAAR"
+  },
+  "navigation": [
+    { "label": "01 : RAAR",       "href_original": "./index.html",   "slug": "/" },
+    { "label": "02 : Works",      "href_original": "./works.html",   "slug": "/works" },
+    { "label": "03 : About us",   "href_original": "./about.html",   "slug": "/about" },
+    { "label": "04 : Contact us", "href_original": "./contact.html", "slug": "/contact" },
+    { "label": "ES",              "href_original": "",               "slug": null, "note": "Enlace vacío. No existe versión en español." },
+    { "label": "Instagram",       "href_original": "https://www.instagram.com/raar.arquitectura/#", "slug": null, "external": true, "icon": "instagram" }
+  ],
+  "contact": {
+    "phone": "+34 93 488 02 56",
+    "phone_original_format": "+ 34 93 488 02 56",
+    "email": "arquitectura@raar-arquitectura.eu",
+    "address": {
+      "street": "C/ Bruc 136 bajos 2a",
+      "city": "Barcelona",
+      "region": "Catalunya",
+      "country": "ES",
+      "postalCode": null,
+      "note": "Código postal no aparece en la web. Bruc 136 corresponde a 08037 Barcelona (Eixample) — verificar con el cliente."
+    },
+    "form_original": {
+      "action": "send_email.php",
+      "method": "post",
+      "fields": [
+        { "type": "email",    "id": "email",   "placeholder": "Email",              "name": null },
+        { "type": "text",     "id": "subject", "placeholder": "Subject",            "name": null },
+        { "type": "textarea", "id": null,      "placeholder": "Enter your message", "name": null }
+      ],
+      "submitLabel": "Send",
+      "note": "Ningún campo tiene atributo name → el formulario no envía datos aunque exista send_email.php. No hay campo nombre, ni teléfono, ni tipo de proyecto, ni consentimiento RGPD."
+    },
+    "socialHeading_original": "Follow us on social media"
+  },
+  "social": [
+    { "network": "instagram", "url": "https://www.instagram.com/raar.arquitectura/", "verified": true },
+    { "network": "facebook",  "url": "http://www.facebook.com", "verified": false, "note": "Enlace genérico a facebook.com, no a un perfil. Placeholder de plantilla." },
+    { "network": "linkedin",  "url": "http://www.linkedin.com", "verified": false, "note": "Enlace genérico a linkedin.com, no a un perfil. Placeholder de plantilla." }
+  ],
+  "seo_original": {
+    "titles": {
+      "index":    "RAAR arquitectura",
+      "works":    "Works",
+      "about":    "Works",
+      "contact":  "Works",
+      "projects": "Works"
+    },
+    "metaDescription": "description",
+    "metaDescription_note": "Literalmente el string 'description' en todas las páginas — placeholder sin rellenar.",
+    "htmlLang": "en",
+    "googleNotranslate": true,
+    "canonical": false,
+    "openGraph": false,
+    "twitterCard": false,
+    "jsonLd": false,
+    "sitemap": false,
+    "robotsTxt": false,
+    "favicon_status": "404 (assets/favicon.ico no existe)",
+    "analytics": "Snippet de Google Analytics (UA) comentado con ID placeholder UA-XXXXX-X"
+  },
+  "design_original": {
+    "fonts": {
+      "display": "Roboto 900 (Google Fonts)",
+      "body": "Roboto Mono 300/400/700 (Google Fonts)",
+      "icons": "Font Awesome 4.7.0 (CDN)"
+    },
+    "colors": {
+      "background": "#ffffff",
+      "text": "#000000",
+      "accent_template": "#001aff",
+      "overlay_portfolio": "#141414 @ 0.9",
+      "note": "Paleta casi monocroma blanco/negro. El azul #001aff viene de la plantilla, no de la marca."
+    },
+    "frame": "Marco fino en los 4 bordes del viewport (#site-border-left/right/top/bottom) — negro en home, blanco (-w) en interiores.",
+    "template": "Bootstrap 3 + jQuery. Estilos del portfolio de 'Tooplate 2082 Pure Mix'; secciones de proyecto de una plantilla FreeHTML5 (fh5co-*). Carruseles Owl Carousel 2, efecto de tecleo Typed.js."
+  }
+}
