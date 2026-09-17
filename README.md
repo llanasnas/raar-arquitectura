@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RAAR arquitectura — nueva web
 
-## Getting Started
+Rediseño de https://www.raar-arquitectura.eu en Next.js 16 (App Router, React 19, Tailwind 4, GSAP, pnpm).
 
-First, run the development server:
+## Estado
+
+**Fase 1 — build funcional (ES).** Landing con hero scrollvideo, proyectos, fichas, servicios, estudio, contacto con formulario, legales, SEO/JSON-LD, sitemap y robots.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev          # http://localhost:3000
+pnpm build && pnpm start
+node scripts/shots.mjs http://localhost:3000 shots   # capturas desktop + móvil (Chrome local)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Carpeta | Contenido |
+|---|---|
+| [`DESIGN.md`](./DESIGN.md) | Sistema visual «vidrio y piedra»: tokens, tipografía, superficies, motion, reglas |
+| [`PRODUCT.md`](./PRODUCT.md) | Verdad de producto (usuarios, propósito, posicionamiento, evidencia) |
+| [`docs/`](./docs/README.md) | Análisis de la web antigua, crítica, plan de landing/hero, snapshot original |
+| [`content/`](./content/README.md) | Textos de proyectos (EN original + `es/` traducciones), páginas, `site.json` |
+| [`lib/copy.ts`](./lib/copy.ts) | Todo el copy de la interfaz (ES). Preparado para CA/EN |
+| [`lib/content.ts`](./lib/content.ts) | Loader de proyectos (gray-matter) |
+| [`components/hero/HeroScrollVideo.tsx`](./components/hero/HeroScrollVideo.tsx) | Hero: 240 frames en canvas, autoplay 4 s + scrub GSAP ScrollTrigger |
+| [`public/hero/`](./public/hero/) | Frames WebP desktop (1600 px) y móvil (900×1200) + posters |
+| [`public/images/`](./public/images/) | Imágenes optimizadas (15 MB); originales en `assets-src/` (gitignored) |
+| [`scripts/`](./scripts/) | `hero/generate-hero-video.mjs` (Seedance 2.5 vía fal.ai), `hero/extract-frames.mjs`, `optimize-images.mjs`, `shots.mjs` |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Variables de entorno (`.env.local`)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Uso |
+|---|---|
+| `FAL_KEY` | Generación del vídeo del hero (solo scripts) |
+| `RESEND_API_KEY` | Envío del formulario. Sin ella, el lead se escribe en el log del servidor |
+| `CONTACT_TO`, `CONTACT_FROM` | Destinatario y remitente del formulario (por defecto `arquitectura@raar-arquitectura.eu`) |
+| `NEXT_PUBLIC_SITE_URL` | Dominio canónico (por defecto `https://www.raar-arquitectura.eu`) |
 
-## Learn More
+## Pendiente
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Datos de RAAR: nombres/fotos de socios, fotos de obra terminada, testimonios, año/m²/fase por proyecto, MO07 vs MO23, GV75/SE08/PR37/GR16, logo SVG, razón social para legales.
+- Idiomas CA y EN (estructura preparada; hoy solo ES).
+- Resend configurado y probado en producción; analítica con consentimiento.
+- Redirecciones 301 desde las URLs antiguas (`/works.html` → `/proyectos`, `/worksvi02.html` → `/proyectos/vi02`…).
+- Vídeo del hero: el máster actual es 720p (12 s, Seedance 2.5, $5.68). Para más nitidez en desktop: regenerar a 1080p (~$12.50) o upscale con Topaz.
