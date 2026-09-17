@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Cover } from "@/components/site/Cover";
-import { SlatsIntro } from "@/components/site/intro/SlatsIntro";
+import { Intro } from "@/components/site/intro/Intro";
 import { Closing, MANIFESTO_LINE, Statement } from "@/components/site/v2/Pieces";
 import { Diagram } from "@/components/site/v2/Diagram";
 import { Feature } from "@/components/site/v2/Feature";
@@ -25,7 +25,7 @@ export default function HomePage() {
 
   return (
     <>
-      <SlatsIntro />
+      <Intro />
       <Cover brandCorner="br" opening />
 
       <Diagram groups={getDiagram()} />

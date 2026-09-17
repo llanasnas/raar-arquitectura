@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Cover } from "@/components/site/Cover";
-import { SlatsIntro } from "@/components/site/intro/SlatsIntro";
+import { Intro } from "@/components/site/intro/Intro";
 import { Band, Closing, MANIFESTO_LINE, Statement } from "@/components/site/v2/Pieces";
 import { StripB } from "@/components/site/v2/StripB";
 import { Feature } from "@/components/site/v2/Feature";
@@ -23,7 +23,7 @@ export default function HomeBPage() {
 
   return (
     <>
-      <SlatsIntro />
+      <Intro />
       <Cover brandCorner="br" opening />
 
       <Band index="Obra" title={copy.featured.title} lead={copy.featured.lead} />

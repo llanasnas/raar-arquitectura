@@ -1005,6 +1005,16 @@
     }
   }
 
+  /* Mientras dura la apertura no se puede hacer scroll (lo pone y lo quita Intro.tsx). */
+  html[data-intro-lock] { overflow: hidden; touch-action: none; }
+
+  /* La apertura no toca esta vez (atrás, menú; ver lib/intro.ts): el HTML servido la lleva
+     puesta, así que se apaga por CSS antes de que React la quite. Es lo mismo que con
+     prefers-reduced-motion: la portada aparece montada. */
+  html[data-intro="skip"] .sintro { display: none; }
+  html[data-intro="skip"] .brand-fixed[data-intro] { animation: none; transform: none; color: var(--carbon); filter: none; }
+  html[data-intro="skip"] .cover-stage[data-opening] { position: relative; inset: auto; z-index: auto; animation: none; }
+
   /* Sin movimiento: ni persiana, ni viaje, ni recogida; la portada aparece montada. */
   @media (prefers-reduced-motion: reduce) {
     .stage-slide, .stage-slide img, .cover-note { transition: none; }
@@ -1053,7 +1063,34 @@
   .dg-group-n { opacity: 0.6; }
   .dg-group[data-on] { transform: translateX(0.6rem); }
   .dg[data-dim] .dg-group:not([data-on]) { opacity: 0.4; }
-  .dg-items { display: none; }
+  /* el desplegable: de 0fr a 1fr, que es lo que empuja a las tipologías de debajo */
+  .dg-items {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 460ms var(--ease-out-expo);
+  }
+  .dg-items[data-open] { grid-template-rows: 1fr; }
+  .dg-items-list {
+    display: grid;
+    gap: 0.35rem;
+    min-height: 0;
+    overflow: hidden;
+    padding-left: 3rem;
+  }
+  .dg-items[data-open] .dg-items-list { padding-block: 0.7rem 1rem; }
+  .dg-item {
+    display: grid;
+    grid-template-columns: 4.2rem 1fr;
+    gap: 0.6rem;
+    align-items: baseline;
+    color: var(--carbon-2);
+    transition: color 200ms var(--ease-out-expo);
+  }
+  .dg-item-name { font-size: 0.95rem; line-height: 1.3; }
+  .dg-item[data-on],
+  .dg-item:hover { color: var(--carbon); }
+  .dg-item[data-on] .dg-item-name { font-weight: 600; }
+  .dg-item[data-pending] { cursor: default; }
 
   .dg-card {
     display: grid;
@@ -1082,7 +1119,14 @@
     max-width: 18ch;
   }
 
-  .dg-figure { position: relative; aspect-ratio: 1; }
+  /* en pantallas bajas (portátil 1280×720) la columna daba un dibujo más alto que la
+     ventana: el lado lo limita la altura libre, no el ancho de la columna */
+  .dg-figure {
+    position: relative;
+    width: min(100%, calc(100svh - var(--bar-h) - 3rem));
+    aspect-ratio: 1;
+    margin-inline: auto;
+  }
   .dg-svg {
     display: block;
     width: 100%;
@@ -1176,15 +1220,9 @@
     .dg-card { display: none; }
     .dg[data-item] .dg-groups { opacity: 1; pointer-events: auto; }
     .dg-group[data-on] { transform: none; }
-    .dg-items {
-      display: grid;
-      gap: 0.35rem;
-      padding: 0.6rem 0 1rem 3rem;
-      border-bottom: 1px solid var(--rule);
-    }
-    .dg-item { display: grid; grid-template-columns: 4.2rem 1fr; gap: 0.6rem; align-items: baseline; }
-    .dg-item-name { font-size: 0.95rem; line-height: 1.3; }
-    .dg-item[data-pending] .dg-item-name { color: var(--carbon-2); }
+    /* sin cursor, la lista va siempre abierta */
+    .dg-items { grid-template-rows: 1fr; border-bottom: 1px solid var(--rule); }
+    .dg-items-list { padding-block: 0.6rem 1rem; }
   }
 
   @media (prefers-reduced-motion: reduce) {

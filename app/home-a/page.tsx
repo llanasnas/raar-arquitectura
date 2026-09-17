@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Cover } from "@/components/site/Cover";
-import { SlatsIntro } from "@/components/site/intro/SlatsIntro";
+import { Intro } from "@/components/site/intro/Intro";
 import { Band, Closing, MANIFESTO_LINE, Statement } from "@/components/site/v2/Pieces";
 import { SpreadA } from "@/components/site/v2/SpreadA";
 import { getFeaturedProjects } from "@/lib/content";
@@ -21,7 +21,7 @@ export default function HomeAPage() {
 
   return (
     <>
-      <SlatsIntro />
+      <Intro />
       <Cover brandCorner="br" opening />
 
       <section data-menu="dark" className="pliegos">

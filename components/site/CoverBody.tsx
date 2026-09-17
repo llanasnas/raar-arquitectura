@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState, type AnimationEvent } from "react";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
+import { useIntroPlays } from "@/lib/intro";
 import { copy } from "@/lib/copy";
 
 // La portada: eslogan y frase a la izquierda, lámina a la derecha.
@@ -28,9 +29,11 @@ const TOKENS = copy.hero.statement.map((token, i) => ({
 
 export function CoverBody({ slides, opening = false }: { slides: Slide[]; opening?: boolean }) {
   const reducedMotion = useReducedMotion();
+  const plays = useIntroPlays(opening);
   const [active, setActive] = useState<number | null>(null);
   const [settling, setSettling] = useState(opening);
-  const isOpening = settling && !reducedMotion;
+  // sin apertura (atrás, menú) la lámina ya está en su sitio desde el primer fotograma
+  const isOpening = settling && plays && !reducedMotion;
 
   // La lámina pasa de `fixed` a estático cuando termina de recogerse: mismo nodo, sin salto.
   const onAnimationEnd = (event: AnimationEvent<HTMLDivElement>) => {

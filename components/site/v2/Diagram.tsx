@@ -18,6 +18,11 @@ import { routes, site } from "@/lib/site";
 // Todo es SVG en línea: los arcos y las líneas se dibujan al entrar en pantalla (trazo que se
 // completa, ver .dg-arc en globals.css) y las etiquetas son enlaces de verdad, rastreables.
 //
+// Sobre una tipología de la lista se despliega, empujando a las demás, la lista de sus obras
+// (pedido del cliente, 17/09): pasar por un título marca su código en el dibujo, y el clic
+// lleva a la ficha. La lámina con foto solo sale al recorrer los códigos del dibujo: si
+// saliera también desde la lista, la lista desaparecería bajo el cursor.
+//
 // En táctil no hay «pasar por encima»: el primer toque selecciona y el segundo lleva.
 // En móvil no caben trece códigos alrededor de un círculo de 350 px: allí el dibujo va sin
 // etiquetas y debajo sale la lista de tipologías con sus obras.
@@ -91,7 +96,8 @@ const ISO_H = 2480.8;
 const ISO_SCALE = 132 / ISO_W;
 const ISO_TRANSFORM = `translate(${f(-66)} ${f((-ISO_H * ISO_SCALE) / 2)}) scale(${ISO_SCALE.toFixed(5)}) translate(-1281.7 -177.3)`;
 
-type Active = { kind: "item" | "group"; id: string } | null;
+// `card`: la obra se ha señalado desde el dibujo y la columna de texto enseña su lámina.
+type Active = { kind: "item"; id: string; card: boolean } | { kind: "group"; id: string } | null;
 
 export function Diagram({ groups }: { groups: DiagramGroup[] }) {
   const router = useRouter();
@@ -102,6 +108,7 @@ export function Diagram({ groups }: { groups: DiagramGroup[] }) {
   const activeGroup =
     active?.kind === "group" ? active.id : active ? placed.find((g) => g.items.some((it) => it.id === active.id))?.id : undefined;
   const activeItem: DiagramItem | undefined = active?.kind === "item" ? placed.flatMap((g) => g.items).find((it) => it.id === active.id) : undefined;
+  const cardItem = active?.kind === "item" && active.card ? activeItem : undefined;
 
   const hover = (next: Active) => (event: ReactPointerEvent) => {
     if (event.pointerType !== "touch") setActive(next);
@@ -122,7 +129,7 @@ export function Diagram({ groups }: { groups: DiagramGroup[] }) {
         className="dg"
         variant="none"
         data-dim={active ? "" : undefined}
-        data-item={activeItem ? "" : undefined}
+        data-item={cardItem ? "" : undefined}
         onPointerDown={(event) => {
           touch.current = event.pointerType === "touch";
         }}
@@ -147,24 +154,34 @@ export function Diagram({ groups }: { groups: DiagramGroup[] }) {
                     <span className="dg-group-name">{group.label}</span>
                     <span className="t-label dg-group-n">{group.items.length}</span>
                   </Link>
-                  {/* solo en móvil: las obras de cada tipología, ya que ahí el dibujo va sin códigos */}
-                  <ul className="dg-items">
-                    {group.items.map((item) =>
-                      item.href ? (
-                        <li key={item.id}>
-                          <Link href={item.href} className="dg-item">
+                  {/* las obras de la tipología: desplegable sobre la tipología activa en escritorio,
+                      siempre abierto en móvil (ahí el dibujo va sin códigos) */}
+                  <div className="dg-items" data-open={activeGroup === group.id || undefined}>
+                    <ul className="dg-items-list">
+                      {group.items.map((item) =>
+                        item.href ? (
+                          <li key={item.id}>
+                            <Link
+                              href={item.href}
+                              className="dg-item"
+                              data-on={activeItem?.id === item.id || undefined}
+                              onPointerEnter={hover({ kind: "item", id: item.id, card: false })}
+                              onFocus={() => setActive({ kind: "item", id: item.id, card: false })}
+                              onBlur={() => setActive(null)}
+                            >
+                              <span className="t-label">{item.label}</span>
+                              <span className="dg-item-name">{item.name}</span>
+                            </Link>
+                          </li>
+                        ) : (
+                          <li key={item.id} className="dg-item" data-pending="" onPointerEnter={hover({ kind: "item", id: item.id, card: false })}>
                             <span className="t-label">{item.label}</span>
-                            <span className="dg-item-name">{item.name}</span>
-                          </Link>
-                        </li>
-                      ) : (
-                        <li key={item.id} className="dg-item" data-pending="">
-                          <span className="t-label">{item.label}</span>
-                          <span className="dg-item-name">{item.note}</span>
-                        </li>
-                      ),
-                    )}
-                  </ul>
+                            <span className="dg-item-name">{item.note}</span>
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  </div>
                 </li>
               ))}
             </ol>
@@ -182,24 +199,24 @@ export function Diagram({ groups }: { groups: DiagramGroup[] }) {
                       fill
                       sizes="(min-width: 900px) 30vw, 1px"
                       className="object-cover"
-                      data-on={activeItem?.id === item.id || undefined}
+                      data-on={cardItem?.id === item.id || undefined}
                     />
                   ),
               )}
             </div>
-            {activeItem && (
+            {cardItem && (
               <>
                 <span className="t-label">
-                  {placed.find((g) => g.id === activeGroup)?.label} · {activeItem.label}
+                  {placed.find((g) => g.id === activeGroup)?.label} · {cardItem.label}
                 </span>
-                <h3 className="dg-card-name">{activeItem.name ?? activeItem.label}</h3>
-                <p className="t-label">{activeItem.place ?? activeItem.note}</p>
-                {activeItem.href ? (
-                  <Link href={activeItem.href} className="link-underline">
+                <h3 className="dg-card-name">{cardItem.name ?? cardItem.label}</h3>
+                <p className="t-label">{cardItem.place ?? cardItem.note}</p>
+                {cardItem.href ? (
+                  <Link href={cardItem.href} className="link-underline">
                     Ver el proyecto
                   </Link>
                 ) : (
-                  activeItem.name && <span className="t-label">{activeItem.note}</span>
+                  cardItem.name && <span className="t-label">{cardItem.note}</span>
                 )}
               </>
             )}
@@ -251,16 +268,16 @@ export function Diagram({ groups }: { groups: DiagramGroup[] }) {
                           <a
                             href={item.href}
                             aria-label={`${item.name} (${item.label})`}
-                            onPointerEnter={hover({ kind: "item", id: item.id })}
+                            onPointerEnter={hover({ kind: "item", id: item.id, card: true })}
                             onPointerLeave={hover(null)}
-                            onFocus={() => setActive({ kind: "item", id: item.id })}
+                            onFocus={() => setActive({ kind: "item", id: item.id, card: true })}
                             onBlur={() => setActive(null)}
-                            onClick={go({ kind: "item", id: item.id }, item.href)}
+                            onClick={go({ kind: "item", id: item.id, card: true }, item.href)}
                           >
                             {label}
                           </a>
                         ) : (
-                          <g onPointerEnter={hover({ kind: "item", id: item.id })} onPointerLeave={hover(null)} onClick={() => setActive({ kind: "item", id: item.id })}>
+                          <g onPointerEnter={hover({ kind: "item", id: item.id, card: true })} onPointerLeave={hover(null)} onClick={() => setActive({ kind: "item", id: item.id, card: true })}>
                             {label}
                           </g>
                         )}

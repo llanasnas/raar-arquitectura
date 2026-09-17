@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Cover } from "@/components/site/Cover";
-import { SlatsIntro } from "@/components/site/intro/SlatsIntro";
+import { Intro } from "@/components/site/intro/Intro";
 import { Band, Closing, MANIFESTO_LINE } from "@/components/site/v2/Pieces";
 import { StackD } from "@/components/site/v2/StackD";
 import { DuoScroll } from "@/components/site/v2/DuoScroll";
@@ -23,7 +23,7 @@ export default function HomeDPage() {
 
   return (
     <>
-      <SlatsIntro />
+      <Intro />
       <Cover brandCorner="br" opening />
 
       <Band index="Cuadernillo" title={copy.featured.title} lead={copy.featured.lead} />

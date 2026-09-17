@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRef, useState, useSyncExternalStore, type AnimationEvent } from "react";
 import { routes } from "@/lib/site";
 import { useTone } from "@/lib/use-tone";
+import { useIntroPlays } from "@/lib/intro";
 import { site } from "@/lib/site";
 
 // El logotipo fijo de la web, y también el enlace a la portada: es la otra mitad de la barra
@@ -37,8 +38,10 @@ export function SiteBrand({ intro, corner = "tl" }: { intro?: BrandIntro; corner
   const ref = useRef<HTMLAnchorElement>(null);
   const [landed, setLanded] = useState(false);
   const reducedMotion = useReducedMotion();
-  // Sin movimiento no hay viaje: el logotipo ya está en su esquina y manda el tono.
-  const travelling = Boolean(intro) && !landed && !reducedMotion;
+  // Solo en la portada, y solo si la apertura se ve esta vez (ver lib/intro.ts: no al volver
+  // con «atrás»). Sin movimiento tampoco hay viaje: el logotipo ya está en su esquina.
+  const plays = useIntroPlays(Boolean(intro));
+  const travelling = plays && !landed && !reducedMotion;
   const tone = useTone(ref, !travelling);
 
   // `intro-logo-land` es la animación del viaje; las demás (tinta, barrido) terminan antes.
