@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties, type ElementType, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ElementType, type HTMLAttributes, type ReactNode } from "react";
 
 // Entradas al hacer scroll. Un solo IntersectionObserver para toda la página: con uno por
 // elemento, una home de revista con cincuenta láminas se vuelve pesada al scrollear.
@@ -28,6 +28,8 @@ function watch(el: HTMLElement) {
   return () => observer?.unobserve(el);
 }
 
+// `none` no anima nada: solo marca `data-in` al entrar, para que lo que hay dentro se dibuje
+// solo (el diagrama de obra usa eso para completar sus trazos).
 export function Reveal({
   as: Tag = "div",
   variant = "up",
@@ -35,14 +37,15 @@ export function Reveal({
   className = "",
   style,
   children,
+  ...rest
 }: {
   as?: ElementType;
-  variant?: "up" | "wipe" | "scale" | "line";
+  variant?: "up" | "wipe" | "scale" | "line" | "none";
   delay?: number;
   className?: string;
   style?: CSSProperties;
   children: ReactNode;
-}) {
+} & Omit<HTMLAttributes<HTMLElement>, "className" | "style" | "children">) {
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -54,6 +57,7 @@ export function Reveal({
   return (
     <Tag
       ref={ref}
+      {...rest}
       className={`rv ${className}`}
       data-rv={variant}
       style={delay ? ({ "--rv-delay": `${delay}ms`, ...style } as CSSProperties) : style}

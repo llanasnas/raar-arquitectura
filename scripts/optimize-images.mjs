@@ -59,6 +59,8 @@ for (const src of walk(SRC)) {
     const poster = join(outDir, `${name}-poster.jpg`);
     execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-i", mp4, "-vframes", "1", "-q:v", "3", poster]);
     renames.push([`/images/${rel}`, `/images/${outRel}`]);
+  } else if (isBrand && ext === ".svg") {
+    continue; // los SVG de marca los genera scripts/build-brand.mjs desde el vector del cliente
   } else if (isBrand) {
     outRel = rel;
     await sharp(src).resize({ width: 1600, withoutEnlargement: true }).png({ compressionLevel: 9 }).toFile(join(OUT, outRel));

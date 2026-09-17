@@ -28,6 +28,7 @@
     "eslint-config-next": "16.3.5",
     "playwright-core": "^1.63.0",
     "sharp": "^0.35.4",
+    "svgo": "^4.1.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

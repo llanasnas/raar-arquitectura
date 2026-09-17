@@ -222,11 +222,12 @@
 
   /* ── Marca ──────────────────────────────────────────
      El logotipo va como máscara CSS: toma el color del texto que lo rodea y puede animarse
-     de un color a otro. Fuente: el SVG del cliente, optimizado. */
+     de un color a otro. Fuente: el vector del cliente (`scripts/build-brand.mjs`); el aspecto
+     es el del viewBox recortado a la caja del trazado, así la máscara `contain` llena la caja. */
   .brandmark {
     display: block;
     width: var(--brand-w, 200px);
-    aspect-ratio: 1600 / 539;
+    aspect-ratio: 586.2 / 197.7;
     background: currentColor;
     -webkit-mask: url("/images/brand/logo-black.svg") no-repeat center / contain;
     mask: url("/images/brand/logo-black.svg") no-repeat center / contain;
@@ -1012,19 +1013,200 @@
     .brand-fixed[data-intro] { animation: none; transform: none; }
   }
 
+  /* ── Diagrama de obra ─────────────────────────────────
+     El sumario en circular (components/site/v2/Diagram.tsx): tipologías a la izquierda, el
+     dibujo a la derecha. Los trazos se completan al entrar en pantalla y, con algo activo,
+     el resto baja de intensidad para que se lea qué va con qué. */
+  .dg {
+    display: grid;
+    grid-template-columns: 4fr 7fr;
+    gap: clamp(2rem, 4vw, 5rem);
+    align-items: center;
+    padding-block: clamp(3rem, 10vh, 7rem);
+  }
+  /* la lista y la ficha ocupan la misma celda: la que toca se ve, la otra se apaga */
+  .dg-side {
+    position: relative;
+    display: grid;
+    align-self: start;
+    padding-top: clamp(1rem, 6vh, 4rem);
+  }
+  .dg-side > * { grid-area: 1 / 1; }
+  .dg-groups { transition: opacity 320ms var(--ease-out-expo); }
+  .dg[data-item] .dg-groups { opacity: 0; pointer-events: none; }
+  .dg-title { margin-bottom: clamp(1rem, 3vh, 2rem); }
+  .dg-group-list { border-top: 1px solid var(--rule); }
+  .dg-group {
+    display: grid;
+    grid-template-columns: 2.4rem 1fr auto;
+    align-items: baseline;
+    gap: 0.6rem;
+    padding-block: 0.8rem;
+    border-bottom: 1px solid var(--rule);
+    transition: opacity 240ms var(--ease-out-expo), transform 420ms var(--ease-out-expo);
+  }
+  .dg-group-name {
+    font-size: clamp(1.05rem, 1.7vw, 1.55rem);
+    line-height: 1.1;
+    letter-spacing: -0.014em;
+  }
+  .dg-group-n { opacity: 0.6; }
+  .dg-group[data-on] { transform: translateX(0.6rem); }
+  .dg[data-dim] .dg-group:not([data-on]) { opacity: 0.4; }
+  .dg-items { display: none; }
+
+  .dg-card {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 320ms var(--ease-out-expo);
+  }
+  .dg[data-item] .dg-card { opacity: 1; pointer-events: auto; }
+  .dg-card-plate {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--carbon);
+    margin-bottom: 0.6rem;
+  }
+  /* todas las fotos están montadas y solo cambia cuál se ve: así el cambio es inmediato */
+  .dg-card-plate img { opacity: 0; transition: opacity 320ms var(--ease-out-expo); }
+  .dg-card-plate img[data-on] { opacity: 1; }
+  .dg-card-name {
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.018em;
+    max-width: 18ch;
+  }
+
+  .dg-figure { position: relative; aspect-ratio: 1; }
+  .dg-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    font-family: inherit;
+  }
+  .dg-svg a { outline: none; }
+  .dg-svg a:focus-visible .dg-label,
+  .dg-svg a:focus-visible .dg-arc { outline: 2px solid var(--carbon); outline-offset: 4px; }
+  .dg-ring {
+    fill: none;
+    stroke: var(--rule);
+    stroke-width: 1;
+    stroke-dasharray: 3 7;
+  }
+  /* Los arcos y las líneas se dibujan con `pathLength=1`: el trazo va de 1 (nada) a 0 (todo).
+     Cada tipología con su retardo (--i), las líneas después del arco y los códigos al final. */
+  .dg-arc {
+    fill: none;
+    stroke: var(--carbon);
+    stroke-width: 22;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition:
+      stroke-dashoffset 1500ms var(--ease-out-expo) calc(var(--i) * 140ms),
+      opacity 320ms var(--ease-out-expo);
+  }
+  .dg-line {
+    fill: none;
+    stroke: var(--carbon);
+    stroke-width: 1.2;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition:
+      stroke-dashoffset 900ms var(--ease-out-expo) calc(var(--i) * 140ms + 600ms),
+      opacity 320ms var(--ease-out-expo),
+      stroke-width 200ms var(--ease-out-expo);
+  }
+  .dg-label {
+    font-size: 24px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    fill: var(--carbon-2);
+    dominant-baseline: middle;
+    /* la zona sensible es la caja del texto entera, no solo el trazo de las letras */
+    pointer-events: bounding-box;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 600ms var(--ease-out-expo) calc(var(--i) * 140ms + 1000ms), fill 200ms var(--ease-out-expo);
+  }
+  .dg-label[data-pending] { fill: var(--carbon-2); cursor: default; }
+  .rv[data-in] .dg-arc,
+  .rv[data-in] .dg-line { stroke-dashoffset: 0; }
+  .rv[data-in] .dg-label { opacity: 1; }
+  /* el número llega con su arco: antes sería un «05» blanco flotando sobre el papel */
+  .dg-num {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    fill: #fff;
+    text-anchor: middle;
+    dominant-baseline: central;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms var(--ease-out-expo) calc(var(--i) * 140ms + 900ms);
+  }
+  .rv[data-in] .dg-num { opacity: 1; }
+  .dg-center { fill: var(--carbon); transform-box: fill-box; transform-origin: center; transition: transform 600ms var(--ease-out-expo); }
+  .dg-center-hit { fill: transparent; cursor: pointer; }
+  .dg-center-link:hover .dg-center,
+  .dg-center-link:focus-visible .dg-center { transform: scale(1.06); }
+
+  /* con algo activo, lo demás se apaga; lo activo se marca en negrita y con la línea gruesa */
+  .dg[data-dim] .dg-arc:not([data-on]) { opacity: 0.22; }
+  .dg[data-dim] .dg-line:not([data-on]) { opacity: 0.18; }
+  .dg[data-dim] .dg-label:not([data-on]) { opacity: 0.3; }
+  .dg-label[data-on] { fill: var(--carbon); font-weight: 700; }
+  .dg-line[data-on] { stroke-width: 2.4; }
+
+  @media (max-width: 899px) {
+    /* dibujo arriba sin códigos (no caben) y debajo la lista con las obras de cada tipología */
+    .dg { grid-template-columns: 1fr; gap: 1rem; }
+    /* sin códigos, el dibujo ocupa solo el centro del viewBox: se amplía para que llene la caja */
+    .dg-figure { order: -1; width: min(100%, 420px); margin-inline: auto; }
+    .dg-svg { transform: scale(1.6); }
+    .dg-side { padding-top: 0; }
+    .dg-label,
+    .dg-line,
+    .dg-card { display: none; }
+    .dg[data-item] .dg-groups { opacity: 1; pointer-events: auto; }
+    .dg-group[data-on] { transform: none; }
+    .dg-items {
+      display: grid;
+      gap: 0.35rem;
+      padding: 0.6rem 0 1rem 3rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .dg-item { display: grid; grid-template-columns: 4.2rem 1fr; gap: 0.6rem; align-items: baseline; }
+    .dg-item-name { font-size: 0.95rem; line-height: 1.3; }
+    .dg-item[data-pending] .dg-item-name { color: var(--carbon-2); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dg-arc,
+    .dg-line { stroke-dashoffset: 0; transition: none; }
+    .dg-label,
+    .dg-num { opacity: 1; transition: none; }
+  }
+
   /* ═══ v2 · páginas interiores ════════════════════════
      Proyectos, ficha de obra, estudio, servicios, contacto y legales, en el mismo papel que
      la portada. Aquí no hay cabecera: la página empieza por su rótulo y reserva al final la
      altura de la banda fija (--bar-h), porque el menú y el logotipo viven encima del
      contenido y si no se comen la última línea. */
   .page { padding-bottom: calc(var(--bar-h) + clamp(1.5rem, 5vh, 3rem)); }
-  /* Velo de papel detrás de la barra fija. En la portada no hace falta —el vídeo se recoge y
-     deja la banda libre—, pero en las páginas interiores hay láminas pasando por debajo del
+  /* Velo de papel detrás de la barra fija, en toda la web: hay láminas pasando por debajo del
      menú todo el rato y la letra se pierde en cuanto la foto es oscura. Con el velo, el tono
-     de estas páginas es siempre tinta: no depende de la foto que toque.
+     es siempre tinta y no depende de la foto que toque. En la portada no se nota: durante la
+     apertura el vídeo va por encima (z 90) y, al recogerse, la banda ya es papel.
      Es un pseudoelemento a propósito: un nodo real lo leería `lib/use-tone.ts` o se comería
-     los clics de esa franja. */
-  .page::after {
+     los clics de esa franja. La web v1 archivada tiene su propia cabecera y no lo lleva. */
+  main::after {
     content: "";
     position: fixed;
     inset: auto 0 0 0;
@@ -1033,6 +1215,7 @@
     pointer-events: none;
     z-index: 55;
   }
+  main:has(.v1-shell)::after { content: none; }
 
   .page-head {
     display: grid;

@@ -62,7 +62,7 @@ export function StackD({ projects }: { projects: Project[] }) {
   );
 
   return (
-    <div ref={scope} data-menu="light" className="stack">
+    <div ref={scope} data-menu="dark" className="stack">
       <span className="stack-counter t-label" aria-hidden="true">
         {String(current + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
       </span>
