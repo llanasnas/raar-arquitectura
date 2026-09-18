@@ -12,9 +12,12 @@ import type { Project } from "@/lib/content";
 // terminadas. La foto de una obra en proceso es la miniatura, que es lo único que hay.
 const SIZES = "(min-width: 900px) 58vw, 100vw";
 
-export function Works({ projects }: { projects: Project[] }) {
+// `rhythm="featured"` es la versión de la portada: cuatro obras con su propio reparto (ver
+// .works-featured). `heading` baja el título a h3 cuando la sección ya lleva su h2.
+export function Works({ projects, rhythm = "index", heading = "h2" }: { projects: Project[]; rhythm?: "index" | "featured"; heading?: "h2" | "h3" }) {
+  const Name = heading;
   return (
-    <ol data-menu="dark" className="works wrap">
+    <ol data-menu="dark" className={rhythm === "featured" ? "works works-featured wrap" : "works wrap"}>
       {projects.map((project, i) => {
         const wip = project.status === "processing";
         const media = wip || !project.hero ? project.thumb : project.hero;
@@ -31,7 +34,7 @@ export function Works({ projects }: { projects: Project[] }) {
                   {project.codeDisplay} · {project.place}
                   {wip && <span className="work-tag"> · En proceso</span>}
                 </span>
-                <h2 className="work-name">{project.name}</h2>
+                <Name className="work-name">{project.name}</Name>
                 <p className="t-body work-sum">{project.summary}</p>
               </div>
             </Link>

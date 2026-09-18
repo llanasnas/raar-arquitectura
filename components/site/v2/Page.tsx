@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { Isotype } from "@/components/site/Isotype";
 import { Reveal } from "@/components/site/v2/Reveal";
 import { copy } from "@/lib/copy";
 import { routes, site } from "@/lib/site";
@@ -86,20 +87,47 @@ export function Steps() {
 }
 
 // Preguntas: <details> nativo, sin JS. El signo es mono y cuadrado (ver .faq-item en globals).
-export function Faq() {
+// `split` es la versión de la home: rótulo pegado al margen y las preguntas en la columna de
+// lectura, la misma retícula que la ficha de obra. El JSON-LD (FaqJsonLd) lo pone la página.
+export function Faq({ split = false }: { split?: boolean }) {
+  const list = (
+    <div className={split ? "faq" : "faq vspace-list"}>
+      {copy.faq.items.map((item) => (
+        <details key={item.q} className="faq-item">
+          <summary>{item.q}</summary>
+          <p className="t-body faq-a">{item.a}</p>
+        </details>
+      ))}
+    </div>
+  );
+
+  if (split) {
+    return (
+      <section data-menu="dark" className="sheet wrap faq-split" aria-labelledby="faq-title">
+        <div className="sheet-facts">
+          <div className="sheet-facts-inner">
+            <Reveal className="t-label" variant="line">
+              Preguntas
+            </Reveal>
+            <Reveal as="h2" id="faq-title" className="t-title faq-title" delay={60}>
+              {copy.faq.title}
+            </Reveal>
+            <Reveal className="t-label faq-note" delay={120}>
+              {copy.process.note}
+            </Reveal>
+          </div>
+        </div>
+        <div className="sheet-text">{list}</div>
+      </section>
+    );
+  }
+
   return (
     <section data-menu="dark" className="wrap vspace">
       <Reveal as="h2" className="t-title" variant="up">
         {copy.faq.title}
       </Reveal>
-      <div className="faq vspace-list">
-        {copy.faq.items.map((item) => (
-          <details key={item.q} className="faq-item">
-            <summary>{item.q}</summary>
-            <p className="t-body faq-a">{item.a}</p>
-          </details>
-        ))}
-      </div>
+      {list}
     </section>
   );
 }
@@ -132,11 +160,14 @@ export function CtaBlock({ title, lead }: { title?: string; lead?: string }) {
 
 // Pie de toda la web, en el mismo lenguaje: tres columnas con regla (contacto, web, legal),
 // el rótulo del estudio arriba y el copyright abajo. Reserva la altura de la barra fija
-// (menú y logotipo) para que la última línea no quede debajo.
-export function SiteFoot() {
+// (menú y logotipo) para que la última línea no quede debajo. `mark` añade el isotipo
+// centrado al final, como cierra la portada en la maqueta del cliente.
+export function SiteFoot({ mark = false }: { mark?: boolean }) {
   const year = new Date().getFullYear();
   return (
     <footer data-menu="dark" className="foot wrap">
+      {/* la regla va dentro del wrap, como las demás: de margen a margen, no a sangre */}
+      <hr className="rule-line" aria-hidden="true" />
       <div className="foot-head">
         <span className="t-label">
           {site.name} · {copy.footer.tagline}
@@ -200,6 +231,11 @@ export function SiteFoot() {
         </span>
         <span>{copy.footer.rights}</span>
       </div>
+      {mark && (
+        <div className="foot-mark" aria-hidden="true">
+          <Isotype />
+        </div>
+      )}
     </footer>
   );
 }

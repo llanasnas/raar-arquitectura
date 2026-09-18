@@ -16,19 +16,16 @@ export const copy = {
     ctaPrimary: "Pide tu primera visita gratuita",
     ctaSecondary: "Ver proyectos",
     scrollHint: "Desliza para entrar",
-    // Las cuatro palabras con las que el estudio quiere que se le lea, dentro de una frase y
-    // no sueltas. Cada palabra marcada (`key`) cambia la imagen de la portada al pasar por
-    // encima: ver components/site/CoverBody.tsx.
-    statement: [
-      { t: "Arquitectura", key: true },
-      { t: " y " },
-      { t: "diseño", key: true },
-      { t: " que buscan la " },
-      { t: "atemporalidad", key: true },
-      { t: " sin salirse del " },
-      { t: "contexto", key: true },
-      { t: "." },
-    ],
+    // Portada v2 (maqueta del cliente «Opción S», 18/09/2026): el lema del estudio en caja
+    // alta y, debajo, sus cuatro palabras en lista. Se van encendiendo una a una al ritmo
+    // del vídeo, y al pasar por encima de una la lámina enseña la obra que la explica: ver
+    // components/site/CoverBody.tsx. El cliente escribió «Rigor» en la maqueta (en la
+    // reunión del 17/09 había dicho «Contexto»): pendiente de confirmar.
+    // El original del cliente es «Born in Barcelona. Designing beyond borders»; aquí va
+    // traducido (la web es en español; el inglés irá en la versión EN).
+    tagline: "Nacidos en Barcelona. Diseñamos sin fronteras",
+    taglineLines: ["Nacidos en Barcelona.", "Diseñamos sin fronteras"],
+    words: ["Arquitectura", "Diseño", "Atemporalidad", "Rigor"],
     skip: "Saltar el recorrido",
     // Beats sobre el vídeo, en orden de scroll. Máximo dos líneas cada uno.
     beats: [
@@ -161,6 +158,38 @@ export const copy = {
     lead: "Gratuita y sin compromiso. Te decimos con sinceridad qué se puede hacer con tu casa.",
   },
 
+  // Bloques propios de la portada (maqueta «Opción S» del cliente, 18/09/2026).
+  home: {
+    // Filosofía: el isotipo, el rótulo y el arranque del segundo párrafo del manifiesto.
+    philosophy: {
+      kicker: "Filosofía",
+      text: "Creemos firmemente en una arquitectura que se construye con gestos sutiles, con integración y con la nobleza de los materiales que nos da la naturaleza. Una arquitectura que no necesita ostentación para tener presencia, que se manifiesta en su esencia y no en el exceso.",
+    },
+    featured: { title: "Proyectos destacados", all: "Todos los proyectos" },
+    // Off grid: dos entradas (eventos y moda) con lámina que cambia al hacer scroll. El
+    // cliente aún no ha mandado ni textos ni fotos: lo que hay son párrafos del manifiesto
+    // y renders propios, de relleno, hasta que llegue lo suyo.
+    offgrid: {
+      title: "Off grid",
+      items: [
+        {
+          n: "01",
+          title: "Eventos",
+          text: "Creemos firmemente en una arquitectura que se construye con gestos sutiles, con integración y con la nobleza de los materiales que nos da la naturaleza. Una arquitectura que no necesita ostentación para tener presencia, que se manifiesta en su esencia y no en el exceso. Cada proyecto es una oportunidad para repensar cómo vivimos, cómo nos movemos y cómo convivimos con lo que nos rodea.",
+          image: { src: "/images/projects/to39/render-04-ceramica.jpg", alt: "" },
+        },
+        {
+          n: "02",
+          title: "Moda",
+          text: "Entendemos la creación como un proceso en evolución constante, donde técnica e intuición se complementan. Trabajamos con un compromiso firme con una arquitectura más responsable, que responda a las necesidades reales de las personas y del entorno.",
+          image: { src: "/images/projects/mo07/render-01-escena-1.jpg", alt: "" },
+        },
+      ],
+    },
+    // Cierre con el formulario. El texto es del cliente, tal cual lo escribió en la maqueta.
+    contact: { title: "¿Quieres formar parte de nuestro viaje?", cta: "¡Contáctanos!" },
+  },
+
   form: {
     name: "Nombre",
     email: "Email",
@@ -267,11 +296,6 @@ export const studioPage = {
   ],
   teamTitle: "Quiénes somos",
   teamNote: "Tres arquitectos formados en Barcelona.", // nombres y credenciales pendientes de confirmación
-  // Rótulos editoriales de los tres párrafos del manifiesto (propuesta B de la home): de qué
-  // habla cada uno. No son datos, son títulos de columna; el cliente puede cambiarlos.
-  themes: ["Origen", "Materia", "Proceso"],
-  // La frase del manifiesto que se destaca en grande (propuesta C). Es del segundo párrafo.
-  quote: "Una arquitectura que no necesita ostentación para tener presencia, que se manifiesta en su esencia y no en el exceso.",
   whereTitle: "Dónde estamos",
   howTitle: "Cómo trabajamos",
 } as const;

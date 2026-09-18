@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { PageHead, Steps, CtaBlock, SiteFoot } from "@/components/site/v2/Page";
+import { Where } from "@/components/site/v2/Home";
 import { Reveal } from "@/components/site/v2/Reveal";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { copy, studioPage } from "@/lib/copy";
-import { routes, site } from "@/lib/site";
+import { routes } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "El estudio · tres arquitectos en Barcelona",
@@ -12,31 +13,38 @@ export const metadata: Metadata = {
   alternates: { canonical: routes.studio },
 };
 
-// El estudio, en lenguaje revista: rótulo, foto a sangre y el manifiesto a dos columnas.
-// El primer párrafo va grande porque es el que define al estudio; el resto, en columna de
-// lectura. Después, cómo trabajan y dónde están.
+// El estudio, en lenguaje revista: rótulo y titular, y debajo el pliego de apertura con el
+// primer párrafo del manifiesto en grande a la izquierda y la foto del equipo a la derecha,
+// a su tamaño. La foto es de 640 px: a sangre se pixelaba y el recorte dejaba fuera a los
+// tres socios, que es justo lo que enseña. Su pie es la única nota sobre quiénes son.
+// El resto del manifiesto sigue a dos columnas. Después, cómo trabajan y dónde están.
 export default function StudioPage() {
   const [opening, ...rest] = studioPage.manifesto;
 
   return (
     <div className="page">
-      <PageHead kicker={studioPage.title} title={copy.studio.title} lead={studioPage.teamNote} />
+      <PageHead kicker={studioPage.title} title={copy.studio.title} />
 
-      <figure className="bleed">
-        <Image
-          src="/images/about/team-aerial.jpg"
-          alt={copy.studio.photoAlt}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-      </figure>
-
-      <section data-menu="dark" className="prose wrap">
-        <Reveal as="p" className="prose-lead" variant="up">
+      <section data-menu="dark" className="studio-open wrap">
+        <Reveal as="p" className="prose-lead studio-open-text" variant="up">
           {opening}
         </Reveal>
+        <figure className="studio-open-media">
+          <Reveal className="studio-plate" variant="wipe" delay={80}>
+            <Image
+              src="/images/about/team-aerial.jpg"
+              alt={copy.studio.photoAlt}
+              fill
+              priority
+              sizes="(min-width: 900px) 640px, 100vw"
+              className="object-cover"
+            />
+          </Reveal>
+          <figcaption className="t-label about-cap">{studioPage.teamNote}</figcaption>
+        </figure>
+      </section>
+
+      <section data-menu="dark" className="prose studio-prose wrap">
         <Reveal className="t-body cols-2" delay={80}>
           {rest.map((text, i) => (
             <p key={i}>{text}</p>
@@ -46,36 +54,7 @@ export default function StudioPage() {
 
       <Steps />
 
-      <section data-menu="dark" className="contact wrap vspace">
-        <div className="contact-side">
-          <h2 className="t-title">{studioPage.whereTitle}</h2>
-          <div className="contact-list">
-            <p className="t-body">
-              {site.address.street}
-              <br />
-              {site.address.postalCode} {site.address.city}
-            </p>
-            <a href={site.phoneHref} className="t-label link-line">
-              {site.phone}
-            </a>
-            <a href={`mailto:${site.email}`} className="t-label link-line">
-              {site.email}
-            </a>
-            <a href={site.instagram} target="_blank" rel="noopener noreferrer" className="t-label link-line">
-              @raar.arquitectura
-            </a>
-          </div>
-        </div>
-        <div className="contact-main">
-          <iframe
-            title="Mapa: C/ Bruc 136, Barcelona"
-            src={`https://www.openstreetmap.org/export/embed.html?bbox=${site.geo.lng - 0.006}%2C${site.geo.lat - 0.004}%2C${site.geo.lng + 0.006}%2C${site.geo.lat + 0.004}&layer=mapnik&marker=${site.geo.lat}%2C${site.geo.lng}`}
-            className="map"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
-      </section>
+      <Where />
 
       <CtaBlock />
       <SiteFoot />

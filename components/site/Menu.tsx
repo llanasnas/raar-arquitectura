@@ -13,10 +13,12 @@ import { routes } from "@/lib/site";
 // y el menú mira qué hay debajo (ver lib/use-tone.ts). Se probó mix-blend-mode: difference
 // y falla sobre tonos medios (una piscina, un cielo gris): la inversión queda con la misma
 // luminancia que el fondo.
+// Off grid (maqueta del cliente, 18/09/2026) es un ancla de la portada, no una página.
 const items = [
   { label: "Inicio", href: routes.home },
   { label: "Proyectos", href: routes.projects },
   { label: "Estudio", href: routes.studio },
+  { label: "Off grid", href: routes.offgrid },
   { label: "Contacto", href: routes.contact },
 ] as const;
 

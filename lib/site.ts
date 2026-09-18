@@ -38,6 +38,8 @@ export const routes = {
   project: (id: string) => `/proyectos/${id}`,
   services: "/servicios",
   studio: "/estudio",
+  // Off grid no tiene página: es un bloque de la portada (ancla)
+  offgrid: "/#off-grid",
   contact: "/contacto",
   legal: "/aviso-legal",
   privacy: "/privacidad",

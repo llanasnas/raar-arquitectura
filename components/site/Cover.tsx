@@ -11,10 +11,10 @@ import { getProject } from "@/lib/content";
 // La portada está montada desde el primer momento: el telón de la apertura la tapa y al
 // subir la descubre, no hay nada que entre después.
 //
-// Cada palabra marcada de la frase enseña una obra distinta, elegida porque explica esa
-// palabra: la casa abierta al valle para «arquitectura», un interior resuelto para «diseño»,
-// la bóveda catalana que sigue ahí para «atemporalidad» y la casa entre medianeras para
-// «contexto».
+// Cada palabra de la lista enseña una obra distinta, elegida porque explica esa palabra:
+// la casa abierta al valle para «arquitectura», un interior resuelto para «diseño», la
+// bóveda catalana que sigue ahí para «atemporalidad» y la casa entre medianeras para
+// «rigor». Mismo orden que `copy.hero.words`.
 const SLIDE_IDS = ["gg01", "im10", "pe17", "vi02"] as const;
 
 export function Cover({ brandCorner = "tl", opening = false }: { brandCorner?: "tl" | "br"; opening?: boolean }) {

@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -143,7 +144,7 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
             {/* diagrama de proyecto: del emplazamiento a la planta */}
             {p.conceptVideo && (
               <div className="gal wrap">
-                <figure className="gal-item gal-wide">
+                <figure className="gal-item gal-diagram">
                   <video
                     src={p.conceptVideo.src}
                     poster={p.conceptVideo.poster}
@@ -152,7 +153,7 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
                     loop
                     playsInline
                     preload="metadata"
-                    className="w-full h-auto"
+                    className="gal-ink"
                     aria-label={`${t.concept} — ${p.code}`}
                   />
                   <figcaption className="t-label gal-cap">
@@ -206,8 +207,14 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
                 <div className="gal">
                   {p.plans.map((pl, i) => (
                     <figure key={pl.src} className="gal-item">
-                      <LightboxItem index={plansOffset + i} label={pl.label ?? pl.alt} className="gal-plate gal-plate-plan">
-                        <Image src={pl.src} alt={pl.label ?? pl.alt} fill sizes="(min-width: 900px) 50vw, 100vw" className="object-contain p-4" />
+                      {/* sin caja blanca, la lámina toma la proporción real del plano: así no queda aire arriba y abajo */}
+                      <LightboxItem
+                        index={plansOffset + i}
+                        label={pl.label ?? pl.alt}
+                        className="gal-plate gal-plate-plan"
+                        style={pl.width && pl.height ? ({ "--gal-ar": `${pl.width} / ${pl.height}` } as CSSProperties) : undefined}
+                      >
+                        <Image src={pl.src} alt={pl.label ?? pl.alt} fill sizes="(min-width: 900px) 50vw, 100vw" className="gal-ink object-contain" />
                       </LightboxItem>
                       <figcaption className="t-label gal-cap">{pl.label ?? pl.alt}</figcaption>
                     </figure>
