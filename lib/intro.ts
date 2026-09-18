@@ -66,9 +66,26 @@ export function useIntroPlays(enabled = true): boolean {
 }
 
 // Al salir de la portada: la próxima visita vuelve a decidir (y ya la habrá visto).
+//
+// Va con un retardo de un tick a propósito. En desarrollo, StrictMode monta, desmonta y
+// vuelve a montar cada componente en el mismo instante; si el desmontaje borrara la decisión
+// en seco, el segundo montaje volvería a decidir con la apertura ya «vista» y la cortaría al
+// segundo. `keepIntro`, desde el montaje, cancela el borrado pendiente.
+let pendingReset: number | null = null;
+
 export function resetIntro() {
-  decision = null;
-  document.documentElement.removeAttribute("data-intro");
-  document.documentElement.removeAttribute("data-intro-lock");
-  listeners.forEach((listener) => listener());
+  if (pendingReset !== null) clearTimeout(pendingReset);
+  pendingReset = window.setTimeout(() => {
+    pendingReset = null;
+    decision = null;
+    document.documentElement.removeAttribute("data-intro");
+    document.documentElement.removeAttribute("data-intro-lock");
+    listeners.forEach((listener) => listener());
+  }, 0);
+}
+
+export function keepIntro() {
+  if (pendingReset === null) return;
+  clearTimeout(pendingReset);
+  pendingReset = null;
 }

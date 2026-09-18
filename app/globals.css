@@ -710,7 +710,7 @@
   .closing {
     display: grid;
     gap: 0.6rem;
-    padding-block: clamp(4rem, 12vh, 9rem) calc(var(--bar-h) + 3rem);
+    padding-block: clamp(4rem, 12vh, 9rem) clamp(3rem, 8vh, 6rem);
   }
   .closing-areas { max-width: 20ch; }
   .closing-cta {
@@ -1232,12 +1232,149 @@
     .dg-num { opacity: 1; transition: none; }
   }
 
+  /* ── El estudio en la home · cuatro propuestas ───────
+     A pliego, B tres columnas, C cita, D al hilo del texto (components/site/v2/About*.tsx).
+     Comparten la lámina, el pie de foto y el párrafo grande. */
+  .about-mark {
+    padding-top: clamp(2rem, 6vh, 4rem);
+    border-top: 1px solid var(--carbon);
+  }
+  .about-mark .t-label { color: var(--carbon); }
+  .about-title { max-width: 14ch; margin-bottom: clamp(1.2rem, 3vh, 2rem); }
+  .about-plate {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  .about-plate-wide { aspect-ratio: 3 / 2; }
+  /* cuadrada: a 3/4 la lámina pegada no cabía en la pantalla con su pie y se metía bajo la barra */
+  .about-plate-tall { aspect-ratio: 1; }
+  /* el plano es trazo sobre blanco: entero y en su papel */
+  .about-plate-plan { background: #fff; }
+  .about-cap { display: block; margin-top: 0.6rem; }
+  .about-lead {
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+    max-width: 30ch;
+    margin-bottom: clamp(1.2rem, 3vh, 2rem);
+  }
+  .about-p { max-width: 54ch; margin-bottom: 1.1rem; }
+
+  /* A · pliego: foto pegada al margen, texto en la otra columna */
+  .about-a {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.5rem, 3vw, 3.5rem);
+    padding-block: clamp(3rem, 10vh, 7rem);
+  }
+  .about-a-media,
+  .about-a-text { grid-row: 1; }
+  .about-a-media { grid-column: 1 / span 5; }
+  .about-a-text { grid-column: 7 / span 6; }
+  .about-a-sticky { position: sticky; top: clamp(3rem, 12vh, 7rem); }
+
+  /* B · tres columnas con regla */
+  .about-b { padding-block: clamp(3rem, 10vh, 7rem); }
+  .about-b-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-bottom: clamp(1.5rem, 4vh, 3rem);
+  }
+  .about-b-head .about-title { margin-bottom: 0; }
+  .about-b-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1.5rem, 3vw, 3.5rem);
+    padding-top: clamp(1.5rem, 4vh, 2.5rem);
+    border-top: 1px solid var(--rule);
+  }
+  .about-b-col { display: grid; gap: 1rem; align-content: start; }
+  .about-b-col .about-p { margin-bottom: 0; }
+  .about-b-foot { margin-top: clamp(2rem, 5vh, 3.5rem); }
+
+  /* C · la cita en grande, la cinta de palabras y el resto a dos columnas */
+  .about-c { padding-block: clamp(3rem, 10vh, 7rem); }
+  .about-c-quote {
+    max-width: 22ch;
+    margin-top: 1rem;
+    text-wrap: balance;
+  }
+  .about-c-keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 2rem;
+    margin-top: clamp(1.5rem, 4vh, 2.5rem);
+    padding-block: 1rem;
+    border-block: 1px solid var(--rule);
+    color: var(--carbon);
+  }
+  .about-c-body {
+    display: grid;
+    grid-template-columns: 4fr 7fr;
+    gap: clamp(2rem, 4vw, 5rem);
+    align-items: start;
+    margin-top: clamp(2rem, 6vh, 4rem);
+  }
+  .about-c-cols { margin-top: 0; margin-bottom: clamp(1.2rem, 3vh, 2rem); }
+
+  /* D · al hilo del texto: párrafos con aire y lámina pegada que cambia con cada uno */
+  .about-d {
+    display: grid;
+    grid-template-columns: 6fr 5fr;
+    gap: clamp(2rem, 5vw, 6rem);
+    padding-block: clamp(3rem, 10vh, 7rem);
+  }
+  .about-d-text,
+  .about-d-media { grid-row: 1; }
+  .about-d-step {
+    max-width: 44ch;
+    min-height: 62svh;
+    padding-block: 12vh;
+    font-size: clamp(1.05rem, 1.5vw, 1.4rem);
+    line-height: 1.45;
+    color: var(--carbon-2);
+    transition: color 500ms var(--ease-out-expo);
+  }
+  .about-d-step[data-on] { color: var(--carbon); }
+  .about-d-sticky {
+    position: sticky;
+    top: clamp(3rem, 12vh, 7rem);
+  }
+  .about-d-img {
+    opacity: 0;
+    transition: opacity 700ms var(--ease-out-expo);
+  }
+  .about-d-img[data-on] { opacity: 1; }
+
+  @media (max-width: 899px) {
+    .about-a,
+    .about-d { grid-template-columns: 1fr; gap: 2rem; }
+    .about-a-media,
+    .about-a-text,
+    .about-d-text,
+    .about-d-media { grid-row: auto; grid-column: 1; }
+    .about-a-sticky { position: static; }
+    .about-b-cols { grid-template-columns: 1fr; gap: 2.5rem; }
+    .about-c-body { grid-template-columns: 1fr; gap: 2rem; }
+    /* en móvil la lámina va encima y el texto seguido: sin pantalla que pegarse */
+    .about-d-media { order: -1; }
+    .about-d-sticky { position: static; }
+    .about-plate-tall { aspect-ratio: 4 / 3; }
+    .about-d-step { min-height: 0; padding-block: 0.6rem; }
+  }
+
   /* ═══ v2 · páginas interiores ════════════════════════
      Proyectos, ficha de obra, estudio, servicios, contacto y legales, en el mismo papel que
      la portada. Aquí no hay cabecera: la página empieza por su rótulo y reserva al final la
      altura de la banda fija (--bar-h), porque el menú y el logotipo viven encima del
      contenido y si no se comen la última línea. */
-  .page { padding-bottom: calc(var(--bar-h) + clamp(1.5rem, 5vh, 3rem)); }
+  /* la altura de la barra fija la reserva el pie (.foot), que cierra todas las páginas */
+  .page { padding-bottom: 0; }
   /* Velo de papel detrás de la barra fija, en toda la web: hay láminas pasando por debajo del
      menú todo el rato y la letra se pierde en cuanto la foto es oscura. Con el velo, el tono
      es siempre tinta y no depende de la foto que toque. En la portada no se nota: durante la
@@ -1559,17 +1696,42 @@
 
   .foot {
     display: grid;
-    gap: 1rem;
-    padding-top: clamp(1.5rem, 4vh, 2.5rem);
+    gap: clamp(1.5rem, 4vh, 2.5rem);
+    padding-top: clamp(2rem, 5vh, 3.5rem);
+    padding-bottom: calc(var(--bar-h) + 1.5rem);
     border-top: 1px solid var(--rule);
   }
-  .foot-row {
+  .foot-head {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem clamp(1.2rem, 3vw, 3rem);
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
   }
-  .foot a { color: inherit; }
-  .foot a:hover { color: var(--carbon); text-decoration: underline; }
+  .foot-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem clamp(1.5rem, 3vw, 3.5rem);
+    padding-block: clamp(1.5rem, 4vh, 2.5rem);
+    border-block: 1px solid var(--rule);
+  }
+  .foot-col {
+    display: grid;
+    justify-items: start;
+    align-content: start;
+    gap: 0.35rem;
+  }
+  .foot-col-title { margin-bottom: 0.5rem; color: var(--carbon); }
+  .foot-link {
+    color: var(--carbon-2);
+    transition: color 200ms var(--ease-out-expo);
+  }
+  .foot-link:hover { color: var(--carbon); text-decoration: underline; text-underline-offset: 0.18em; }
+  .foot-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+  }
 
   /* lista con reglas y guion: sustituye a los checks rojos de la v1 */
   .list-rule { border-top: 1px solid var(--rule); }
@@ -1804,6 +1966,7 @@
     .step-text { grid-column: 2; }
     .form-row { grid-template-columns: 1fr; }
     .pager { grid-template-columns: 1fr; }
+    .foot-grid { grid-template-columns: 1fr; }
     .pager-next { justify-self: start; text-align: left; }
     .bleed { height: clamp(240px, 48svh, 420px); }
   }

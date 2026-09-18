@@ -130,28 +130,75 @@ export function CtaBlock({ title, lead }: { title?: string; lead?: string }) {
   );
 }
 
-// Pie: mono, de una sola línea de alto, con lo que la ley pide y nada más. El menú fijo está
-// justo debajo, así que la página reserva su altura con .page.
+// Pie de toda la web, en el mismo lenguaje: tres columnas con regla (contacto, web, legal),
+// el rótulo del estudio arriba y el copyright abajo. Reserva la altura de la barra fija
+// (menú y logotipo) para que la última línea no quede debajo.
 export function SiteFoot() {
+  const year = new Date().getFullYear();
   return (
     <footer data-menu="dark" className="foot wrap">
-      <div className="foot-row t-label">
-        <span>
-          {site.name} · {site.address.street}, {site.address.postalCode} {site.address.city}
+      <div className="foot-head">
+        <span className="t-label">
+          {site.name} · {copy.footer.tagline}
         </span>
-        <a href={`mailto:${site.email}`}>{site.email}</a>
-        <a href={site.instagram} target="_blank" rel="noopener noreferrer">
-          Instagram
-        </a>
+        <span className="t-label foot-areas">{site.areas.join(" · ")}</span>
       </div>
-      <div className="foot-row t-label">
-        <Link href={routes.projects}>Proyectos</Link>
-        <Link href={routes.services}>Servicios</Link>
-        <Link href={routes.studio}>Estudio</Link>
-        <Link href={routes.contact}>Contacto</Link>
-        <Link href={routes.legal}>Aviso legal</Link>
-        <Link href={routes.privacy}>Privacidad</Link>
-        <Link href={routes.cookies}>Cookies</Link>
+
+      <div className="foot-grid">
+        <div className="foot-col">
+          <span className="t-label foot-col-title">{copy.footer.contact}</span>
+          <p className="t-body">
+            {site.address.street}
+            <br />
+            {site.address.postalCode} {site.address.city}
+          </p>
+          <a href={site.phoneHref} className="t-body foot-link">
+            {site.phone}
+          </a>
+          <a href={`mailto:${site.email}`} className="t-body foot-link">
+            {site.email}
+          </a>
+          <a href={site.instagram} target="_blank" rel="noopener noreferrer" className="t-body foot-link">
+            Instagram
+          </a>
+        </div>
+        <div className="foot-col">
+          <span className="t-label foot-col-title">Web</span>
+          <Link href={routes.home} className="t-body foot-link">
+            Inicio
+          </Link>
+          <Link href={routes.projects} className="t-body foot-link">
+            Proyectos
+          </Link>
+          <Link href={routes.services} className="t-body foot-link">
+            Servicios
+          </Link>
+          <Link href={routes.studio} className="t-body foot-link">
+            Estudio
+          </Link>
+          <Link href={routes.contact} className="t-body foot-link">
+            Contacto
+          </Link>
+        </div>
+        <div className="foot-col">
+          <span className="t-label foot-col-title">{copy.footer.legal}</span>
+          <Link href={routes.legal} className="t-body foot-link">
+            Aviso legal
+          </Link>
+          <Link href={routes.privacy} className="t-body foot-link">
+            Política de privacidad
+          </Link>
+          <Link href={routes.cookies} className="t-body foot-link">
+            Cookies
+          </Link>
+        </div>
+      </div>
+
+      <div className="foot-bottom t-label">
+        <span>
+          © {year} {site.name}
+        </span>
+        <span>{copy.footer.rights}</span>
       </div>
     </footer>
   );

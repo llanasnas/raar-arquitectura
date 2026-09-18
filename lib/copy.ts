@@ -267,6 +267,11 @@ export const studioPage = {
   ],
   teamTitle: "Quiénes somos",
   teamNote: "Tres arquitectos formados en Barcelona.", // nombres y credenciales pendientes de confirmación
+  // Rótulos editoriales de los tres párrafos del manifiesto (propuesta B de la home): de qué
+  // habla cada uno. No son datos, son títulos de columna; el cliente puede cambiarlos.
+  themes: ["Origen", "Materia", "Proceso"],
+  // La frase del manifiesto que se destaca en grande (propuesta C). Es del segundo párrafo.
+  quote: "Una arquitectura que no necesita ostentación para tener presencia, que se manifiesta en su esencia y no en el exceso.",
   whereTitle: "Dónde estamos",
   howTitle: "Cómo trabajamos",
 } as const;

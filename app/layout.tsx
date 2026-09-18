@@ -44,7 +44,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es" className={`${poppins.variable} h-full antialiased`}>
+    // suppressHydrationWarning: el script de la apertura (components/site/intro/Intro.tsx) le
+    // pone a <html> data-intro y data-intro-lock antes de hidratar, a propósito; sin esto React
+    // lo señala como desajuste en desarrollo (en producción no dice nada, pero molesta).
+    <html lang="es" className={`${poppins.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full">
         <a href="#contenido" className="skip-link">
           Saltar al contenido

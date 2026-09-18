@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { SlatsIntro } from "@/components/site/intro/SlatsIntro";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
-import { INTRO_KEY, markIntroSeen, navigationType, resetIntro, useIntroPlays } from "@/lib/intro";
+import { INTRO_KEY, keepIntro, markIntroSeen, navigationType, resetIntro, useIntroPlays } from "@/lib/intro";
 
 // La apertura, con sus reglas de cuándo se ve (lib/intro.ts) y lo que pasa mientras dura:
 //
@@ -40,7 +40,11 @@ export function Intro() {
     // solo cuando la apertura ha terminado: si se enciende en `load`, Chrome aprovecha ese
     // instante para devolver el scroll a donde estaba (se vio a 203 px).
     const reloaded = navigationType() === "reload" && html.getAttribute("data-intro") === "play";
-    if (reloaded) window.scrollTo({ top: 0, behavior: "instant" });
+    if (reloaded) {
+      // el script ya lo hizo; se repite por si un desmontaje intermedio (StrictMode) lo deshizo
+      history.scrollRestoration = "manual";
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
 
     // `intro-logo-land` es lo último que termina: cuando el logotipo aterriza, se suelta
     const unlock = () => {
@@ -65,8 +69,12 @@ export function Intro() {
     };
   }, [plays, reducedMotion]);
 
-  // al salir de la portada, la próxima visita vuelve a decidir
-  useEffect(() => resetIntro, []);
+  // al salir de la portada, la próxima visita vuelve a decidir (y al volver a montar en el
+  // mismo tick, como hace StrictMode, no se borra nada)
+  useEffect(() => {
+    keepIntro();
+    return resetIntro;
+  }, []);
 
   if (!plays) return null;
   return (
