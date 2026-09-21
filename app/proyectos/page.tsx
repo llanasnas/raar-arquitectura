@@ -6,6 +6,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { getProjects, type Project } from "@/lib/content";
 import { copy } from "@/lib/copy";
 import { routes } from "@/lib/site";
+import { TYPOLOGIES } from "@/lib/typologies";
 
 export const metadata: Metadata = {
   title: "Proyectos de arquitectura en Barcelona, Vallès y Girona",
@@ -13,10 +14,9 @@ export const metadata: Metadata = {
   alternates: { canonical: routes.projects },
 };
 
+// Los filtros son las tipologías del cliente (lib/typologies.ts), más las obras en proceso.
 const TYPES: { key: string; label: string; match: (p: Project) => boolean }[] = [
-  { key: "obra-nueva", label: "Obra nueva", match: (p) => p.typeLabel === "Obra nueva" },
-  { key: "reforma", label: "Reforma integral", match: (p) => p.typeLabel === "Reforma integral" },
-  { key: "rehabilitacion", label: "Rehabilitación", match: (p) => p.typeLabel === "Rehabilitación" },
+  ...TYPOLOGIES.map((t) => ({ key: t.id, label: t.label, match: (p: Project) => t.items.includes(p.id) })),
   { key: "en-proceso", label: copy.projects.processing, match: (p) => p.status === "processing" },
 ];
 
@@ -44,7 +44,8 @@ export default async function ProjectsPage(props: PageProps<"/proyectos">) {
 
   return (
     <div className="page">
-      <PageHead kicker="Índice de obra" title={copy.projects.title} lead={copy.projects.lead} />
+      {/* sin entradilla: el cliente la quitó (guía del 21/09) */}
+      <PageHead kicker="Índice de obra" title={copy.projects.title} />
 
       {/* Filtros como sumario: etiquetas mono con una línea debajo del activo, sin píldoras. */}
       <div className="wrap">

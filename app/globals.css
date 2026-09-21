@@ -465,21 +465,25 @@
     padding-top: calc(var(--gutter-2) + var(--brand-size) * 0.34);
   }
   /* la columna de texto ocupa toda la altura: el lema arriba y las palabras repartidas hasta
-     abajo, a la altura del vídeo */
+     abajo, a la altura del vídeo. Todo centrado en la columna, no al margen (guía del
+     cliente, 21/09/2026) */
   .cover-text {
     display: flex;
     flex: 1;
     flex-direction: column;
+    align-items: center;
     margin-top: clamp(1.5rem, 7svh, 5rem);
+    text-align: center;
   }
-  /* el lema del estudio, en caja alta y negrita, como lo trajo el cliente en su maqueta */
+  /* el lema del estudio, en grande y en cursiva (guía del cliente, 21/09): siempre en inglés.
+     En caja alta no cabía a este cuerpo en media pantalla, así que va en caja baja */
   .cover-slogan {
-    font-size: clamp(1.3rem, 2.2vw, 2.2rem);
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
-    max-width: 24ch;
+    font-size: clamp(1.9rem, 3.4vw, 3.9rem);
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
   /* Las cuatro palabras del estudio, en lista y en caja alta. Se encienden de arriba abajo al
      ritmo del vídeo (`data-lit`) y al pasar por encima de una (`data-active`) manda sobre la
@@ -496,6 +500,7 @@
   }
   .cover-words li {
     display: flex;
+    justify-content: center;
   }
   .cover-key {
     position: relative;
@@ -1325,8 +1330,7 @@
       margin-top: 1.5rem;
     }
     .cover-slogan {
-      font-size: 1.15rem;
-      max-width: 26ch;
+      font-size: 1.6rem;
     }
     .cover-words {
       gap: 0.45rem;
@@ -1724,26 +1728,17 @@
     color: var(--carbon);
   }
 
-  /* Filosofía: isotipo, rótulo y el arranque del manifiesto centrado y en grande */
+  /* Filosofía: el arranque del manifiesto centrado y en grande, y el isotipo debajo. Sin
+     rótulo (guía del cliente, 21/09/2026) */
   .philo {
-    position: relative;
     display: grid;
     justify-items: center;
-    gap: clamp(1.2rem, 3vh, 2rem);
+    gap: clamp(1.8rem, 5vh, 3.2rem);
     padding-block: clamp(2.5rem, 7vh, 5rem) clamp(3rem, 9vh, 6rem);
     text-align: center;
   }
   .philo-mark {
     --iso-w: clamp(3rem, 4vw, 4.5rem);
-  }
-  /* el rótulo va al margen, como en la maqueta: la cita sigue centrada */
-  .philo-kicker {
-    position: absolute;
-    left: var(--gutter-2);
-    top: calc(
-      clamp(2.5rem, 7vh, 5rem) + clamp(3rem, 4vw, 4.5rem) * 0.55 +
-        clamp(1.2rem, 3vh, 2rem)
-    );
   }
   .philo-text {
     font-size: clamp(1.2rem, 2.1vw, 2rem);
@@ -1781,6 +1776,16 @@
     --work-ar: 4 / 3;
     align-self: end;
   }
+  .works-featured .work:nth-child(5) {
+    grid-column: 1 / span 7;
+    --work-ar: 4 / 3;
+    align-self: start;
+  }
+  .works-featured .work:nth-child(6) {
+    grid-column: 9 / span 4;
+    --work-ar: 3 / 4;
+    align-self: end;
+  }
 
   /* El estudio: texto a la izquierda con el isotipo al pie, foto a la derecha a su tamaño */
   .about {
@@ -1805,8 +1810,9 @@
     width: 100%;
     max-width: 640px;
   }
+  /* el titular en grande (guía del cliente, 21/09): dos líneas, «Tres miradas, / un objetivo» */
   .about-title {
-    max-width: 14ch;
+    max-width: 12ch;
     margin-bottom: clamp(1.5rem, 5vh, 3.5rem);
   }
   .about-p {
@@ -1920,15 +1926,60 @@
     color: var(--carbon);
   }
 
-  /* El formulario en la portada: las dos frases del cliente al lado */
-  .home-contact {
+  /* el título en grande (guía del cliente, 21/09), un punto por debajo del display para que
+     «Dónde estamos» quepa en la columna de los datos */
+  .where-title {
+    font-size: clamp(1.9rem, 4.4vw, 4.2rem);
+  }
+
+  /* El bloque de contacto (portada y /contacto): el título grande arriba, la foto del
+     teléfono a la izquierda y el formulario a la derecha (guía del cliente, 21/09/2026). */
+  .contact-2 {
+    display: grid;
+    gap: clamp(2rem, 6vh, 4rem);
     padding-block: clamp(2.5rem, 7vh, 5rem) clamp(3rem, 9vh, 6rem);
   }
-  .home-contact-title {
-    max-width: 16ch;
+  /* en /contacto el bloque abre la página: toma el aire de arriba de un rótulo de página */
+  .page > .contact-2:first-child {
+    padding-top: clamp(3.5rem, 12vh, 8rem);
   }
-  .home-contact-cta {
-    margin-top: clamp(1.5rem, 5vh, 3rem);
+  .contact-2-head {
+    display: grid;
+    gap: 0.9rem;
+  }
+  .contact-2-title {
+    max-width: 18ch;
+  }
+  .contact-2-body {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+  }
+  .contact-2-side,
+  .contact-2-main {
+    grid-row: 1;
+  }
+  .contact-2-side {
+    grid-column: 1 / span 5;
+    display: grid;
+    gap: clamp(1.2rem, 3vh, 2rem);
+    align-content: start;
+  }
+  .contact-2-main {
+    grid-column: 7 / span 6;
+  }
+  .contact-2-media {
+    margin: 0;
+  }
+  /* la foto es vertical (4:5) y se queda a su ancho de columna, nunca a sangre */
+  .contact-2-plate {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--carbon);
+  }
+  .contact-2-side .contact-list {
+    margin-top: 0;
   }
 
   @media (max-width: 899px) {
@@ -1999,6 +2050,18 @@
     }
     .works-featured .work:nth-child(n) {
       grid-column: 1 / -1;
+    }
+    .where-title {
+      font-size: clamp(1.9rem, 9vw, 2.6rem);
+    }
+    .contact-2-body {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .contact-2-side,
+    .contact-2-main {
+      grid-row: auto;
+      grid-column: 1;
     }
   }
 
@@ -2174,31 +2237,130 @@
     gap: 0.9rem;
     padding-block: clamp(3rem, 10vh, 7rem) clamp(1.5rem, 4vh, 2.5rem);
   }
+  /* el nombre de la obra baja de cuerpo: la referencia, el lugar y el tipo van en grande en la
+     ficha, como en la web anterior del cliente (guía del 21/09) */
   .pj-title {
-    max-width: 18ch;
+    max-width: 26ch;
   }
-  .pj-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem 1.6rem;
-  }
-  /* lámina de apertura a sangre: ocupa casi la pantalla, como la doble página de un reportaje */
+  /* Apertura: un pase de tres fotos (components/projects/HeroSlider.tsx). La cinta es un
+     scroll horizontal con snap, así que el arrastre lo hace el navegador; el clic sobre la
+     lámina, las flechas y los puntos los pone el componente.
+     La caja mide lo que la primera foto (--pj-ar) con tope de altura, y las fotos se encajan
+     enteras: nada se recorta. El fondo es papel, así una foto de otra proporción deja aire y
+     no una franja negra. */
   .pj-hero {
     position: relative;
     display: block;
     width: 100%;
-    height: clamp(300px, 78svh, 900px);
+    aspect-ratio: var(--pj-ar, 3 / 2);
+    max-height: min(82svh, 900px);
     overflow: hidden;
-    background: var(--carbon);
+    background: var(--paper);
   }
-  /* la apertura abre la lupa: el botón ocupa la lámina entera */
-  .pj-hero-btn {
+  .pj-hero-track {
     position: absolute;
     inset: 0;
-    display: block;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .pj-hero-track::-webkit-scrollbar {
+    display: none;
+  }
+  .pj-hero-slide {
+    position: relative;
+    flex: 0 0 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  /* la lámina entera pasa a la siguiente al clic: el gesto que pidió el cliente */
+  .pj-hero-hit {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
-    cursor: zoom-in;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: e-resize;
+  }
+  .pj-hero-arrow {
+    position: absolute;
+    top: 50%;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: var(--paper);
+    color: var(--carbon);
+    box-shadow: 0 0 0 1px var(--rule);
+    transform: translateY(-50%);
+    transition: opacity 240ms var(--ease-out-expo);
+  }
+  .pj-hero-arrow:hover {
+    opacity: 0.85;
+  }
+  .pj-hero-arrow[data-dir="prev"] {
+    left: var(--gutter-2);
+  }
+  .pj-hero-arrow[data-dir="next"] {
+    right: var(--gutter-2);
+  }
+  .pj-hero-arrow:focus-visible,
+  .pj-hero-hit:focus-visible {
+    outline: 1px solid var(--paper);
+    outline-offset: -4px;
+  }
+  /* debajo de la foto: puntos cuadrados a la izquierda y la cuenta a la derecha, en tinta */
+  .pj-hero-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 0.8rem;
+  }
+  .pj-hero-dots {
+    display: flex;
+    gap: 0.55rem;
+  }
+  .pj-hero-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    padding: 0;
+    border: 1px solid var(--carbon);
+    background: transparent;
+    transition: background-color 240ms var(--ease-out-expo);
+  }
+  .pj-hero-dot[data-on] {
+    background: var(--carbon);
+  }
+  .pj-hero-count {
+    font-variant-numeric: tabular-nums;
+  }
+  /* referencia, lugar y tipo en grande, las tres líneas de la ficha anterior */
+  .pj-big {
+    display: grid;
+    gap: 0.1em;
+    font-size: clamp(1.25rem, 1.9vw, 1.9rem);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+  /* el diagrama de proyecto con su pie a la izquierda, en la columna de la ficha */
+  .pj-diagram {
+    margin: 0;
+    padding-top: 0;
+  }
+  .pj-diagram-cap {
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
   }
   /* una obra en obras, también en su ficha: en gris hasta que esté terminada */
   .plate-wip {
@@ -2266,11 +2428,13 @@
     height: 1px;
     background: var(--carbon-2);
   }
+  /* el texto de la ficha en un cuerpo más pequeño, más cerca de la web anterior del cliente
+     (guía del 21/09): la lectura larga va a 15–16 px y a línea holgada */
   .sheet-p {
-    font-size: clamp(1.02rem, 1.35vw, 1.3rem);
-    line-height: 1.5;
-    max-width: 58ch;
-    margin-top: 1.1rem;
+    font-size: clamp(0.92rem, 1.02vw, 1rem);
+    line-height: 1.7;
+    max-width: 66ch;
+    margin-top: 1rem;
   }
   .sheet-p:first-child {
     margin-top: 0;
@@ -2381,6 +2545,62 @@
     aspect-ratio: 640 / 483;
     overflow: hidden;
     background: var(--carbon);
+  }
+  /* el manifiesto entero a la izquierda, en tinta y a cuerpo de lectura, como en la web
+     anterior del cliente (guía del 21/09) */
+  .studio-manifesto {
+    color: var(--carbon);
+    max-width: 62ch;
+  }
+  .studio-manifesto p + p {
+    margin-top: 1rem;
+  }
+
+  /* Cómo trabajamos: la foto conceptual a la izquierda y las cinco líneas del cliente a la
+     derecha, como un sumario con regla. La foto es un dibujo de línea sobre blanco: se
+     multiplica sobre el papel (.gal-ink) para que no quede un rectángulo blanco */
+  .how {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.5rem, 3vw, 3.5rem);
+    align-items: start;
+    padding-block: clamp(2.5rem, 8vh, 5rem);
+  }
+  .how-media,
+  .how-text {
+    grid-row: 1;
+  }
+  .how-media {
+    grid-column: 1 / span 5;
+    margin: 0;
+  }
+  .how-text {
+    grid-column: 7 / span 6;
+  }
+  .how-plate {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+  .how-title {
+    margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
+  }
+  .how-list {
+    border-top: 1px solid var(--rule);
+  }
+  .how-step {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    gap: clamp(1rem, 2.5vw, 2.5rem);
+    align-items: baseline;
+    padding-block: clamp(0.9rem, 2.5vh, 1.5rem);
+    border-bottom: 1px solid var(--rule);
+  }
+  .how-step-name {
+    font-size: clamp(1.15rem, 2vw, 1.8rem);
+    font-weight: 400;
+    letter-spacing: -0.018em;
+    line-height: 1.15;
   }
   /* el resto del manifiesto sigue al pliego sin volver a abrir hueco arriba */
   .studio-prose {
@@ -2842,6 +3062,44 @@
     color: var(--paper);
   }
 
+  /* ── Aviso de cookies ────────────────────────────────
+     Tarjeta pequeña encima de la barra, a la izquierda, sin velo. Entra con un fundido y, en
+     la portada, no se ve mientras dura la apertura (components/site/Consent.tsx). */
+  .consent {
+    position: fixed;
+    left: var(--gutter-2);
+    bottom: calc(var(--bar-h) + 0.5rem);
+    z-index: 70;
+    width: min(25rem, calc(100vw - 2 * var(--gutter-2)));
+    padding: 1.1rem 1.2rem 1.2rem;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    box-shadow: 0 12px 40px rgb(17 17 16 / 0.08);
+    animation: consent-in 600ms var(--ease-out-expo) both;
+  }
+  @keyframes consent-in {
+    from { opacity: 0; transform: translateY(0.6rem); }
+    to { opacity: 1; transform: none; }
+  }
+  html[data-intro-lock] .consent { visibility: hidden; }
+  .consent-text {
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: var(--carbon);
+    text-wrap: pretty;
+  }
+  .consent-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 0.8rem;
+    margin-top: 0.9rem;
+  }
+  .consent-btn { min-height: 40px; padding: 0 1.1rem; }
+  .consent-more { margin-left: auto; }
+  .consent-settings { display: grid; gap: 0.7rem; justify-items: start; }
+  .consent-settings p { color: var(--carbon-2); }
+
   /* mapa: en gris, para que no meta el color de Google/OSM en una página de papel y tinta */
   .map {
     display: block;
@@ -2895,7 +3153,7 @@
     }
 
     .pj-hero {
-      height: clamp(260px, 56svh, 520px);
+      max-height: 70svh;
     }
     .sheet,
     .contact,
@@ -2928,6 +3186,21 @@
     .studio-open-media {
       order: -1;
       max-width: none;
+    }
+    .how {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .how-media,
+    .how-text {
+      grid-row: auto;
+      grid-column: 1;
+    }
+    .pj-hero-arrow {
+      display: none;
+    }
+    .pj-hero-hit {
+      cursor: pointer;
     }
     .sheet-facts-inner,
     .srv-body-inner {

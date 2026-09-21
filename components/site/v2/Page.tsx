@@ -141,7 +141,7 @@ export function CtaBlock({ title, lead }: { title?: string; lead?: string }) {
         {copy.context.line} {site.areas.join(" · ")}
       </Reveal>
       <Reveal as="h2" className="t-display cta-2-title" delay={60}>
-        {title ?? copy.contactCta.title}
+        {title ?? copy.contactCta.closingTitle}
       </Reveal>
       <Reveal as="p" className="t-lead cta-2-lead" delay={120}>
         {lead ?? copy.contactCta.lead}

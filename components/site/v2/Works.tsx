@@ -29,10 +29,10 @@ export function Works({ projects, rhythm = "index", heading = "h2" }: { projects
                   <Image src={media.src} alt={media.alt} fill sizes={SIZES} priority={i < 2} className="object-cover" />
                 </span>
               </Reveal>
+              {/* pie según el cliente (guía del 21/09): «Referencia. Tipo. Ubicación», título y subtítulo */}
               <div className="work-cap">
                 <span className="t-label">
-                  {project.codeDisplay} · {project.place}
-                  {wip && <span className="work-tag"> · En proceso</span>}
+                  {project.code}. {project.typeLabel}. {wip ? <span className="work-tag">En proceso</span> : project.place}
                 </span>
                 <Name className="work-name">{project.name}</Name>
                 <p className="t-body work-sum">{project.summary}</p>

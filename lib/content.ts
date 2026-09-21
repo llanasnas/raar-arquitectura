@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { imageSize } from "./image-size";
+import { typologiesOf } from "./typologies";
 
 const PROJECTS_DIR = path.join(process.cwd(), "content", "projects");
 
@@ -20,7 +21,7 @@ export type Project = {
   place: string; // "Sarrià, Barcelona"
   placeFull: string;
   type: ProjectType | null;
-  typeLabel: string; // "Reforma integral" | "Obra nueva" | "Rehabilitación"
+  typeLabel: string; // la tipología del cliente ("Obra nueva", "Rehabilitación"…; ver lib/typologies.ts)
   typology: string | null;
   year: string | null;
   surface: string | null;
@@ -71,13 +72,11 @@ function media(list: RawMedia[] | undefined, fallbackAlt: string): Media[] {
     .map((m) => sized({ src: m.src as string, alt: m.alt_suggested ?? fallbackAlt, label: m.label_suggested }));
 }
 
+// Si el cliente no ha puesto la obra en ninguna tipología, se cae al tipo del archivo original.
 const TYPE_LABEL: Record<string, string> = {
   "new-build": "Obra nueva",
-  renovation: "Reforma integral",
+  renovation: "Rehabilitación",
 };
-
-// Proyectos cuyo "Rebuild" es rehabilitación de nave/taller, no reforma de vivienda.
-const REHAB = new Set(["to39", "mo07"]);
 
 function loadOne(id: string): Project | null {
   const file = path.join(PROJECTS_DIR, `${id}.md`);
@@ -91,9 +90,11 @@ function loadOne(id: string): Project | null {
 
   const src = es ? sections(es.content) : sections(en.content);
   const type = (fm.type_normalized as ProjectType | undefined) ?? null;
-  const typeLabel = REHAB.has(id) ? "Rehabilitación" : type ? TYPE_LABEL[type] : "En proceso";
+  // la etiqueta de tipo es la tipología del cliente (una obra puede tener dos: CM25)
+  const typologies = typologiesOf(id).map((t) => t.label);
+  const typeLabel = typologies.length ? typologies.join(" · ") : type ? TYPE_LABEL[type] : "En proceso";
 
-  const gallery = media(fm.gallery as RawMedia[], `${fm.code} — render`);
+  const gallery = media(fm.gallery as RawMedia[], `${fm.code} — imagen`);
   const plans = media(fm.plans as RawMedia[], `${fm.code} — planta`);
 
   const heroSrc = (fm.hero as string | null) ?? null;

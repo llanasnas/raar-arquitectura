@@ -21,6 +21,12 @@ export const ArrowRight = (p: Props) => (
   </svg>
 );
 
+export const ArrowLeft = (p: Props) => (
+  <svg {...base} {...p}>
+    <path d="M19 12H5M11 6l-6 6 6 6" />
+  </svg>
+);
+
 export const ArrowDown = (p: Props) => (
   <svg {...base} {...p}>
     <path d="M12 5v14M6 13l6 6 6-6" />

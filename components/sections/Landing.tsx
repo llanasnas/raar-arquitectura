@@ -199,7 +199,7 @@ export function Faq({ items = copy.faq.items, title = copy.faq.title }: { items?
 }
 
 /* ── 4.8 CTA final + formulario ─────────────────────────────── */
-export function ContactCta({ title = copy.contactCta.title, lead = copy.contactCta.lead }: { title?: string; lead?: string }) {
+export function ContactCta({ title = copy.contactCta.closingTitle, lead = copy.contactCta.lead }: { title?: string; lead?: string }) {
   return (
     <Section id="contacto" className="border-t border-line">
       <div className="grid md:grid-cols-12 gap-10">

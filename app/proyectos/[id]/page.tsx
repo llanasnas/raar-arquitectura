@@ -3,9 +3,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Crumbs, CtaBlock, SiteFoot } from "@/components/site/v2/Page";
+import { Crumbs, SiteFoot } from "@/components/site/v2/Page";
 import { Reveal } from "@/components/site/v2/Reveal";
 import { ProjectJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { HeroSlider } from "@/components/projects/HeroSlider";
 import { LightboxItem, LightboxProvider } from "@/components/projects/Lightbox";
 import { getAdjacentProjects, getProject, getProjects } from "@/lib/content";
 import { copy } from "@/lib/copy";
@@ -32,8 +33,10 @@ export async function generateMetadata(props: PageProps<"/proyectos/[id]">): Pro
   };
 }
 
-// Ficha de obra en lenguaje v2: apertura a sangre, ficha pegada al margen y el texto del
-// estudio a media columna, como el reportaje de una revista. Cualquier imagen abre la lupa.
+// Ficha de obra en lenguaje v2, afinada con la guía del cliente (21/09/2026): la apertura es
+// un pase de tres fotos, y debajo, como en su web anterior, la referencia, el lugar y el tipo
+// en grande a la izquierda con el texto a media columna, en un cuerpo más pequeño. Los renders
+// y los planos abren la lupa; la apertura no (el clic pasa a la foto siguiente).
 export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
   const { id } = await props.params;
   const p = getProject(id);
@@ -41,38 +44,23 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
   const { prev, next } = getAdjacentProjects(id);
   const t = copy.projects;
 
-  // una sola lupa para toda la página: apertura, renders y planos en la misma secuencia
-  const heroSrc = p.hero?.src;
-  const heroInGallery = heroSrc ? p.gallery.findIndex((g) => g.src === heroSrc) : -1;
-  const heroExtra = p.hero && heroInGallery < 0 ? [p.hero] : [];
-  const lightbox = [...heroExtra, ...p.gallery, ...p.plans];
-  const heroIndex = Math.max(heroInGallery, 0);
-  const galleryOffset = heroExtra.length;
-  const plansOffset = galleryOffset + p.gallery.length;
+  // la apertura: la lámina principal y las dos primeras de la galería que no sean ella
+  const heroItems = p.hero ? [p.hero, ...p.gallery.filter((g) => g.src !== p.hero?.src)].slice(0, 3) : [];
+  // una sola lupa para renders y planos, en la misma secuencia
+  const lightbox = [...p.gallery, ...p.plans];
+  const plansOffset = p.gallery.length;
 
   return (
     <LightboxProvider items={lightbox} label={`${p.name} · ${t.renders}`}>
       <div className="page">
         <div className="pj-head wrap">
           <Crumbs items={[{ label: t.back, href: routes.projects }, { label: p.codeDisplay }]} />
-          <Reveal as="h1" className="t-display pj-title" variant="up">
+          <Reveal as="h1" className="t-title pj-title" variant="up">
             {p.name}
           </Reveal>
-          <div className="pj-meta t-label">
-            <span>{p.placeFull || p.place}</span>
-            <span>{p.typeLabel}</span>
-            {p.surface && <span>{p.surface}</span>}
-            {p.year && <span>{p.year}</span>}
-          </div>
         </div>
 
-        {p.hero && (
-          <div className="pj-hero">
-            <LightboxItem index={heroIndex} label={p.hero.alt} className="pj-hero-btn">
-              <Image src={p.hero.src} alt={p.hero.alt} fill priority sizes="100vw" className="object-cover" />
-            </LightboxItem>
-          </div>
-        )}
+        {heroItems.length > 0 && <HeroSlider items={heroItems} label={`${p.name} · ${t.renders}`} />}
 
         {p.status === "processing" ? (
           <section data-menu="dark" className="sheet wrap">
@@ -95,31 +83,34 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
             <section data-menu="dark" className="sheet wrap">
               <div className="sheet-facts">
                 <div className="sheet-facts-inner">
-                  <h2 className="t-label">{t.sheet}</h2>
-                  <dl className="facts">
-                    <dt className="t-label">{t.location}</dt>
-                    <dd className="t-body">{p.placeFull || p.place}</dd>
-                    <dt className="t-label">{t.typeLabel}</dt>
-                    <dd className="t-body">{p.typeLabel}</dd>
-                    {p.typology && (
-                      <>
-                        <dt className="t-label">{t.typology}</dt>
-                        <dd className="t-body">{p.typology}</dd>
-                      </>
-                    )}
-                    {p.surface && (
-                      <>
-                        <dt className="t-label">{t.surface}</dt>
-                        <dd className="t-body">{p.surface}</dd>
-                      </>
-                    )}
-                    {p.year && (
-                      <>
-                        <dt className="t-label">{t.year}</dt>
-                        <dd className="t-body">{p.year}</dd>
-                      </>
-                    )}
-                  </dl>
+                  {/* referencia, lugar y tipo en grande, como las tres líneas de la web anterior */}
+                  <h2 className="pj-big">
+                    <span>{p.codeDisplay}</span>
+                    <span>{p.place}</span>
+                    <span>{p.typeLabel}</span>
+                  </h2>
+                  {(p.typology || p.surface || p.year) && (
+                    <dl className="facts">
+                      {p.typology && (
+                        <>
+                          <dt className="t-label">{t.typology}</dt>
+                          <dd className="t-body">{p.typology}</dd>
+                        </>
+                      )}
+                      {p.surface && (
+                        <>
+                          <dt className="t-label">{t.surface}</dt>
+                          <dd className="t-body">{p.surface}</dd>
+                        </>
+                      )}
+                      {p.year && (
+                        <>
+                          <dt className="t-label">{t.year}</dt>
+                          <dd className="t-body">{p.year}</dd>
+                        </>
+                      )}
+                    </dl>
+                  )}
                   {p.text.facts.length > 0 && (
                     <ul className="sheet-notes">
                       {p.text.facts.map((f, i) => (
@@ -141,10 +132,15 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
               </div>
             </section>
 
-            {/* diagrama de proyecto: del emplazamiento a la planta */}
+            {/* diagrama de proyecto: del emplazamiento a la planta. Su pie va a la izquierda, en
+                la columna de la ficha, y el dibujo en la del texto (guía del cliente, 21/09) */}
             {p.conceptVideo && (
-              <div className="gal wrap">
-                <figure className="gal-item gal-diagram">
+              <figure className="sheet pj-diagram wrap">
+                <figcaption className="sheet-facts pj-diagram-cap">
+                  <span className="t-label">{t.concept}</span>
+                  <span className="t-label">{t.conceptNote}</span>
+                </figcaption>
+                <div className="sheet-text gal-diagram">
                   <video
                     src={p.conceptVideo.src}
                     poster={p.conceptVideo.poster}
@@ -156,11 +152,8 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
                     className="gal-ink"
                     aria-label={`${t.concept} — ${p.code}`}
                   />
-                  <figcaption className="t-label gal-cap">
-                    {t.concept} · {t.conceptNote}
-                  </figcaption>
-                </figure>
-              </div>
+                </div>
+              </figure>
             )}
 
             {/* segundo bloque de texto + renders */}
@@ -180,7 +173,7 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
                   const wide = i % 3 === 0;
                   return (
                     <Reveal key={g.src} as="figure" className={`gal-item ${wide ? "gal-wide" : ""}`} variant="wipe" delay={(i % 2) * 90}>
-                      <LightboxItem index={galleryOffset + i} label={g.alt} className="gal-plate">
+                      <LightboxItem index={i} label={g.alt} className="gal-plate">
                         <Image src={g.src} alt={g.alt} fill sizes={wide ? "100vw" : "(min-width: 900px) 50vw, 100vw"} className="object-cover" />
                       </LightboxItem>
                       {g.alt && <figcaption className="t-label gal-cap">{g.alt}</figcaption>}
@@ -240,7 +233,7 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
           )}
         </nav>
 
-        <CtaBlock title={t.ctaTitle} lead={t.ctaText} />
+        {/* sin «¿Tienes una casa parecida?»: el cliente lo quitó entero (guía del 21/09) */}
         <SiteFoot />
         <ProjectJsonLd project={p} />
         <BreadcrumbJsonLd

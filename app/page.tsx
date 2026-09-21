@@ -10,10 +10,11 @@ import { getDiagram } from "@/lib/diagram";
 import { HomeJsonLd } from "@/components/seo/JsonLd";
 import { site } from "@/lib/site";
 
-// La portada según la maqueta del cliente («Opción S», 18/09/2026): apertura de persiana
-// sobre el vídeo, la portada con el lema y las cuatro palabras, la filosofía, el diagrama de
-// obra, cuatro obras destacadas, el estudio, off grid, dónde estamos, el formulario y el pie
-// con el isotipo. Entre bloques, una regla; fuera de la portada nada sale a sangre.
+// La portada según la maqueta del cliente («Opción S», 18/09/2026) y su «Guia per a web»
+// (21/09/2026): apertura de persiana sobre el vídeo, la portada con el lema y las cuatro
+// palabras, la filosofía, el diagrama de obra, seis obras destacadas, off grid, el estudio,
+// dónde estamos, el formulario y el pie con el isotipo. Entre bloques, una regla; fuera de
+// la portada nada sale a sangre.
 // El logotipo abajo a la derecha y el menú abajo a la izquierda los pone el layout.
 export const metadata: Metadata = {
   title: { absolute: `${site.name} · Estudio de arquitectura en Barcelona` },
@@ -21,8 +22,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-// Las cuatro obras destacadas, en el orden de la maqueta (GV75 no va: la cambiamos por VI02).
-const FEATURED_IDS = ["ar07", "co38", "vi02", "gg01"] as const;
+// Las seis obras destacadas, en el orden de la guía del cliente (21/09/2026). GR16 sigue en
+// proceso: se enseña en gris con su miniatura, como en el índice.
+const FEATURED_IDS = ["ar07", "mo07", "gr16", "co38", "gg01", "pe17"] as const;
 
 export default function HomePage() {
   const projects = getPublishedProjects();
@@ -43,10 +45,10 @@ export default function HomePage() {
       <Featured projects={featured} />
 
       <Rule />
-      <About />
+      <OffGrid />
 
       <Rule />
-      <OffGrid />
+      <About />
 
       <Rule />
       <Where />

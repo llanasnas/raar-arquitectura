@@ -16,15 +16,15 @@ export const copy = {
     ctaPrimary: "Pide tu primera visita gratuita",
     ctaSecondary: "Ver proyectos",
     scrollHint: "Desliza para entrar",
-    // Portada v2 (maqueta del cliente «Opción S», 18/09/2026): el lema del estudio en caja
-    // alta y, debajo, sus cuatro palabras en lista. Se van encendiendo una a una al ritmo
-    // del vídeo, y al pasar por encima de una la lámina enseña la obra que la explica: ver
-    // components/site/CoverBody.tsx. El cliente escribió «Rigor» en la maqueta (en la
-    // reunión del 17/09 había dicho «Contexto»): pendiente de confirmar.
-    // El original del cliente es «Born in Barcelona. Designing beyond borders»; aquí va
-    // traducido (la web es en español; el inglés irá en la versión EN).
-    tagline: "Nacidos en Barcelona. Diseñamos sin fronteras",
-    taglineLines: ["Nacidos en Barcelona.", "Diseñamos sin fronteras"],
+    // Portada v2 (maqueta del cliente «Opción S», 18/09/2026): el lema del estudio en grande,
+    // en cursiva y centrado, y debajo sus cuatro palabras en lista. Se van encendiendo una a
+    // una al ritmo del vídeo, y al pasar por encima de una la lámina enseña la obra que la
+    // explica: ver components/site/CoverBody.tsx. El cliente escribió «Rigor» en la maqueta
+    // (en la reunión del 17/09 había dicho «Contexto»): pendiente de confirmar.
+    // El lema va **siempre en inglés**, también en la web en español («Guia per a web»,
+    // 21/09/2026): es el eslogan del estudio, no se traduce.
+    tagline: "Born in Barcelona. Designing beyond borders",
+    taglineLines: ["Born in Barcelona.", "Designing beyond borders"],
     words: ["Arquitectura", "Diseño", "Atemporalidad", "Rigor"],
     skip: "Saltar el recorrido",
     // Beats sobre el vídeo, en orden de scroll. Máximo dos líneas cada uno.
@@ -114,7 +114,8 @@ export const copy = {
   },
 
   studio: {
-    title: "Tres miradas, un estudio",
+    // título del cliente («Guia per a web», 21/09/2026)
+    title: "Tres miradas, un objetivo",
     text: [
       "RAAR nace del encuentro de tres arquitectos formados en Barcelona, unidos por una intuición común: la arquitectura puede ser una fuerza transformadora, consciente y libre, que encuentra su expresión en lo atemporal.",
       "Creemos en una arquitectura de gestos sutiles, integrada en su entorno y construida con la nobleza de los materiales que da la naturaleza. Una arquitectura que no necesita ostentación para tener presencia.",
@@ -154,15 +155,19 @@ export const copy = {
   },
 
   contactCta: {
-    title: "Empecemos por una visita.",
+    // el título de la página de contacto es del cliente («Make it yours. Make it RAAR.»,
+    // 21/09/2026); el cierre de las demás páginas sigue con la visita
+    title: "Hazlo tuyo. Hazlo RAAR.",
+    titleEn: "Make it yours. Make it RAAR.",
     lead: "Gratuita y sin compromiso. Te decimos con sinceridad qué se puede hacer con tu casa.",
+    closingTitle: "Empecemos por una visita.",
   },
 
   // Bloques propios de la portada (maqueta «Opción S» del cliente, 18/09/2026).
   home: {
-    // Filosofía: el isotipo, el rótulo y el arranque del segundo párrafo del manifiesto.
+    // Filosofía: el arranque del segundo párrafo del manifiesto y el isotipo debajo. Sin
+    // rótulo: el cliente lo quitó («Guia per a web», 21/09/2026).
     philosophy: {
-      kicker: "Filosofía",
       text: "Creemos firmemente en una arquitectura que se construye con gestos sutiles, con integración y con la nobleza de los materiales que nos da la naturaleza. Una arquitectura que no necesita ostentación para tener presencia, que se manifiesta en su esencia y no en el exceso.",
     },
     featured: { title: "Proyectos destacados", all: "Todos los proyectos" },
@@ -186,8 +191,13 @@ export const copy = {
         },
       ],
     },
-    // Cierre con el formulario. El texto es del cliente, tal cual lo escribió en la maqueta.
-    contact: { title: "¿Quieres formar parte de nuestro viaje?", cta: "¡Contáctanos!" },
+    // Cierre con el formulario. El texto es del cliente, tal cual lo escribió en la maqueta;
+    // la foto del teléfono también es suya (21/09/2026).
+    contact: {
+      title: "¿Quieres formar parte de nuestro viaje?",
+      cta: "¡Contáctanos!",
+      photoAlt: "Un brazo sostiene en el aire un auricular de teléfono colgando del cable, con el logotipo de RAAR sobre el cielo",
+    },
   },
 
   form: {
@@ -298,6 +308,31 @@ export const studioPage = {
   teamNote: "Tres arquitectos formados en Barcelona.", // nombres y credenciales pendientes de confirmación
   whereTitle: "Dónde estamos",
   howTitle: "Cómo trabajamos",
+  // Cómo trabajamos, como lo dio el cliente (21/09/2026): cinco líneas, sin texto debajo.
+  // La foto conceptual de al lado la tiene que mandar él: mientras tanto va un diagrama propio.
+  howSteps: [
+    "Entendemos tu idea",
+    "Estudiamos su viabilidad",
+    "Adaptamos el concepto",
+    "Hacemos del concepto arquitectura",
+    "Compromiso y rigor durante todo el proceso",
+  ],
+} as const;
+
+// Aviso de cookies (components/site/Consent.tsx) y ajustes en la página de cookies.
+export const consentCopy = {
+  text: "Usamos cookies de analítica para saber qué partes de la web se ven. Solo si las aceptas.",
+  accept: "Aceptar",
+  reject: "Rechazar",
+  more: "Más información",
+  settings: {
+    title: "Tus preferencias",
+    granted: "Analítica activada.",
+    denied: "Analítica desactivada.",
+    none: "Todavía no has elegido.",
+    enable: "Activar analítica",
+    disable: "Desactivar analítica",
+  },
 } as const;
 
 export const legalCopy = {

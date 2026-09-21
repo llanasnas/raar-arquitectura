@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Isotype } from "@/components/site/Isotype";
 import { Reveal } from "@/components/site/v2/Reveal";
 import { Works } from "@/components/site/v2/Works";
@@ -9,10 +10,10 @@ import { copy, studioPage } from "@/lib/copy";
 import { routes, site } from "@/lib/site";
 import type { Project } from "@/lib/content";
 
-// Los bloques de la portada según la maqueta del cliente («Opción S», 18/09/2026): filosofía,
-// obras destacadas, el estudio, dónde estamos y el formulario. Entre bloque y bloque va una
-// regla que respeta los márgenes; nada sale a sangre fuera de la portada, que fue la primera
-// indicación del cliente.
+// Los bloques de la portada según la maqueta del cliente («Opción S», 18/09/2026) y su «Guia
+// per a web» (21/09/2026): filosofía, obras destacadas, el estudio, dónde estamos y el
+// formulario. Entre bloque y bloque va una regla que respeta los márgenes; nada sale a
+// sangre fuera de la portada, que fue la primera indicación del cliente.
 
 // Regla entre bloques: va dentro del `.wrap` para que empiece y acabe en el margen del texto.
 export function Rule() {
@@ -23,26 +24,23 @@ export function Rule() {
   );
 }
 
-// Filosofía: el isotipo, el rótulo y el arranque del manifiesto, centrado y en grande.
+// Filosofía: solo el arranque del manifiesto, centrado y en grande, y el isotipo debajo.
+// El rótulo «Filosofía» lo quitó el cliente (guía del 21/09).
 export function Philosophy() {
-  const { kicker, text } = copy.home.philosophy;
   return (
     <section data-menu="dark" className="philo wrap">
-      <Reveal className="philo-mark" variant="scale">
+      <Reveal as="blockquote" className="philo-text">
+        {copy.home.philosophy.text}
+      </Reveal>
+      <Reveal className="philo-mark" variant="scale" delay={120}>
         <Isotype />
-      </Reveal>
-      <Reveal className="t-label philo-kicker" variant="line" delay={60}>
-        {kicker}
-      </Reveal>
-      <Reveal as="blockquote" className="philo-text" delay={120}>
-        {text}
       </Reveal>
     </section>
   );
 }
 
-// Obras destacadas: cuatro, en la retícula del índice pero con su propio ritmo (dos iguales
-// arriba, una vertical y una apaisada abajo), y el enlace al índice entero.
+// Obras destacadas: las seis que eligió el cliente, en la retícula del índice pero con su
+// propio ritmo (ver .works-featured), y el enlace al índice entero.
 export function Featured({ projects }: { projects: Project[] }) {
   return (
     <section
@@ -67,9 +65,10 @@ export function Featured({ projects }: { projects: Project[] }) {
   );
 }
 
-// El estudio, como lo puso el cliente en la maqueta: rótulo, titular y el primer párrafo del
-// manifiesto a la izquierda, con el isotipo debajo (que lleva a la página del estudio), y la
-// foto de los tres a la derecha. La foto es de 640 px: a su tamaño, nunca a sangre.
+// El estudio, como lo puso el cliente en la maqueta: rótulo, titular (grande, guía del 21/09)
+// y el primer párrafo del manifiesto a la izquierda, con el isotipo debajo (que lleva a la
+// página del estudio), y la foto de los tres a la derecha. La foto es de 640 px: a su tamaño,
+// nunca a sangre.
 export function About() {
   const [opening] = studioPage.manifesto;
   return (
@@ -86,7 +85,7 @@ export function About() {
         <Reveal
           as="h2"
           id="about-title"
-          className="t-title about-title"
+          className="t-display about-title"
           delay={60}
         >
           {copy.studio.title}
@@ -119,8 +118,8 @@ export function About() {
   );
 }
 
-// Dónde estamos: los datos con su icono a la izquierda y el mapa a la derecha. Lo usan la
-// portada y la página del estudio.
+// Dónde estamos: el título grande, los datos con su icono a la izquierda y el mapa a la
+// derecha. Lo usan la portada y la página del estudio.
 export function Where() {
   return (
     <section
@@ -129,7 +128,7 @@ export function Where() {
       aria-labelledby="where-title"
     >
       <div className="contact-side">
-        <Reveal as="h2" id="where-title" className="t-title" variant="up">
+        <Reveal as="h2" id="where-title" className="t-display where-title" variant="up">
           {studioPage.whereTitle}
         </Reveal>
         <ul className="where-list">
@@ -178,31 +177,66 @@ export function Where() {
   );
 }
 
-// El cierre de la portada es el formulario, con las dos frases del cliente al lado.
-export function HomeContact() {
+// El bloque de contacto, el mismo en la portada y en /contacto (guía del cliente, 21/09):
+// el título grande arriba, la foto del teléfono a la izquierda y el formulario a la derecha.
+// `heading` es h1 en la página de contacto y h2 en la portada; `aside` va bajo la foto (los
+// datos del estudio en /contacto).
+export function ContactSpread({
+  title,
+  cta,
+  heading: Heading = "h2",
+  id = "contacto",
+  defaultType,
+  aside,
+}: {
+  title: string;
+  cta?: string;
+  heading?: "h1" | "h2";
+  id?: string;
+  defaultType?: string;
+  aside?: ReactNode;
+}) {
   return (
     <section
       data-menu="dark"
-      className="contact home-contact wrap"
-      id="contacto"
-      aria-labelledby="home-contact-title"
+      className="contact-2 wrap"
+      id={id}
+      aria-labelledby={`${id}-title`}
     >
-      <div className="contact-side">
-        <Reveal
-          as="h2"
-          id="home-contact-title"
-          className="t-title home-contact-title"
-          variant="up"
-        >
-          {copy.home.contact.title}
+      <div className="contact-2-head">
+        <Reveal as={Heading} id={`${id}-title`} className="t-display contact-2-title" variant="up">
+          {title}
         </Reveal>
-        <Reveal as="p" className="t-title home-contact-cta" delay={80}>
-          {copy.home.contact.cta}
-        </Reveal>
+        {cta && (
+          <Reveal as="p" className="t-title contact-2-cta" delay={80}>
+            {cta}
+          </Reveal>
+        )}
       </div>
-      <div className="contact-main">
-        <ContactFormV2 />
+      <div className="contact-2-body">
+        <div className="contact-2-side">
+          <figure className="contact-2-media">
+            <Reveal className="contact-2-plate" variant="wipe" delay={60}>
+              <Image
+                src="/images/contact/phone.jpg"
+                alt={copy.home.contact.photoAlt}
+                fill
+                sizes="(min-width: 900px) 34vw, 100vw"
+                className="object-cover"
+              />
+            </Reveal>
+          </figure>
+          {aside}
+        </div>
+        <div className="contact-2-main">
+          <ContactFormV2 defaultType={defaultType} />
+        </div>
       </div>
     </section>
   );
+}
+
+// El cierre de la portada es el formulario, con las dos frases del cliente encima.
+export function HomeContact() {
+  return <ContactSpread title={copy.home.contact.title} cta={copy.home.contact.cta} />;
 }

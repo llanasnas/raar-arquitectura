@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { PageHead, SiteFoot } from "@/components/site/v2/Page";
-import { ContactFormV2 } from "@/components/forms/ContactFormV2";
+import { SiteFoot } from "@/components/site/v2/Page";
+import { ContactSpread } from "@/components/site/v2/Home";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { copy } from "@/lib/copy";
 import { routes, site } from "@/lib/site";
@@ -13,20 +13,23 @@ export const metadata: Metadata = {
 
 const VALID = new Set(["reforma", "obra-nueva", "rehabilitacion", "no-se"]);
 
-// Contacto: el rótulo con la promesa, los datos del estudio en mono a la izquierda y el
-// formulario a la derecha, en la misma retícula de doce columnas que el resto de la web.
+// Contacto, como en la portada (guía del cliente, 21/09/2026): su título («Hazlo tuyo. Hazlo
+// RAAR.») en grande, la foto del teléfono a la izquierda con los datos del estudio debajo, y el
+// formulario a la derecha.
 export default async function ContactPage(props: PageProps<"/contacto">) {
   const sp = await props.searchParams;
   const tipo = typeof sp.tipo === "string" && VALID.has(sp.tipo) ? sp.tipo : undefined;
 
   return (
     <div className="page">
-      <PageHead kicker="Contacto" title={copy.contactCta.title} lead={copy.contactCta.lead} />
-
-      <section data-menu="dark" className="contact wrap">
-        <div className="contact-side">
-          <h2 className="t-label">{copy.form.or}</h2>
+      <ContactSpread
+        heading="h1"
+        id="contacto"
+        title={copy.contactCta.title}
+        defaultType={tipo}
+        aside={
           <div className="contact-list">
+            <h2 className="t-label">{copy.form.or}</h2>
             <a href={site.phoneHref} className="t-label link-line">
               {site.phone}
             </a>
@@ -40,11 +43,8 @@ export default async function ContactPage(props: PageProps<"/contacto">) {
             </p>
             <p className="t-body">{site.areas.join(" · ")}</p>
           </div>
-        </div>
-        <div className="contact-main">
-          <ContactFormV2 defaultType={tipo} />
-        </div>
-      </section>
+        }
+      />
 
       <SiteFoot />
       <BreadcrumbJsonLd items={[{ name: "Inicio", href: "/" }, { name: "Contacto", href: routes.contact }]} />
