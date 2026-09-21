@@ -34,7 +34,7 @@ export function OrganizationJsonLd() {
           addressCountry: site.address.country,
         },
         geo: { "@type": "GeoCoordinates", latitude: site.geo.lat, longitude: site.geo.lng },
-        areaServed: ["Barcelona", "Vallès Occidental", "Vallès Oriental", "Gironès"].map((name) => ({ "@type": "AdministrativeArea", name })),
+        areaServed: site.areas.map((name) => ({ "@type": "AdministrativeArea", name })),
         sameAs: [site.instagram],
         knowsAbout: ["reforma integral", "obra nueva", "rehabilitación", "arquitectura residencial"],
         priceRange: "$$$",

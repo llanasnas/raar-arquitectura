@@ -22,9 +22,10 @@ export const copy = {
     // explica: ver components/site/CoverBody.tsx. El cliente escribió «Rigor» en la maqueta
     // (en la reunión del 17/09 había dicho «Contexto»): pendiente de confirmar.
     // El lema va **siempre en inglés**, también en la web en español («Guia per a web»,
-    // 21/09/2026): es el eslogan del estudio, no se traduce.
-    tagline: "Born in Barcelona. Designing beyond borders",
-    taglineLines: ["Born in Barcelona.", "Designing beyond borders"],
+    // 21/09/2026): es el eslogan del estudio, no se traduce. Dos líneas del mismo ancho: la
+    // primera más grande y un punto más gruesa, sin punto tras Barcelona (cliente, 22/09).
+    tagline: "Born in Barcelona, designing beyond borders",
+    taglineLines: ["Born in Barcelona", "Designing beyond borders"],
     words: ["Arquitectura", "Diseño", "Atemporalidad", "Rigor"],
     skip: "Saltar el recorrido",
     // Beats sobre el vídeo, en orden de scroll. Máximo dos líneas cada uno.
@@ -191,11 +192,11 @@ export const copy = {
         },
       ],
     },
-    // Cierre con el formulario. El texto es del cliente, tal cual lo escribió en la maqueta;
-    // la foto del teléfono también es suya (21/09/2026).
+    // Cierre con el formulario. El título es del cliente, tal cual lo escribió en la maqueta,
+    // en una sola línea; el «¡Contáctanos!» lo quitó él (se entiende con la foto, 22/09). La
+    // foto del teléfono también es suya (21/09/2026).
     contact: {
       title: "¿Quieres formar parte de nuestro viaje?",
-      cta: "¡Contáctanos!",
       photoAlt: "Un brazo sostiene en el aire un auricular de teléfono colgando del cable, con el logotipo de RAAR sobre el cielo",
     },
   },

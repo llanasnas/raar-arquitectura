@@ -49,7 +49,7 @@ export function Featured({ projects }: { projects: Project[] }) {
       aria-labelledby="featured-title"
     >
       <div className="wrap">
-        <Reveal as="h2" id="featured-title" className="t-title" variant="up">
+        <Reveal as="h2" id="featured-title" className="sec-title" variant="up">
           {copy.home.featured.title}
         </Reveal>
       </div>
@@ -85,7 +85,7 @@ export function About() {
         <Reveal
           as="h2"
           id="about-title"
-          className="t-display about-title"
+          className="sec-title about-title"
           delay={60}
         >
           {copy.studio.title}
@@ -118,19 +118,20 @@ export function About() {
   );
 }
 
-// Dónde estamos: el título grande, los datos con su icono a la izquierda y el mapa a la
-// derecha. Lo usan la portada y la página del estudio.
+// Dónde estamos: el título a una línea, y debajo los datos con su icono a la izquierda y el
+// mapa a la derecha, en la misma retícula que el estudio para que el mapa y la foto de los
+// tres queden alineados por los dos lados (cliente, 22/09). Lo usan la portada y /estudio.
 export function Where() {
   return (
     <section
       data-menu="dark"
-      className="contact where wrap"
+      className="where wrap"
       aria-labelledby="where-title"
     >
-      <div className="contact-side">
-        <Reveal as="h2" id="where-title" className="t-display where-title" variant="up">
-          {studioPage.whereTitle}
-        </Reveal>
+      <Reveal as="h2" id="where-title" className="sec-title" variant="up">
+        {studioPage.whereTitle}
+      </Reveal>
+      <div className="where-body">
         <ul className="where-list">
           <li>
             <Phone />
@@ -163,34 +164,33 @@ export function Where() {
             </a>
           </li>
         </ul>
-      </div>
-      <div className="contact-main">
-        <iframe
-          title={`Mapa: ${site.address.street}, ${site.address.city}`}
-          src={`https://www.openstreetmap.org/export/embed.html?bbox=${site.geo.lng - 0.006}%2C${site.geo.lat - 0.004}%2C${site.geo.lng + 0.006}%2C${site.geo.lat + 0.004}&layer=mapnik&marker=${site.geo.lat}%2C${site.geo.lng}`}
-          className="map"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        />
+        <div className="where-map">
+          <iframe
+            title={`Mapa: ${site.address.street}, ${site.address.city}`}
+            src={`https://www.openstreetmap.org/export/embed.html?bbox=${site.geo.lng - 0.006}%2C${site.geo.lat - 0.004}%2C${site.geo.lng + 0.006}%2C${site.geo.lat + 0.004}&layer=mapnik&marker=${site.geo.lat}%2C${site.geo.lng}`}
+            className="map"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </div>
       </div>
     </section>
   );
 }
 
 // El bloque de contacto, el mismo en la portada y en /contacto (guía del cliente, 21/09):
-// el título grande arriba, la foto del teléfono a la izquierda y el formulario a la derecha.
-// `heading` es h1 en la página de contacto y h2 en la portada; `aside` va bajo la foto (los
-// datos del estudio en /contacto).
+// el título grande arriba, a una línea, la foto del teléfono a la izquierda y el formulario
+// a la derecha, **de la misma altura** (la foto se estira a lo que mida el formulario y se
+// recorta lo justo; cliente, 22/09). `heading` es h1 en la página de contacto y h2 en la
+// portada; `aside` va bajo la foto (los datos del estudio en /contacto).
 export function ContactSpread({
   title,
-  cta,
   heading: Heading = "h2",
   id = "contacto",
   defaultType,
   aside,
 }: {
   title: string;
-  cta?: string;
   heading?: "h1" | "h2";
   id?: string;
   defaultType?: string;
@@ -203,16 +203,9 @@ export function ContactSpread({
       id={id}
       aria-labelledby={`${id}-title`}
     >
-      <div className="contact-2-head">
-        <Reveal as={Heading} id={`${id}-title`} className="t-display contact-2-title" variant="up">
-          {title}
-        </Reveal>
-        {cta && (
-          <Reveal as="p" className="t-title contact-2-cta" delay={80}>
-            {cta}
-          </Reveal>
-        )}
-      </div>
+      <Reveal as={Heading} id={`${id}-title`} className="sec-title contact-2-title" variant="up">
+        {title}
+      </Reveal>
       <div className="contact-2-body">
         <div className="contact-2-side">
           <figure className="contact-2-media">
@@ -236,7 +229,7 @@ export function ContactSpread({
   );
 }
 
-// El cierre de la portada es el formulario, con las dos frases del cliente encima.
+// El cierre de la portada es el formulario, con la frase del cliente encima.
 export function HomeContact() {
-  return <ContactSpread title={copy.home.contact.title} cta={copy.home.contact.cta} />;
+  return <ContactSpread title={copy.home.contact.title} />;
 }

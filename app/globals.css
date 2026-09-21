@@ -40,6 +40,13 @@
      más el mismo margen arriba y abajo (petición del cliente, 18/09/2026: que el logotipo
      no quede pegado al vídeo y que sus márgenes sean simétricos en todos los dispositivos). */
   --bar-h: calc(var(--brand-h) + 2 * var(--gutter-2));
+  /* Los apartados de la portada: mismo cuerpo de título en todos (el de «Tres miradas», un
+     punto por debajo del display para que «¿Quieres formar parte de nuestro viaje?» quepa
+     en una línea), misma distancia del título al texto y mismo aire arriba y abajo
+     (cliente, 22/09/2026). */
+  --sec-title: clamp(2rem, 4.6vw, 4.4rem);
+  --sec-gap: clamp(1.5rem, 4vh, 2.5rem);
+  --sec-pad: clamp(3rem, 9vh, 6rem);
 
   /* ── v1 archivada (solo la usa .v1-shell y sus componentes) ── */
   --stone: #f2f2ef;
@@ -476,14 +483,28 @@
     text-align: center;
   }
   /* el lema del estudio, en grande y en cursiva (guía del cliente, 21/09): siempre en inglés.
-     En caja alta no cabía a este cuerpo en media pantalla, así que va en caja baja */
+     En caja alta no cabía a este cuerpo en media pantalla, así que va en caja baja.
+     Dos líneas del mismo ancho (cliente, 22/09): «Born in Barcelona» se escala por `--l1`
+     hasta medir lo que «Designing beyond borders», y va un punto más gruesa. El valor de
+     aquí es aproximado; CoverBody.tsx lo mide con la fuente cargada. */
   .cover-slogan {
+    --l1: 1.36;
     font-size: clamp(1.9rem, 3.4vw, 3.9rem);
     font-style: italic;
     font-weight: 500;
     line-height: 1.08;
     letter-spacing: -0.02em;
-    text-wrap: balance;
+  }
+  .cover-slogan > span {
+    display: block;
+    width: fit-content;
+    margin-inline: auto;
+    white-space: nowrap;
+  }
+  .cover-slogan-l1 {
+    font-size: calc(1em * var(--l1));
+    font-weight: 600;
+    line-height: 1;
   }
   /* Las cuatro palabras del estudio, en lista y en caja alta. Se encienden de arriba abajo al
      ritmo del vídeo (`data-lit`) y al pasar por encima de una (`data-active`) manda sobre la
@@ -1401,17 +1422,16 @@
      el resto baja de intensidad para que se lea qué va con qué. */
   .dg {
     display: grid;
-    grid-template-columns: 4fr 7fr;
+    grid-template-columns: 5fr 7fr;
     gap: clamp(2rem, 4vw, 5rem);
     align-items: center;
-    padding-block: clamp(3rem, 10vh, 7rem);
+    padding-block: var(--sec-pad);
   }
   /* la lista y la ficha ocupan la misma celda: la que toca se ve, la otra se apaga */
   .dg-side {
     position: relative;
     display: grid;
     align-self: start;
-    padding-top: clamp(1rem, 6vh, 4rem);
   }
   .dg-side > * {
     grid-area: 1 / 1;
@@ -1423,9 +1443,6 @@
     opacity: 0;
     pointer-events: none;
   }
-  .dg-title {
-    margin-bottom: clamp(1rem, 3vh, 2rem);
-  }
   .dg-group-list {
     border-top: 1px solid var(--rule);
   }
@@ -1434,14 +1451,14 @@
     grid-template-columns: 2.4rem 1fr auto;
     align-items: baseline;
     gap: 0.6rem;
-    padding-block: 0.8rem;
+    padding-block: 1rem;
     border-bottom: 1px solid var(--rule);
     transition:
       opacity 240ms var(--ease-out-expo),
       transform 420ms var(--ease-out-expo);
   }
   .dg-group-name {
-    font-size: clamp(1.05rem, 1.7vw, 1.55rem);
+    font-size: clamp(1.15rem, 2vw, 1.9rem);
     line-height: 1.1;
     letter-spacing: -0.014em;
   }
@@ -1533,9 +1550,11 @@
 
   /* en pantallas bajas (portátil 1280×720) la columna daba un dibujo más alto que la
      ventana: el lado lo limita la altura libre, no el ancho de la columna */
+  /* el lado lo limita la altura libre de la ventana, no la columna; el margen es el mínimo
+     para que el dibujo quepa entero en un portátil bajo (el cliente lo quería más grande) */
   .dg-figure {
     position: relative;
-    width: min(100%, calc(100svh - var(--bar-h) - 3rem));
+    width: min(100%, calc(100svh - var(--bar-h) - 1.5rem));
     aspect-ratio: 1;
     margin-inline: auto;
   }
@@ -1721,6 +1740,15 @@
     border-top: 1px solid var(--rule);
     margin: 0;
   }
+  /* el título de cada apartado de la portada: mismo cuerpo y misma distancia al texto */
+  .sec-title {
+    font-size: var(--sec-title);
+    font-weight: 400;
+    line-height: 1.03;
+    letter-spacing: -0.025em;
+    margin-bottom: var(--sec-gap);
+    text-wrap: balance;
+  }
   .isotype {
     display: block;
     width: var(--iso-w, 3.5rem);
@@ -1734,7 +1762,7 @@
     display: grid;
     justify-items: center;
     gap: clamp(1.8rem, 5vh, 3.2rem);
-    padding-block: clamp(2.5rem, 7vh, 5rem) clamp(3rem, 9vh, 6rem);
+    padding-block: var(--sec-pad);
     text-align: center;
   }
   .philo-mark {
@@ -1751,10 +1779,10 @@
   /* Obras destacadas: la retícula del índice con reparto propio (dos iguales arriba, una
      vertical y una apaisada abajo). Sin sangre: todo dentro del margen. */
   .featured {
-    padding-block: clamp(2.5rem, 7vh, 5rem) clamp(3rem, 9vh, 6rem);
+    padding-block: var(--sec-pad);
   }
   .featured .works {
-    padding-block: clamp(1.5rem, 4vh, 2.5rem) clamp(2rem, 5vh, 3rem);
+    padding-block: 0 clamp(2rem, 5vh, 3rem);
   }
   .works-featured .work:nth-child(1) {
     grid-column: 1 / span 6;
@@ -1793,7 +1821,7 @@
     grid-template-columns: repeat(12, 1fr);
     gap: clamp(1.5rem, 3vw, 3.5rem);
     align-items: stretch;
-    padding-block: clamp(2.5rem, 7vh, 5rem) clamp(3rem, 9vh, 6rem);
+    padding-block: var(--sec-pad);
   }
   .about-text,
   .about-media {
@@ -1810,10 +1838,8 @@
     width: 100%;
     max-width: 640px;
   }
-  /* el titular en grande (guía del cliente, 21/09): dos líneas, «Tres miradas, / un objetivo» */
   .about-title {
-    max-width: 12ch;
-    margin-bottom: clamp(1.5rem, 5vh, 3.5rem);
+    margin-top: 0.6rem;
   }
   .about-p {
     max-width: 46ch;
@@ -1849,10 +1875,7 @@
 
   /* Off grid: lámina pegada a la izquierda que cambia con la entrada que cruza el centro */
   .offgrid {
-    padding-block: clamp(2.5rem, 7vh, 5rem) clamp(3rem, 9vh, 6rem);
-  }
-  .offgrid-title {
-    margin-bottom: clamp(1.5rem, 4vh, 3rem);
+    padding-block: var(--sec-pad);
   }
   .offgrid-body {
     display: grid;
@@ -1905,11 +1928,37 @@
     line-height: 1.5;
   }
 
-  /* Dónde estamos: la lista con icono; el mapa va en .contact-main */
+  /* Dónde estamos: la lista con icono a la izquierda y el mapa a la derecha, en la misma
+     retícula y con la misma caja (640 × 483) que la foto del estudio, para que los dos queden
+     alineados por la izquierda y por la derecha (cliente, 22/09) */
+  .where {
+    padding-block: var(--sec-pad);
+  }
+  .where-body {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.5rem, 3vw, 3.5rem);
+    align-items: start;
+  }
+  .where-list,
+  .where-map {
+    grid-row: 1;
+  }
   .where-list {
+    grid-column: 1 / span 5;
     display: grid;
     gap: 1rem;
-    margin-top: clamp(1.2rem, 3vh, 2rem);
+    align-content: start;
+  }
+  .where-map {
+    grid-column: 7 / span 6;
+    justify-self: end;
+    width: 100%;
+    max-width: 640px;
+  }
+  .where-map .map {
+    height: auto;
+    aspect-ratio: 640 / 483;
   }
   .where-list li {
     display: flex;
@@ -1926,34 +1975,24 @@
     color: var(--carbon);
   }
 
-  /* el título en grande (guía del cliente, 21/09), un punto por debajo del display para que
-     «Dónde estamos» quepa en la columna de los datos */
-  .where-title {
-    font-size: clamp(1.9rem, 4.4vw, 4.2rem);
-  }
-
-  /* El bloque de contacto (portada y /contacto): el título grande arriba, la foto del
-     teléfono a la izquierda y el formulario a la derecha (guía del cliente, 21/09/2026). */
+  /* El bloque de contacto (portada y /contacto): el título grande arriba, a una línea, la
+     foto del teléfono a la izquierda y el formulario a la derecha, de la misma altura: la
+     foto se estira a lo que mida el formulario (cliente, 22/09/2026). */
   .contact-2 {
-    display: grid;
-    gap: clamp(2rem, 6vh, 4rem);
-    padding-block: clamp(2.5rem, 7vh, 5rem) clamp(3rem, 9vh, 6rem);
+    padding-block: var(--sec-pad);
   }
   /* en /contacto el bloque abre la página: toma el aire de arriba de un rótulo de página */
   .page > .contact-2:first-child {
     padding-top: clamp(3.5rem, 12vh, 8rem);
   }
-  .contact-2-head {
-    display: grid;
-    gap: 0.9rem;
-  }
   .contact-2-title {
-    max-width: 18ch;
+    white-space: nowrap;
   }
   .contact-2-body {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: clamp(2rem, 4vw, 4rem);
+    align-items: stretch;
   }
   .contact-2-side,
   .contact-2-main {
@@ -1961,20 +2000,24 @@
   }
   .contact-2-side {
     grid-column: 1 / span 5;
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: clamp(1.2rem, 3vh, 2rem);
-    align-content: start;
   }
   .contact-2-main {
     grid-column: 7 / span 6;
   }
+  /* la foto toma toda la altura que le deja la fila: la del formulario */
   .contact-2-media {
+    display: flex;
+    flex: 1;
     margin: 0;
+    min-height: 0;
   }
-  /* la foto es vertical (4:5) y se queda a su ancho de columna, nunca a sangre */
   .contact-2-plate {
     position: relative;
-    aspect-ratio: 4 / 5;
+    flex: 1;
+    min-height: 0;
     overflow: hidden;
     background: var(--carbon);
   }
@@ -2051,8 +2094,20 @@
     .works-featured .work:nth-child(n) {
       grid-column: 1 / -1;
     }
-    .where-title {
-      font-size: clamp(1.9rem, 9vw, 2.6rem);
+    .where-body {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .where-list,
+    .where-map {
+      grid-row: auto;
+      grid-column: 1;
+    }
+    .where-map {
+      max-width: none;
+    }
+    .contact-2-title {
+      white-space: normal;
     }
     .contact-2-body {
       grid-template-columns: 1fr;
@@ -2062,6 +2117,10 @@
     .contact-2-main {
       grid-row: auto;
       grid-column: 1;
+    }
+    /* en una columna la foto necesita su propia altura */
+    .contact-2-plate {
+      aspect-ratio: 4 / 5;
     }
   }
 

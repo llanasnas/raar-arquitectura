@@ -27,7 +27,8 @@ import { routes, site } from "@/lib/site";
 // En móvil no caben trece códigos alrededor de un círculo de 350 px: allí el dibujo va sin
 // etiquetas y debajo sale la lista de tipologías con sus obras.
 
-// Geometría, en unidades del viewBox (-550 … 550). Tres anillos y el isotipo en el centro.
+// Geometría, en unidades del viewBox (-470 … 470: lo justo para los códigos, que llegan a
+// ±435; con margen de sobra el dibujo salía pequeño). Tres anillos y el isotipo en el centro.
 const RINGS = [288, 238, 188] as const;
 const R_INNER = 124;
 const R_LINE = 324;
@@ -138,7 +139,7 @@ export function Diagram({ groups }: { groups: DiagramGroup[] }) {
         {/* Columna de texto: en reposo, las tipologías; sobre una obra, su ficha. */}
         <div className="dg-side">
           <div className="dg-groups" onPointerLeave={hover(null)}>
-            <h2 className="t-title dg-title">{copy.projects.title}</h2>
+            <h2 className="sec-title">{copy.projects.title}</h2>
             <ol className="dg-group-list">
               {placed.map((group, i) => (
                 <li key={group.id}>
@@ -224,7 +225,7 @@ export function Diagram({ groups }: { groups: DiagramGroup[] }) {
         </div>
 
         <div className="dg-figure">
-          <svg className="dg-svg" viewBox="-550 -550 1100 1100" role="group" aria-label={`${copy.projects.title}: ${groups.map((g) => g.label).join(", ")}`}>
+          <svg className="dg-svg" viewBox="-470 -470 940 940" role="group" aria-label={`${copy.projects.title}: ${groups.map((g) => g.label).join(", ")}`}>
             {/* anillos de guía */}
             {[...RINGS, R_INNER].map((r) => (
               <circle key={r} r={r} className="dg-ring" />

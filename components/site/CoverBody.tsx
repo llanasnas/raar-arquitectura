@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, type AnimationEvent, type SyntheticEvent } from "react";
+import { useEffect, useRef, useState, type AnimationEvent } from "react";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { useIntroPlays } from "@/lib/intro";
 import { copy } from "@/lib/copy";
@@ -9,9 +9,14 @@ import { copy } from "@/lib/copy";
 // La portada (maqueta «Opción S» del cliente, 18/09/2026): el lema en caja alta y, debajo,
 // las cuatro palabras del estudio en lista, a la izquierda; la lámina a la derecha.
 //
-// Las palabras **se encienden una a una al ritmo del vídeo**: el bucle dura doce segundos
-// y cada palabra manda durante un cuarto, de arriba abajo. No es un reloj aparte: se lee
-// del propio vídeo (`timeupdate`), así que si el vídeo se para, la palabra se queda.
+// Las palabras **se encienden una a una, una por segundo** (cliente, 22/09/2026; antes
+// iban al ritmo del vídeo, cada tres). Con `prefers-reduced-motion` no hay pase: manda la
+// primera.
+//
+// El lema va en dos líneas **del mismo ancho**: la de arriba, más grande y un punto más
+// gruesa, se escala hasta medir lo que la de abajo. La proporción se mide una vez, con la
+// fuente ya cargada, y se deja en `--l1`; el CSS lleva un valor aproximado para que el
+// servidor ya pinte algo parecido.
 //
 // Y siguen **mandando sobre la lámina**: al pasar por encima de «atemporalidad», la lámina
 // deja el vídeo y enseña la obra que la explica, con su pie debajo de la lista. Al salir,
@@ -19,6 +24,7 @@ import { copy } from "@/lib/copy";
 export type Slide = { src: string; alt: string; caption: string };
 
 const WORDS = copy.hero.words;
+const EVERY = 1000;
 
 export function CoverBody({
   slides,
@@ -32,33 +38,50 @@ export function CoverBody({
   const [active, setActive] = useState<number | null>(null);
   const [lit, setLit] = useState(0);
   const [settling, setSettling] = useState(opening);
+  const slogan = useRef<HTMLHeadingElement>(null);
   // sin apertura (atrás, menú) la lámina ya está en su sitio desde el primer fotograma
   const isOpening = settling && plays && !reducedMotion;
+
+  // una palabra por segundo, en bucle
+  useEffect(() => {
+    if (reducedMotion) return;
+    const timer = setInterval(() => setLit((current) => (current + 1) % WORDS.length), EVERY);
+    return () => clearInterval(timer);
+  }, [reducedMotion]);
+
+  // la primera línea del lema mide lo que la segunda: se miden las dos al mismo cuerpo y la
+  // proporción va a `--l1`. Cada línea es un bloque a su ancho (`width: fit-content`).
+  useEffect(() => {
+    const el = slogan.current;
+    if (!el) return;
+    let cancelled = false;
+    const fit = () => {
+      if (cancelled) return;
+      const [first, second] = Array.from(el.querySelectorAll<HTMLElement>("span"));
+      if (!first || !second) return;
+      first.style.fontSize = getComputedStyle(second).fontSize;
+      const ratio = second.getBoundingClientRect().width / first.getBoundingClientRect().width;
+      first.style.fontSize = "";
+      if (Number.isFinite(ratio) && ratio > 0) el.style.setProperty("--l1", ratio.toFixed(4));
+    };
+    document.fonts.ready.then(fit);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // La lámina pasa de `fixed` a estático cuando termina de recogerse: mismo nodo, sin salto.
   const onAnimationEnd = (event: AnimationEvent<HTMLDivElement>) => {
     if (event.animationName.includes("stage-settle")) setSettling(false);
   };
 
-  // Qué palabra toca según por dónde va el vídeo. `timeupdate` llega unas cuatro veces por
-  // segundo: de sobra para un cambio cada tres.
-  const onTimeUpdate = (event: SyntheticEvent<HTMLVideoElement>) => {
-    const video = event.currentTarget;
-    if (!video.duration) return;
-    const next = Math.min(
-      WORDS.length - 1,
-      Math.floor((video.currentTime / video.duration) * WORDS.length),
-    );
-    setLit((current) => (current === next ? current : next));
-  };
-
   return (
     <>
       <div className="cover-left">
         <div className="cover-text">
-          <h1 className="cover-slogan mb-6" aria-label={copy.hero.tagline}>
-            {copy.hero.taglineLines.map((line) => (
-              <span key={line} className="block">
+          <h1 ref={slogan} className="cover-slogan mb-6" aria-label={copy.hero.tagline}>
+            {copy.hero.taglineLines.map((line, i) => (
+              <span key={line} className={i === 0 ? "cover-slogan-l1" : undefined}>
                 {line}
               </span>
             ))}
@@ -131,7 +154,6 @@ export function CoverBody({
             loop
             playsInline
             preload="auto"
-            onTimeUpdate={onTimeUpdate}
           />
         )}
 

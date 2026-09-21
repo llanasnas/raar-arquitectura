@@ -172,7 +172,7 @@ export function SiteFoot({ mark = false }: { mark?: boolean }) {
         <span className="t-label">
           {site.name} · {copy.footer.tagline}
         </span>
-        <span className="t-label foot-areas">{site.areas.join(" · ")}</span>
+        <span className="t-label foot-areas">{site.reach.join(" · ")}</span>
       </div>
 
       <div className="foot-grid">

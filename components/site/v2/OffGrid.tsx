@@ -62,7 +62,7 @@ export function OffGrid() {
 
   return (
     <section data-menu="dark" className="offgrid wrap" id="off-grid" aria-labelledby="offgrid-title">
-      <Reveal as="h2" id="offgrid-title" className="t-title offgrid-title" variant="up">
+      <Reveal as="h2" id="offgrid-title" className="sec-title" variant="up">
         {copy.home.offgrid.title}
       </Reveal>
 

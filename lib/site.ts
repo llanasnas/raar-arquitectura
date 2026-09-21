@@ -22,8 +22,11 @@ export const site = {
   },
   geo: { lat: 41.3979, lng: 2.1654 },
   instagram: "https://www.instagram.com/raar.arquitectura/",
-  // Municipios reales donde hay proyectos publicados (prueba local + SEO geográfico)
-  areas: ["Sarrià", "Gràcia", "Sant Cugat del Vallès", "La Garriga", "Gironès"],
+  // Dónde trabajan, en concreto (cliente, 22/09/2026): cierre de las páginas y datos
+  // estructurados. La lista amplia del pie es `reach`.
+  areas: ["Barcelona", "Sant Cugat", "Costa Brava", "Andorra"],
+  // Hasta dónde llegan, para el pie («Designing beyond borders»): lista del cliente, 22/09.
+  reach: ["Catalunya", "España", "Andorra", "Asia", "Norte de África"],
 } as const;
 
 // wa.me link, optionally with a prefilled message
