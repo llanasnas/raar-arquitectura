@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Menu } from "@/components/site/Menu";
 import { BrandSlot } from "@/components/site/BrandSlot";
+import { Consent } from "@/components/site/Consent";
+import { Analytics } from "@/components/site/Analytics";
 import { OrganizationJsonLd } from "@/components/seo/JsonLd";
 import { site } from "@/lib/site";
 
@@ -55,6 +57,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main id="contenido">{children}</main>
         <Menu />
         <BrandSlot />
+        {/* aviso de cookies y, solo con consentimiento e ID en .env.local, Google Analytics */}
+        <Consent />
+        <Analytics />
         <OrganizationJsonLd />
       </body>
     </html>
