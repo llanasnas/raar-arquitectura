@@ -183,8 +183,8 @@ export function Where() {
 // «Contacta con nosotros:» con el formulario debajo, **a la altura de la foto**: la foto va
 // a su proporción y los campos se reparten hasta abajo (cliente, 22/09). Si el formulario es
 // más alto que la foto (pantalla estrecha), es la foto la que se estira. `heading` es h1 en
-// la página de contacto y h2 en la portada; `aside` va bajo la foto (los datos del estudio
-// en /contacto).
+// la página de contacto y h2 en la portada; `aside` va bajo la foto, en su propia fila (los
+// datos del estudio en /contacto).
 export function ContactSpread({
   title,
   cta = copy.home.contact.cta,
@@ -223,7 +223,6 @@ export function ContactSpread({
               />
             </Reveal>
           </figure>
-          {aside}
         </div>
         <div className="contact-2-main">
           <Reveal as="p" className="t-title contact-2-cta" delay={80}>
@@ -231,6 +230,9 @@ export function ContactSpread({
           </Reveal>
           <ContactFormV2 defaultType={defaultType} />
         </div>
+        {/* los datos van en una fila aparte, bajo la foto: en la misma columna estiraban la
+            fila y el formulario ya no acababa donde la foto */}
+        {aside && <div className="contact-2-aside">{aside}</div>}
       </div>
     </section>
   );

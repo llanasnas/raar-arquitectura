@@ -2030,7 +2030,12 @@
     overflow: hidden;
     background: var(--carbon);
   }
-  .contact-2-side .contact-list {
+  /* los datos de /contacto: segunda fila, bajo la foto, sin tocar la altura de la primera */
+  .contact-2-aside {
+    grid-row: 2;
+    grid-column: 1 / span 5;
+  }
+  .contact-2-aside .contact-list {
     margin-top: 0;
   }
 
@@ -2123,7 +2128,8 @@
       gap: 2rem;
     }
     .contact-2-side,
-    .contact-2-main {
+    .contact-2-main,
+    .contact-2-aside {
       grid-row: auto;
       grid-column: 1;
     }
