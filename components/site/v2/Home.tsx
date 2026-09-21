@@ -179,18 +179,22 @@ export function Where() {
 }
 
 // El bloque de contacto, el mismo en la portada y en /contacto (guía del cliente, 21/09):
-// el título grande arriba, a una línea, la foto del teléfono a la izquierda y el formulario
-// a la derecha, **de la misma altura** (la foto se estira a lo que mida el formulario y se
-// recorta lo justo; cliente, 22/09). `heading` es h1 en la página de contacto y h2 en la
-// portada; `aside` va bajo la foto (los datos del estudio en /contacto).
+// el título grande arriba, a una línea, la foto del teléfono a la izquierda y a la derecha
+// «Contacta con nosotros:» con el formulario debajo, **a la altura de la foto**: la foto va
+// a su proporción y los campos se reparten hasta abajo (cliente, 22/09). Si el formulario es
+// más alto que la foto (pantalla estrecha), es la foto la que se estira. `heading` es h1 en
+// la página de contacto y h2 en la portada; `aside` va bajo la foto (los datos del estudio
+// en /contacto).
 export function ContactSpread({
   title,
+  cta = copy.home.contact.cta,
   heading: Heading = "h2",
   id = "contacto",
   defaultType,
   aside,
 }: {
   title: string;
+  cta?: string;
   heading?: "h1" | "h2";
   id?: string;
   defaultType?: string;
@@ -222,6 +226,9 @@ export function ContactSpread({
           {aside}
         </div>
         <div className="contact-2-main">
+          <Reveal as="p" className="t-title contact-2-cta" delay={80}>
+            {cta}
+          </Reveal>
           <ContactFormV2 defaultType={defaultType} />
         </div>
       </div>
@@ -229,7 +236,7 @@ export function ContactSpread({
   );
 }
 
-// El cierre de la portada es el formulario, con la frase del cliente encima.
+// El cierre de la portada es el formulario, con las frases del cliente.
 export function HomeContact() {
   return <ContactSpread title={copy.home.contact.title} />;
 }

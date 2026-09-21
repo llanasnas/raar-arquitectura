@@ -193,10 +193,11 @@ export const copy = {
       ],
     },
     // Cierre con el formulario. El título es del cliente, tal cual lo escribió en la maqueta,
-    // en una sola línea; el «¡Contáctanos!» lo quitó él (se entiende con la foto, 22/09). La
-    // foto del teléfono también es suya (21/09/2026).
+    // en una sola línea; el «Contacta con nosotros:» va encima del formulario (cliente,
+    // 22/09). La foto del teléfono también es suya (21/09/2026).
     contact: {
       title: "¿Quieres formar parte de nuestro viaje?",
+      cta: "Contacta con nosotros:",
       photoAlt: "Un brazo sostiene en el aire un auricular de teléfono colgando del cable, con el logotipo de RAAR sobre el cielo",
     },
   },

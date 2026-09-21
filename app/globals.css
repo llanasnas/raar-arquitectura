@@ -1976,8 +1976,10 @@
   }
 
   /* El bloque de contacto (portada y /contacto): el título grande arriba, a una línea, la
-     foto del teléfono a la izquierda y el formulario a la derecha, de la misma altura: la
-     foto se estira a lo que mida el formulario (cliente, 22/09/2026). */
+     foto del teléfono a la izquierda y, a la derecha, «Contacta con nosotros:» con el
+     formulario debajo, a la altura de la foto: la foto va a su proporción (4:5) y los campos
+     se reparten hasta abajo; si el formulario es más alto, se estira la foto (cliente,
+     22/09/2026). */
   .contact-2 {
     padding-block: var(--sec-pad);
   }
@@ -2006,18 +2008,25 @@
   }
   .contact-2-main {
     grid-column: 7 / span 6;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.2rem, 3vh, 2rem);
   }
-  /* la foto toma toda la altura que le deja la fila: la del formulario */
+  /* el formulario ocupa lo que queda hasta el pie de la foto y reparte sus filas */
+  .contact-2-main .form-2 {
+    flex: 1;
+    align-content: space-between;
+  }
+  /* la foto, a su proporción; si la fila es más alta (formulario largo), se estira */
   .contact-2-media {
     display: flex;
     flex: 1;
     margin: 0;
-    min-height: 0;
   }
   .contact-2-plate {
     position: relative;
     flex: 1;
-    min-height: 0;
+    aspect-ratio: 4 / 5;
     overflow: hidden;
     background: var(--carbon);
   }
@@ -2118,9 +2127,8 @@
       grid-row: auto;
       grid-column: 1;
     }
-    /* en una columna la foto necesita su propia altura */
-    .contact-2-plate {
-      aspect-ratio: 4 / 5;
+    .contact-2-main .form-2 {
+      align-content: start;
     }
   }
 
