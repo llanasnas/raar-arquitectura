@@ -7,6 +7,7 @@
 // Salida:
 //   public/images/brand/logo-black.svg / logo-white.svg   viewBox recortado a la caja del
 //                                                          trazado, sin <style>, pasado por svgo
+//   public/images/brand/wordmark-black.svg                 solo RAAR, sin «arquitectura»
 //   public/images/brand/logo-black.png / logo-white.png   1600 px de ancho, fondo transparente
 //   assets-src/images/brand/logo-black.png / logo-white.png   2444 px (el «original» que
 //                                                          optimize-images vuelve a bajar a 1600)
@@ -78,9 +79,15 @@ for (const [name, fill] of [
   }
 }
 
-// Iconos: solo RAAR, sobre blanco, casi a sangre (como los que había)
+// Solo RAAR, sin «arquitectura»: el wordmark grande de la portada (cliente, 22/09/2026) y los
+// iconos. Va como máscara CSS (.cover-mark), así que hace falta su caja para el aspect-ratio.
 const markBox = await bbox(clean(wordmark));
 const markSvg = svgOf(clean(wordmark), markBox, "#000");
+console.log(`caja del wordmark: ${markBox.x} ${markBox.y} ${markBox.w} ${markBox.h}  (aspecto ${(markBox.w / markBox.h).toFixed(3)})`);
+writeFileSync(join(OUT, "wordmark-black.svg"), markSvg);
+console.log(`${(markSvg.length / 1e3).toFixed(1).padStart(6)} KB  wordmark-black.svg`);
+
+// Iconos: solo RAAR, sobre blanco, casi a sangre (como los que había)
 for (const [file, size] of [
   ["app/icon.png", 64],
   ["app/apple-icon.png", 180],

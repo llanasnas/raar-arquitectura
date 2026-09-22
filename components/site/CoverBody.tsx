@@ -18,6 +18,11 @@ import { copy } from "@/lib/copy";
 // fuente ya cargada, y se deja en `--l1`; el CSS lleva un valor aproximado para que el
 // servidor ya pinte algo parecido.
 //
+// Arriba de la columna va **RAAR en grande** (solo el wordmark, sin «arquitectura»), de lado
+// a lado de la columna, y el texto baja al pie (cliente, 22/09/2026). Aparece cuando el
+// logotipo pequeño ha aterrizado abajo a la derecha: comparte el `data-opening` de la lámina,
+// que se quita justo cuando el vídeo termina de recogerse, a la vez que aterriza el logotipo.
+//
 // Y siguen **mandando sobre la lámina**: al pasar por encima de «atemporalidad», la lámina
 // deja el vídeo y enseña la obra que la explica, con su pie debajo de la lista. Al salir,
 // vuelve el vídeo. En táctil se toca y se queda fijada hasta que se toca otra o la misma.
@@ -78,6 +83,7 @@ export function CoverBody({
   return (
     <>
       <div className="cover-left">
+        <span className="cover-mark" data-opening={isOpening || undefined} aria-hidden="true" />
         <div className="cover-text">
           <h1 ref={slogan} className="cover-slogan mb-6" aria-label={copy.hero.tagline}>
             {copy.hero.taglineLines.map((line, i) => (
