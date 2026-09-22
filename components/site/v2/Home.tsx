@@ -118,9 +118,10 @@ export function About() {
   );
 }
 
-// Dónde estamos: el título a una línea, y debajo los datos con su icono a la izquierda y el
-// mapa a la derecha, en la misma retícula que el estudio para que el mapa y la foto de los
-// tres queden alineados por los dos lados (cliente, 22/09). Lo usan la portada y /estudio.
+// Dónde estamos: el título y los datos en la columna de la izquierda, el mapa a la derecha,
+// en la misma retícula que el estudio (así el mapa y la foto de los tres quedan alineados por
+// los dos lados). El título arranca a la altura del mapa y los datos van con su interlínea
+// normal: lo que sobra, sobra por abajo (cliente, 22/09). Lo usan la portada y /estudio.
 export function Where() {
   return (
     <section
@@ -128,10 +129,10 @@ export function Where() {
       className="where wrap"
       aria-labelledby="where-title"
     >
-      <Reveal as="h2" id="where-title" className="sec-title" variant="up">
-        {studioPage.whereTitle}
-      </Reveal>
-      <div className="where-body">
+      <div className="where-side">
+        <Reveal as="h2" id="where-title" className="sec-title" variant="up">
+          {studioPage.whereTitle}
+        </Reveal>
         <ul className="where-list">
           <li>
             <Phone />
@@ -173,15 +174,15 @@ export function Where() {
             </li>
           )}
         </ul>
-        <div className="where-map">
-          <iframe
-            title={`Mapa: ${site.address.street}, ${site.address.city}`}
-            src={`https://www.openstreetmap.org/export/embed.html?bbox=${site.geo.lng - 0.006}%2C${site.geo.lat - 0.004}%2C${site.geo.lng + 0.006}%2C${site.geo.lat + 0.004}&layer=mapnik&marker=${site.geo.lat}%2C${site.geo.lng}`}
-            className="map"
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-          />
-        </div>
+      </div>
+      <div className="where-map">
+        <iframe
+          title={`Mapa: ${site.address.street}, ${site.address.city}`}
+          src={`https://www.openstreetmap.org/export/embed.html?bbox=${site.geo.lng - 0.006}%2C${site.geo.lat - 0.004}%2C${site.geo.lng + 0.006}%2C${site.geo.lat + 0.004}&layer=mapnik&marker=${site.geo.lat}%2C${site.geo.lng}`}
+          className="map"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        />
       </div>
     </section>
   );

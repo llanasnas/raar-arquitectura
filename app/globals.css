@@ -1864,29 +1864,28 @@
     line-height: 1.5;
   }
 
-  /* Dónde estamos: la lista con icono a la izquierda y el mapa a la derecha, en la misma
-     retícula y con la misma caja (640 × 483) que la foto del estudio, para que los dos queden
-     alineados por la izquierda y por la derecha (cliente, 22/09) */
+  /* Dónde estamos: el título y los datos en la columna de la izquierda y el mapa a la
+     derecha, en la misma retícula y con la misma caja (640 × 483) que la foto del estudio,
+     así los dos quedan alineados por la izquierda y por la derecha. El título arranca a la
+     altura del mapa y los datos llevan su interlínea normal: lo que sobra queda abajo
+     (cliente, 22/09). */
   .where {
-    padding-block: var(--sec-pad);
-  }
-  .where-body {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: clamp(1.5rem, 3vw, 3.5rem);
-    align-items: stretch;
+    align-items: start;
+    padding-block: var(--sec-pad);
   }
-  .where-list,
+  .where-side,
   .where-map {
     grid-row: 1;
   }
-  /* repartidos de arriba abajo: la columna mide lo que el mapa, como el texto del estudio
-     mide lo que su foto (cliente, 22/09) */
-  .where-list {
+  .where-side {
     grid-column: 1 / span 5;
+  }
+  .where-list {
     display: grid;
     gap: 1rem;
-    align-content: space-between;
   }
   .where-map {
     grid-column: 7 / span 6;
@@ -2076,11 +2075,11 @@
     .works-featured .work:nth-child(n) {
       grid-column: 1 / -1;
     }
-    .where-body {
+    .where {
       grid-template-columns: 1fr;
       gap: 2rem;
     }
-    .where-list,
+    .where-side,
     .where-map {
       grid-row: auto;
       grid-column: 1;
