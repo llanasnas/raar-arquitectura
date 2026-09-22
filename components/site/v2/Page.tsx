@@ -194,6 +194,11 @@ export function SiteFoot({ mark = false }: { mark?: boolean }) {
           <a href={site.instagram} target="_blank" rel="noopener noreferrer" className="t-body foot-link">
             Instagram
           </a>
+          {site.linkedin && (
+            <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className="t-body foot-link">
+              LinkedIn
+            </a>
+          )}
         </div>
         <div className="foot-col">
           <span className="t-label foot-col-title">Web</span>
