@@ -330,7 +330,8 @@
     width: var(--brand-w, 200px);
     aspect-ratio: 586.15 / 168;
     background: currentColor;
-    -webkit-mask: url("/images/brand/wordmark-black.svg") no-repeat center / contain;
+    -webkit-mask: url("/images/brand/wordmark-black.svg") no-repeat center /
+      contain;
     mask: url("/images/brand/wordmark-black.svg") no-repeat center / contain;
   }
 
@@ -406,7 +407,8 @@
   /* En la portada el logotipo ya está tumbado de lado a lado: durante la apertura solo se
      encoge al centro (una fracción del ancho) y al aterrizar vuelve a su sitio. */
   .brand-fixed[data-intro][data-hero] {
-    transform: translate(0, calc(50svh - var(--hero-top) - var(--hero-h) / 2)) scale(var(--intro-hero));
+    transform: translate(0, calc(50svh - var(--hero-top) - var(--hero-h) / 2))
+      scale(var(--intro-hero));
   }
 
   /* El viaje va con el vídeo recogiéndose: el logotipo se coloca mientras la lámina deja
@@ -509,8 +511,8 @@
     display: flex;
     flex: 1;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: end;
+    justify-content: end;
     padding-top: clamp(1.5rem, 4svh, 3rem);
     text-align: center;
   }
