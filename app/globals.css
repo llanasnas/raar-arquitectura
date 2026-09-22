@@ -2398,15 +2398,18 @@
     line-height: 1.15;
     letter-spacing: -0.015em;
   }
-  /* el diagrama de proyecto con su pie a la izquierda, en la columna de la ficha */
+  /* El diagrama de proyecto con su pie a la izquierda, en la columna de la ficha y con su
+     mismo margen (petición del cliente, 21/09). El pie va **a la altura del dibujo**, no
+     pegado arriba: el vídeo tiene mucho aire dentro y el pie se quedaba solo a media página
+     (22/09). */
   .pj-diagram {
     margin: 0;
-    padding-top: 0;
+    padding-block: clamp(1rem, 3vh, 2rem) clamp(2rem, 6vh, 4rem);
   }
   .pj-diagram-cap {
     display: grid;
     gap: 0.4rem;
-    align-content: start;
+    align-content: center;
   }
   /* una obra en obras, también en su ficha: en gris hasta que esté terminada */
   .plate-wip {
@@ -2531,7 +2534,7 @@
     width: auto;
     max-width: 100%;
     height: auto;
-    max-height: min(70svh, 44rem);
+    max-height: min(56svh, 34rem);
     /* el blanco del h264 vuelve como 253, y multiplicado deja un rectángulo un punto más oscuro
        que el papel: el contraste lo devuelve a 255 antes de mezclar */
     filter: contrast(1.05);
