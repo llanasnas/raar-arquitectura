@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PageHead, CtaBlock, SiteFoot } from "@/components/site/v2/Page";
+import { PageHead, SiteFoot } from "@/components/site/v2/Page";
+import { ContactSpread } from "@/components/site/v2/Home";
 import { Works } from "@/components/site/v2/Works";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { getProjects, type Project } from "@/lib/content";
@@ -76,7 +77,8 @@ export default async function ProjectsPage(props: PageProps<"/proyectos">) {
         <Works projects={list} />
       )}
 
-      <CtaBlock title={copy.projects.ctaTitle} lead={copy.projects.ctaText} />
+      {/* el cierre es la frase del cliente y el formulario, sin nada más (22/09) */}
+      <ContactSpread title={copy.contactCta.projectsTitle} id="contacto" />
       <SiteFoot />
       <BreadcrumbJsonLd items={[{ name: "Inicio", href: "/" }, { name: copy.projects.title, href: routes.projects }]} />
     </div>

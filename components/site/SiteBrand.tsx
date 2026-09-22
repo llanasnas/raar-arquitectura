@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState, useSyncExternalStore, type AnimationEvent } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore, type AnimationEvent } from "react";
 import { routes } from "@/lib/site";
 import { useTone } from "@/lib/use-tone";
 import { useIntroPlays } from "@/lib/intro";
@@ -20,6 +20,9 @@ import { site } from "@/lib/site";
 export type BrandIntro = "ident" | "video" | "reveal" | "slats";
 export type BrandCorner = "tl" | "br";
 
+// cuánto scroll basta para mandarlo a su esquina (y volver a lo grande al subir del todo)
+const TOP = 40;
+
 const REDUCED = "(prefers-reduced-motion: reduce)";
 
 function useReducedMotion() {
@@ -34,15 +37,30 @@ function useReducedMotion() {
   );
 }
 
-export function SiteBrand({ intro, corner = "tl" }: { intro?: BrandIntro; corner?: BrandCorner }) {
+export function SiteBrand({ intro, corner = "tl", hero = false }: { intro?: BrandIntro; corner?: BrandCorner; hero?: boolean }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const [landed, setLanded] = useState(false);
+  const [atTop, setAtTop] = useState(true);
   const reducedMotion = useReducedMotion();
   // Solo en la portada, y solo si la apertura se ve esta vez (ver lib/intro.ts: no al volver
   // con «atrás»). Sin movimiento tampoco hay viaje: el logotipo ya está en su esquina.
   const plays = useIntroPlays(Boolean(intro));
   const travelling = plays && !landed && !reducedMotion;
-  const tone = useTone(ref, !travelling);
+
+  // En la portada, arriba del todo, el logotipo es el RAAR enorme que cruza la pantalla
+  // (cliente, 22/09/2026); al primer scroll baja a su esquina y al volver arriba vuelve a
+  // crecer. Es el mismo elemento: no hay relevo.
+  useEffect(() => {
+    if (!hero) return;
+    const read = () => setAtTop(window.scrollY < TOP);
+    read();
+    window.addEventListener("scroll", read, { passive: true });
+    return () => window.removeEventListener("scroll", read);
+  }, [hero]);
+  const big = hero && atTop;
+
+  // grande no lee el tono: es tinta sobre el papel y sobre el vídeo, como en la maqueta
+  const tone = useTone(ref, !travelling && !big);
 
   // `intro-logo-land` es la animación del viaje; las demás (tinta, barrido) terminan antes.
   const onAnimationEnd = (event: AnimationEvent<HTMLAnchorElement>) => {
@@ -56,8 +74,9 @@ export function SiteBrand({ intro, corner = "tl" }: { intro?: BrandIntro; corner
       aria-label={`${site.name} · Inicio`}
       className="brandmark brand-fixed"
       data-corner={corner}
+      data-hero={big ? "" : undefined}
       data-intro={travelling ? intro : undefined}
-      data-tone={travelling ? undefined : tone}
+      data-tone={travelling || big ? undefined : tone}
       onAnimationEnd={onAnimationEnd}
     />
   );

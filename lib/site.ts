@@ -22,6 +22,7 @@ export const site = {
   },
   geo: { lat: 41.3979, lng: 2.1654 },
   instagram: "https://www.instagram.com/raar.arquitectura/",
+  linkedin: "https://www.linkedin.com/company/raar-arquitectura/",
   // Dónde trabajan, en concreto (cliente, 22/09/2026): cierre de las páginas y datos
   // estructurados. La lista amplia del pie es `reach`.
   areas: ["Barcelona", "Sant Cugat", "Costa Brava", "Andorra"],
@@ -42,7 +43,7 @@ export const routes = {
   services: "/servicios",
   studio: "/estudio",
   // Off grid no tiene página: es un bloque de la portada (ancla)
-  offgrid: "/#off-grid",
+  offgrid: "/off-grid",
   contact: "/contacto",
   legal: "/aviso-legal",
   privacy: "/privacidad",

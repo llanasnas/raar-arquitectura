@@ -23,8 +23,15 @@
   /* el logotipo fijo vive en la banda de abajo, a la altura del menú: por eso es pequeño.
      Ampliado por --intro-scale es el que se ve en el centro durante la apertura. */
   --brand-size: clamp(104px, 10vw, 168px);
-  /* alto del logotipo: su caja es 586,2 × 197,7 (ver .brandmark) */
-  --brand-h: calc(var(--brand-size) * 0.3373);
+  /* alto del logotipo: su caja es 586,15 × 168 (ver .brandmark; sin «arquitectura») */
+  --brand-h: calc(var(--brand-size) * 0.28661);
+  /* la posición grande del logotipo en la portada: de lado a lado arriba, con el mismo
+     margen que el resto de la web a los lados y arriba (cliente, 22/09) */
+  --hero-top: var(--gutter-2);
+  --hero-w: calc(100vw - 2 * var(--gutter-2));
+  --hero-h: calc(var(--hero-w) / 3.489);
+  /* cuánto ocupa mientras dura la apertura, en fracción del ancho de pantalla */
+  --intro-hero: 0.52;
   --panel-top: clamp(92px, 13svh, 190px);
   --panel-bottom: clamp(100px, 17svh, 210px);
   --intro-scale: 4.2;
@@ -85,9 +92,8 @@
        mide el menú (una línea, ver .menu a en móvil) más otro margen igual */
     --menu-h: calc(0.68rem * 1.22);
     --bar-h: calc(var(--brand-h) + var(--menu-h) + 3 * var(--gutter-2));
-    /* la franja de texto de la portada: RAAR en grande, lema, cuatro palabras y el pie de
-       la obra. En un móvil bajo el svh no llega y la última palabra se metía bajo el vídeo */
-    --cover-top: max(46svh, 390px);
+    /* la franja de texto de la portada: el RAAR grande (28,7vw) y el lema debajo */
+    --cover-top: max(32svh, 280px);
   }
 }
 
@@ -268,11 +274,14 @@
       0 1px 18px rgb(0 0 0 / 0.55),
       0 0 2px rgb(0 0 0 / 0.25);
   }
+  /* los cinco caben en la mitad de la pantalla: en la portada esa es la columna del texto,
+     y el menú tiene que quedar dentro de ella (cliente, 22/09) */
   .menu ul {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 0.35rem clamp(1.4rem, 4vw, 4rem);
+    gap: 0.35rem clamp(1.1rem, 2.6vw, 2.6rem);
+    max-width: calc(50vw - 2 * var(--gutter-2));
   }
   .menu a {
     display: inline-flex;
@@ -315,13 +324,14 @@
      El logotipo va como máscara CSS: toma el color del texto que lo rodea y puede animarse
      de un color a otro. Fuente: el vector del cliente (`scripts/build-brand.mjs`); el aspecto
      es el del viewBox recortado a la caja del trazado, así la máscara `contain` llena la caja. */
+  /* Solo el wordmark: «arquitectura» fuera de todos los logotipos (cliente, 22/09/2026). */
   .brandmark {
     display: block;
     width: var(--brand-w, 200px);
-    aspect-ratio: 586.2 / 197.7;
+    aspect-ratio: 586.15 / 168;
     background: currentColor;
-    -webkit-mask: url("/images/brand/logo-black.svg") no-repeat center / contain;
-    mask: url("/images/brand/logo-black.svg") no-repeat center / contain;
+    -webkit-mask: url("/images/brand/wordmark-black.svg") no-repeat center / contain;
+    mask: url("/images/brand/wordmark-black.svg") no-repeat center / contain;
   }
 
   /* ── Logotipo fijo ──────────────────────────────────
@@ -336,6 +346,9 @@
     --brand-w: var(--brand-size);
     color: var(--carbon);
     transition:
+      width 900ms var(--ease-quint),
+      right 900ms var(--ease-quint),
+      bottom 900ms var(--ease-quint),
       color 320ms var(--ease-out-expo),
       filter 320ms var(--ease-out-expo);
   }
@@ -350,6 +363,19 @@
     right: var(--gutter-2);
     bottom: max(var(--gutter-2), env(safe-area-inset-bottom, 0px));
     transform-origin: bottom right;
+  }
+  /* Arriba del todo en la portada, el logotipo **es** la portada: cruza la pantalla de lado
+     a lado, con «RA» sobre el papel y «AR» sobre el vídeo (cliente, 22/09/2026). Al primer
+     scroll vuelve a su esquina y al subir del todo crece otra vez; es el mismo elemento, así
+     que el viaje se ve. No recibe clics mientras es grande: taparía media portada. */
+  .brand-fixed[data-corner][data-hero] {
+    --brand-w: var(--hero-w);
+    right: var(--gutter-2);
+    bottom: calc(100svh - var(--hero-top) - var(--hero-h));
+    /* de lado a lado, el encogido de la apertura se mide desde el centro, no desde la
+       esquina donde vive cuando es pequeño */
+    transform-origin: center;
+    pointer-events: none;
   }
   /* fuera de la apertura manda el tono de lo que tiene debajo, como en el menú */
   .brand-fixed[data-tone="light"] {
@@ -376,6 +402,11 @@
         calc(-50svh + var(--gutter-2) + 50% * var(--intro-scale))
       )
       scale(var(--intro-scale));
+  }
+  /* En la portada el logotipo ya está tumbado de lado a lado: durante la apertura solo se
+     encoge al centro (una fracción del ancho) y al aterrizar vuelve a su sitio. */
+  .brand-fixed[data-intro][data-hero] {
+    transform: translate(0, calc(50svh - var(--hero-top) - var(--hero-h) / 2)) scale(var(--intro-hero));
   }
 
   /* El viaje va con el vídeo recogiéndose: el logotipo se coloca mientras la lámina deja
@@ -452,58 +483,34 @@
   /* ── Portada ────────────────────────────────────────
      Eslogan a la izquierda, vídeo a la derecha a toda altura. La portada mide
      `100svh - --stage-gap`: ese hueco de abajo deja asomar la sección siguiente. */
+  /* El vídeo ocupa **toda** la altura y ya no se recoge (cliente, 22/09/2026): el menú pasa
+     por encima, con el velo de papel de `main::after` para que se lea. */
   .cover {
     position: relative;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* la fila de abajo es la banda del menú y el logotipo: ahí no entra ni el vídeo ni
-       la sección siguiente, por eso la portada mide la pantalla entera */
-    grid-template-rows: 1fr var(--bar-h);
     min-height: 100svh;
   }
+  /* la columna de texto empieza por debajo del RAAR grande, que es fijo y no ocupa sitio */
   .cover-left {
     display: flex;
     flex-direction: column;
     padding: var(--gutter-2);
+    padding-top: calc(var(--hero-top) + var(--hero-h) + var(--gutter-2));
+    padding-bottom: var(--bar-h);
   }
   /* si el logotipo se queda arriba a la izquierda, el texto le reserva su altura
      (539/1600 del ancho del logotipo); si se va abajo a la derecha, el texto sube */
   .cover[data-brand="tl"] .cover-left {
     padding-top: calc(var(--gutter-2) + var(--brand-size) * 0.34);
   }
-  /* RAAR en grande arriba de la columna (cliente, 22/09/2026): solo el wordmark, de lado a
-     lado de la columna sin margen (los negativos anulan el padding), como máscara para que
-     tome la tinta. Aparece cuando el logotipo pequeño ha aterrizado abajo a la derecha: lleva
-     el mismo `data-opening` que la lámina y se enciende al quitarse. En un portátil bajo se
-     limita por altura y la máscara lo encaja centrado. */
-  .cover-mark {
-    display: block;
-    flex: none;
-    width: calc(100% + 2 * var(--gutter-2));
-    max-height: 30svh;
-    margin-inline: calc(-1 * var(--gutter-2));
-    aspect-ratio: 586.15 / 168;
-    background: currentColor;
-    color: var(--carbon);
-    -webkit-mask: url("/images/brand/wordmark-black.svg") no-repeat center / contain;
-    mask: url("/images/brand/wordmark-black.svg") no-repeat center / contain;
-    transition: opacity 700ms var(--ease-out-expo) 150ms;
-  }
-  .cover-mark[data-opening] {
-    opacity: 0;
-  }
-  html[data-intro="skip"] .cover-mark[data-opening] {
-    opacity: 1;
-    transition: none;
-  }
-  /* el texto baja al pie de la columna, bajo el wordmark, centrado (guía del 21/09 y cliente
-     del 22/09); las medidas también miran la altura para que quepa en un portátil bajo */
+  /* el lema, centrado en la columna y pegado al pie, bajo el RAAR grande */
   .cover-text {
     display: flex;
-    flex: none;
+    flex: 1;
     flex-direction: column;
     align-items: center;
-    margin-top: auto;
+    justify-content: center;
     padding-top: clamp(1.5rem, 4svh, 3rem);
     text-align: center;
   }
@@ -531,106 +538,16 @@
     font-weight: 600;
     line-height: 1;
   }
-  /* Las cuatro palabras del estudio, en lista y en caja alta. Se encienden de arriba abajo al
-     ritmo del vídeo (`data-lit`) y al pasar por encima de una (`data-active`) manda sobre la
-     lámina de la derecha (ver components/site/CoverBody.tsx). */
-  /* comprimidas: una debajo de otra con poco aire (cliente, 22/09) */
-  .cover-words {
-    display: flex;
-    flex: none;
-    flex-direction: column;
-    gap: clamp(0.15rem, 0.8svh, 0.5rem);
-    margin-top: clamp(1rem, 3svh, 2rem);
-  }
-  .cover-words li {
-    display: flex;
-    justify-content: center;
-  }
-  .cover-key {
-    position: relative;
-    padding: 0;
-    border: 0;
-    background: none;
-    font: inherit;
-    font-size: clamp(1.4rem, min(2.7vw, 4.2svh), 2.7rem);
-    line-height: 1.15;
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
-    color: var(--carbon);
-    opacity: 0.32;
-    transition: opacity 700ms var(--ease-out-expo);
-  }
-  .cover-key[data-lit],
-  .cover-key[data-active],
-  .cover-key:hover,
-  .cover-key:focus-visible {
-    opacity: 1;
-  }
-  .cover-key:focus-visible {
-    outline: 1px solid currentColor;
-    outline-offset: 4px;
-  }
-  /* la línea de debajo aparece con la palabra que manda: dice que se puede tocar */
-  .cover-key::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -0.08em;
-    height: 1px;
-    background: currentColor;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 480ms var(--ease-out-expo);
-  }
-  .cover-key:hover::after,
-  .cover-key:focus-visible::after,
-  .cover-key[data-active]::after {
-    transform: scaleX(1);
-  }
-
-  /* La obra que responde a la palabra: entra sobre el vídeo y se asienta. */
-  .stage-slide {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 620ms var(--ease-out-expo);
-  }
-  .stage-slide img {
-    transform: scale(1.05);
-    transition: transform 1400ms var(--ease-out-expo);
-  }
-  .stage-slide[data-on] {
-    opacity: 1;
-  }
-  .stage-slide[data-on] img {
-    transform: none;
-  }
-  /* pie de la obra que manda ahora mismo; el hueco está reservado para que la frase no salte */
-  .cover-note {
-    min-height: 1.2em;
-    margin-top: clamp(1.1rem, 3svh, 2rem);
-    opacity: 0;
-    transform: translateY(0.4rem);
-    transition:
-      opacity 420ms var(--ease-out-expo) 120ms,
-      transform 420ms var(--ease-out-expo) 120ms;
-  }
-  .cover-note[data-on] {
-    opacity: 1;
-    transform: none;
-  }
-  /* La lámina del vídeo ocupa la mitad derecha. Durante el telón va a toda altura (tapa
-     la banda de abajo, para que no se vea lo que hay debajo de la portada) y al final se
-     recoge justo hasta dejar la banda libre.
-     Mientras se recoge es `position: fixed` y su caja final coincide exactamente con el
-     hueco que ocupa aquí, así que al soltar el fixed no hay salto y el vídeo sigue
-     reproduciendo: es el mismo nodo. */
+  /* La lámina del vídeo ocupa la mitad derecha, de arriba abajo. Durante el telón es
+     `position: fixed` con la misma caja que ocupa en el flujo, así que al soltar el fixed no
+     hay salto y el vídeo sigue reproduciendo: es el mismo nodo. */
   .cover-stage {
     position: relative;
     overflow: hidden;
     background: var(--carbon);
   }
+  /* el vídeo ya no se recoge: la animación solo marca el final de la apertura (es cuando
+     `data-opening` se quita y la lámina vuelve a su sitio del flujo, que es el mismo) */
   .cover-stage[data-opening] {
     position: fixed;
     inset: 0 0 0 50%;
@@ -639,7 +556,7 @@
   }
   @keyframes stage-settle {
     to {
-      inset: 0 0 var(--bar-h) 50%;
+      inset: 0 0 0 50%;
     }
   }
   .cover-video {
@@ -1362,29 +1279,24 @@
       );
     }
 
-    /* la portada se parte en filas: texto arriba, vídeo abajo y la banda al pie */
+    /* la portada se parte en filas: texto arriba y vídeo abajo, hasta el borde */
     .cover {
       grid-template-columns: 1fr;
-      grid-template-rows: var(--cover-top) 1fr var(--bar-h);
+      grid-template-rows: var(--cover-top) 1fr;
     }
     .cover-left {
       padding-bottom: 1rem;
     }
-    .cover-mark {
-      max-height: none;
+    /* el menú cruza toda la pantalla y acaba sobre el vídeo: aquí el velo va entero */
+    main:has(.cover)::after {
+      -webkit-mask-image: none;
+      mask-image: none;
     }
     .cover-text {
       padding-top: 1rem;
     }
     .cover-slogan {
       font-size: 1.35rem;
-    }
-    .cover-words {
-      gap: 0.1rem;
-      margin-top: 0.8rem;
-    }
-    .cover-key {
-      font-size: 1.15rem;
     }
     /* durante el telón el vídeo llega hasta abajo del todo, igual que en escritorio: así no
        se ve la sección siguiente por debajo */
@@ -1393,7 +1305,7 @@
     }
     @keyframes stage-settle {
       to {
-        inset: var(--cover-top) 0 var(--bar-h) 0;
+        inset: var(--cover-top) 0 0 0;
       }
     }
   }
@@ -1425,24 +1337,12 @@
 
   /* Sin movimiento: ni persiana, ni viaje, ni recogida; la portada aparece montada. */
   @media (prefers-reduced-motion: reduce) {
-    .stage-slide,
-    .stage-slide img,
-    .cover-note {
-      transition: none;
-    }
-    .stage-slide img {
-      transform: none;
-    }
     .sintro {
       display: none;
     }
     .brand-fixed[data-intro] {
       animation: none;
       transform: none;
-    }
-    .cover-mark[data-opening] {
-      opacity: 1;
-      transition: none;
     }
   }
 
@@ -1796,7 +1696,7 @@
     text-align: center;
   }
   .philo-mark {
-    --iso-w: clamp(3rem, 4vw, 4.5rem);
+    --iso-w: clamp(4rem, 5.6vw, 6.5rem);
   }
   .philo-text {
     font-size: clamp(1.2rem, 2.1vw, 2rem);
@@ -1872,10 +1772,14 @@
     margin-top: 0.6rem;
   }
   .about-p {
-    max-width: 46ch;
     font-size: clamp(1rem, 1.25vw, 1.2rem);
     line-height: 1.5;
     color: var(--carbon);
+    text-align: justify;
+    hyphens: auto;
+  }
+  .about-p + .about-p {
+    margin-top: 1rem;
   }
   .about-foot {
     margin-top: auto;
@@ -1968,17 +1872,19 @@
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: clamp(1.5rem, 3vw, 3.5rem);
-    align-items: start;
+    align-items: stretch;
   }
   .where-list,
   .where-map {
     grid-row: 1;
   }
+  /* repartidos de arriba abajo: la columna mide lo que el mapa, como el texto del estudio
+     mide lo que su foto (cliente, 22/09) */
   .where-list {
     grid-column: 1 / span 5;
     display: grid;
     gap: 1rem;
-    align-content: start;
+    align-content: space-between;
   }
   .where-map {
     grid-column: 7 / span 6;
@@ -2019,6 +1925,36 @@
   }
   .contact-2-title {
     white-space: nowrap;
+  }
+  /* En /contacto el título es el de la página y va más grande: llega casi hasta donde acaba
+     «Contacta con nosotros» (cliente, 22/09). Las dos mitades salen una detrás de otra,
+     cada una desde debajo de su propia línea. */
+  .contact-2-title[data-parts] {
+    font-size: clamp(2.2rem, 8vw, 7.4rem);
+  }
+  .hz {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    /* la caja recorta justo por la base de la letra; con line-height 1 se comerían las colas */
+    padding-bottom: 0.12em;
+  }
+  .hz > span {
+    display: inline-block;
+    animation: hz-in 1100ms var(--ease-quint) both;
+    animation-delay: calc(var(--i) * 420ms + 160ms);
+    transform: translateY(105%);
+  }
+  @keyframes hz-in {
+    to {
+      transform: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hz > span {
+      animation: none;
+      transform: none;
+    }
   }
   .contact-2-body {
     display: grid;
@@ -2199,6 +2135,12 @@
   }
   main:has(.v1-shell)::after {
     content: none;
+  }
+  /* En la portada el vídeo llega hasta abajo del todo y el velo lo lavaría: aquí solo cubre
+     la mitad del menú y se desvanece antes de llegar a la lámina (cliente, 22/09). */
+  main:has(.cover)::after {
+    -webkit-mask-image: linear-gradient(to right, #000 42%, transparent 56%);
+    mask-image: linear-gradient(to right, #000 42%, transparent 56%);
   }
 
   .page-head {
@@ -2410,10 +2352,10 @@
     opacity: 0.85;
   }
   .pj-hero-arrow[data-dir="prev"] {
-    left: var(--gutter-2);
+    left: 1rem;
   }
   .pj-hero-arrow[data-dir="next"] {
-    right: var(--gutter-2);
+    right: 1rem;
   }
   .pj-hero-arrow:focus-visible,
   .pj-hero-hit:focus-visible {
@@ -2491,8 +2433,9 @@
   .sheet-facts {
     grid-column: 1 / span 3;
   }
+  /* el texto acaba en el margen, como acaba la foto de arriba (cliente, 22/09) */
   .sheet-text {
-    grid-column: 5 / span 7;
+    grid-column: 5 / -1;
   }
   .sheet-facts-inner {
     position: sticky;
@@ -2532,12 +2475,15 @@
     background: var(--carbon-2);
   }
   /* el texto de la ficha en un cuerpo más pequeño, más cerca de la web anterior del cliente
-     (guía del 21/09): la lectura larga va a 15–16 px y a línea holgada */
+     (guía del 21/09): la lectura larga va a 15–16 px y a línea holgada. Justificado y de
+     margen a margen de la columna, como la foto de arriba (cliente, 22/09). */
   .sheet-p {
     font-size: clamp(0.92rem, 1.02vw, 1rem);
     line-height: 1.7;
-    max-width: 66ch;
     margin-top: 1rem;
+    text-align: justify;
+    text-wrap: pretty;
+    hyphens: auto;
   }
   .sheet-p:first-child {
     margin-top: 0;
@@ -2653,7 +2599,8 @@
      anterior del cliente (guía del 21/09) */
   .studio-manifesto {
     color: var(--carbon);
-    max-width: 62ch;
+    text-align: justify;
+    hyphens: auto;
   }
   .studio-manifesto p + p {
     margin-top: 1rem;
@@ -2704,6 +2651,11 @@
     font-weight: 400;
     letter-spacing: -0.018em;
     line-height: 1.15;
+  }
+  /* el pliego de /estudio es el mismo bloque que el del estudio en la portada, pero abre
+     página: se le da el aire de arriba de un rótulo de página (cliente, 22/09) */
+  .studio-top {
+    padding-top: clamp(3.5rem, 12vh, 8rem);
   }
   /* el resto del manifiesto sigue al pliego sin volver a abrir hueco arriba */
   .studio-prose {
@@ -2877,7 +2829,7 @@
     display: grid;
     justify-items: center;
     padding-top: clamp(1rem, 3vh, 2rem);
-    --iso-w: 3rem;
+    --iso-w: clamp(3.5rem, 5vw, 5rem);
   }
   .foot-head {
     display: flex;

@@ -172,7 +172,9 @@ export function SiteFoot({ mark = false }: { mark?: boolean }) {
         <span className="t-label">
           {site.name} · {copy.footer.tagline}
         </span>
-        <span className="t-label foot-areas">{site.reach.join(" · ")}</span>
+        <span className="t-label foot-areas">
+          {site.reach.join(" · ")} · {copy.footer.reachMore}
+        </span>
       </div>
 
       <div className="foot-grid">
@@ -201,8 +203,8 @@ export function SiteFoot({ mark = false }: { mark?: boolean }) {
           <Link href={routes.projects} className="t-body foot-link">
             Proyectos
           </Link>
-          <Link href={routes.services} className="t-body foot-link">
-            Servicios
+          <Link href={routes.offgrid} className="t-body foot-link">
+            Off grid
           </Link>
           <Link href={routes.studio} className="t-body foot-link">
             Estudio

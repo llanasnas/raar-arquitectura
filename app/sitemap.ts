@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${site.url}${routes.projects}`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}${routes.services}`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
     { url: `${site.url}${routes.studio}`, lastModified: now, changeFrequency: "yearly", priority: 0.6 },
+    { url: `${site.url}${routes.offgrid}`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${site.url}${routes.contact}`, lastModified: now, changeFrequency: "yearly", priority: 0.8 },
   ];
   const projects: MetadataRoute.Sitemap = getProjects()

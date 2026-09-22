@@ -18,5 +18,6 @@ export function BrandSlot() {
 
   // La clave lo remonta al cambiar de página: al volver a la portada el telón vuelve a
   // empezar desde el centro, y no se queda con el estado de «ya aterrizado».
-  return <SiteBrand key={pathname} intro={OPENING.has(pathname) ? "slats" : undefined} corner="br" />;
+  // solo la portada de verdad lleva el RAAR grande: las propuestas A–D se quedan como estaban
+  return <SiteBrand key={pathname} intro={OPENING.has(pathname) ? "slats" : undefined} corner="br" hero={pathname === "/"} />;
 }

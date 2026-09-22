@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Fragment, type CSSProperties, type ReactNode } from "react";
 import { Isotype } from "@/components/site/Isotype";
 import { Reveal } from "@/components/site/v2/Reveal";
 import { Works } from "@/components/site/v2/Works";
 import { ContactFormV2 } from "@/components/forms/ContactFormV2";
-import { Mail, Phone, Pin, Instagram } from "@/components/ui/Icon";
+import { Mail, Phone, Pin, Instagram, LinkedIn } from "@/components/ui/Icon";
 import { copy, studioPage } from "@/lib/copy";
 import { routes, site } from "@/lib/site";
 import type { Project } from "@/lib/content";
@@ -163,6 +163,15 @@ export function Where() {
               @raar.arquitectura
             </a>
           </li>
+          {/* la URL de LinkedIn la tiene que dar el cliente: sin ella, no se pinta el enlace */}
+          {site.linkedin && (
+            <li>
+              <LinkedIn />
+              <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className="t-label link-line">
+                LinkedIn
+              </a>
+            </li>
+          )}
         </ul>
         <div className="where-map">
           <iframe
@@ -185,8 +194,12 @@ export function Where() {
 // más alto que la foto (pantalla estrecha), es la foto la que se estira. `heading` es h1 en
 // la página de contacto y h2 en la portada; `aside` va bajo la foto, en su propia fila (los
 // datos del estudio en /contacto).
+//
+// `parts` parte el título en dos y cada mitad **sube desde debajo de su línea**, una detrás
+// de otra (cliente, 22/09): es el título de /contacto, «Hazlo tuyo. Hazlo RAAR.».
 export function ContactSpread({
   title,
+  parts,
   cta = copy.home.contact.cta,
   heading: Heading = "h2",
   id = "contacto",
@@ -194,6 +207,7 @@ export function ContactSpread({
   aside,
 }: {
   title: string;
+  parts?: readonly string[];
   cta?: string;
   heading?: "h1" | "h2";
   id?: string;
@@ -207,8 +221,25 @@ export function ContactSpread({
       id={id}
       aria-labelledby={`${id}-title`}
     >
-      <Reveal as={Heading} id={`${id}-title`} className="sec-title contact-2-title" variant="up">
-        {title}
+      <Reveal
+        as={Heading}
+        id={`${id}-title`}
+        className="sec-title contact-2-title"
+        variant={parts ? "none" : "up"}
+        data-parts={parts ? "" : undefined}
+        aria-label={parts ? title : undefined}
+      >
+        {parts
+          ? parts.map((part, i) => (
+              // el espacio va fuera de la caja que recorta: dentro se lo come el overflow
+              <Fragment key={part}>
+                {i > 0 ? " " : null}
+                <span className="hz" style={{ "--i": i } as CSSProperties}>
+                  <span>{part}</span>
+                </span>
+              </Fragment>
+            ))
+          : title}
       </Reveal>
       <div className="contact-2-body">
         <div className="contact-2-side">

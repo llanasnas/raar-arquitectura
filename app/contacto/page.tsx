@@ -26,6 +26,7 @@ export default async function ContactPage(props: PageProps<"/contacto">) {
         heading="h1"
         id="contacto"
         title={copy.contactCta.title}
+        parts={copy.contactCta.titleParts}
         defaultType={tipo}
         aside={
           <div className="contact-list">

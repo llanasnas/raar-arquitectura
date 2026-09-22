@@ -14,6 +14,9 @@ import type { Media } from "@/lib/content";
 // Las fotos se ven **enteras**: la caja toma la proporción de la primera (con tope de altura)
 // y las demás se encajan dentro sin recortar. Con una caja a la medida de la pantalla cada
 // render perdía un tercio por arriba y por abajo, y en móvil los lados.
+//
+// Va dentro del `.wrap`, con los mismos márgenes que el texto de debajo (cliente, 22/09): a
+// sangre, la foto y el texto no empezaban ni acababan en la misma línea.
 export function HeroSlider({ items, label }: { items: Media[]; label: string }) {
   const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
@@ -40,7 +43,7 @@ export function HeroSlider({ items, label }: { items: Media[]; label: string }) 
   const ratio = first?.width && first?.height ? `${first.width} / ${first.height}` : "3 / 2";
 
   return (
-    <div className="pj-slider" style={{ "--pj-ar": ratio } as CSSProperties}>
+    <div className="pj-slider wrap" style={{ "--pj-ar": ratio } as CSSProperties}>
       <div className="pj-hero">
         <div ref={track} className="pj-hero-track" role="group" aria-roledescription="carrusel" aria-label={label}>
           {items.map((m, i) => (
@@ -68,7 +71,7 @@ export function HeroSlider({ items, label }: { items: Media[]; label: string }) 
 
       {/* puntos y cuenta debajo, en tinta sobre papel: encima de la foto no se leían */}
       {n > 1 && (
-        <div className="pj-hero-bar wrap">
+        <div className="pj-hero-bar">
           <div className="pj-hero-dots" aria-hidden="true">
             {items.map((m, i) => (
               <button key={m.src} type="button" tabIndex={-1} className="pj-hero-dot" data-on={i === index || undefined} onClick={() => goTo(i)} />

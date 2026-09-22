@@ -15,13 +15,16 @@ import { copy } from "@/lib/copy";
 // cruza el centro: ahí no manda el scroll, **van cambiando solas** (lámina y texto a la vez,
 // cada pocos segundos). Con prefers-reduced-motion no hay pase: se ven las dos entradas.
 //
+// Es a la vez un bloque de la portada y la página /off-grid (cliente, 22/09/2026): ahí el
+// rótulo es el h1.
+//
 // Textos y fotos son de relleno hasta que el cliente mande los suyos (ver lib/copy.ts).
 const ITEMS = copy.home.offgrid.items;
 const MOBILE = "(max-width: 899px)";
 const REDUCED = "(prefers-reduced-motion: reduce)";
 const EVERY = 5000;
 
-export function OffGrid() {
+export function OffGrid({ heading: Heading = "h2" }: { heading?: "h1" | "h2" }) {
   const [active, setActive] = useState(0);
   const steps = useRef<(HTMLElement | null)[]>([]);
 
@@ -62,7 +65,7 @@ export function OffGrid() {
 
   return (
     <section data-menu="dark" className="offgrid wrap" id="off-grid" aria-labelledby="offgrid-title">
-      <Reveal as="h2" id="offgrid-title" className="sec-title" variant="up">
+      <Reveal as={Heading} id="offgrid-title" className="sec-title" variant="up">
         {copy.home.offgrid.title}
       </Reveal>
 

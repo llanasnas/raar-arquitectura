@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { PageHead, CtaBlock, SiteFoot } from "@/components/site/v2/Page";
+import { SiteFoot } from "@/components/site/v2/Page";
 import { Where } from "@/components/site/v2/Home";
 import { Reveal } from "@/components/site/v2/Reveal";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
@@ -13,23 +13,29 @@ export const metadata: Metadata = {
   alternates: { canonical: routes.studio },
 };
 
-// El estudio como lo pidió el cliente en su guía (21/09/2026): igual que en su web anterior.
-// Rótulo y titular («Tres miradas, un objetivo»), y debajo el manifiesto entero a la
-// izquierda con la foto del equipo a la derecha, sin pie. La foto es de 640 px: a su tamaño,
-// nunca a sangre. Después, cómo trabajan (una foto conceptual y las cinco líneas del
-// cliente) y dónde están.
+// El estudio, con el mismo pliego que el bloque del estudio en la portada (cliente,
+// 22/09/2026): rótulo, titular y el manifiesto a la izquierda, justificado, y la foto de los
+// tres a la derecha, a su tamaño (es de 640 px: nunca a sangre). Después, cómo trabajan (la
+// foto conceptual y las cinco líneas del cliente) y dónde están. Sin cierre de visita: lo
+// quitó el cliente.
 export default function StudioPage() {
   return (
     <div className="page">
-      <PageHead kicker={studioPage.title} title={copy.studio.title} />
-
-      <section data-menu="dark" className="studio-open wrap">
-        <Reveal className="studio-open-text t-body studio-manifesto" variant="up">
+      <section data-menu="dark" className="about studio-top wrap" aria-labelledby="studio-title">
+        <div className="about-text">
+          <Reveal className="t-label" variant="line">
+            {studioPage.title}
+          </Reveal>
+          <Reveal as="h1" id="studio-title" className="sec-title about-title" delay={60}>
+            {copy.studio.title}
+          </Reveal>
           {studioPage.manifesto.map((text, i) => (
-            <p key={i}>{text}</p>
+            <Reveal key={i} as="p" className="about-p" delay={120 + i * 60}>
+              {text}
+            </Reveal>
           ))}
-        </Reveal>
-        <figure className="studio-open-media">
+        </div>
+        <figure className="about-media">
           <Reveal className="studio-plate" variant="wipe" delay={80}>
             <Image
               src="/images/about/team-aerial.jpg"
@@ -47,7 +53,6 @@ export default function StudioPage() {
 
       <Where />
 
-      <CtaBlock />
       <SiteFoot />
       <BreadcrumbJsonLd items={[{ name: "Inicio", href: "/" }, { name: studioPage.title, href: routes.studio }]} />
     </div>
@@ -72,7 +77,7 @@ function HowWeWork() {
         </Reveal>
       </figure>
       <div className="how-text">
-        <Reveal as="h2" id="how-title" className="t-display how-title" variant="up">
+        <Reveal as="h2" id="how-title" className="sec-title" variant="up">
           {studioPage.howTitle}
         </Reveal>
         <ol className="how-list">

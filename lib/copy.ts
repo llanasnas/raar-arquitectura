@@ -16,17 +16,14 @@ export const copy = {
     ctaPrimary: "Pide tu primera visita gratuita",
     ctaSecondary: "Ver proyectos",
     scrollHint: "Desliza para entrar",
-    // Portada v2 (maqueta del cliente «Opción S», 18/09/2026): el lema del estudio en grande,
-    // en cursiva y centrado, y debajo sus cuatro palabras en lista. Se van encendiendo una a
-    // una al ritmo del vídeo, y al pasar por encima de una la lámina enseña la obra que la
-    // explica: ver components/site/CoverBody.tsx. El cliente escribió «Rigor» en la maqueta
-    // (en la reunión del 17/09 había dicho «Contexto»): pendiente de confirmar.
+    // Portada v2: el lema del estudio en grande, en cursiva y centrado, bajo el RAAR enorme
+    // que cruza la pantalla (el logotipo fijo, ver components/site/SiteBrand.tsx). Las cuatro
+    // palabras y las obras que enseñaban al pasar por encima se quitaron el 22/09/2026.
     // El lema va **siempre en inglés**, también en la web en español («Guia per a web»,
     // 21/09/2026): es el eslogan del estudio, no se traduce. Dos líneas del mismo ancho: la
     // primera más grande y un punto más gruesa, sin punto tras Barcelona (cliente, 22/09).
     tagline: "Born in Barcelona, designing beyond borders",
     taglineLines: ["Born in Barcelona", "Designing beyond borders"],
-    words: ["Arquitectura", "Diseño", "Atemporalidad", "Rigor"],
     skip: "Saltar el recorrido",
     // Beats sobre el vídeo, en orden de scroll. Máximo dos líneas cada uno.
     beats: [
@@ -159,9 +156,13 @@ export const copy = {
     // el título de la página de contacto es del cliente («Make it yours. Make it RAAR.»,
     // 21/09/2026); el cierre de las demás páginas sigue con la visita
     title: "Hazlo tuyo. Hazlo RAAR.",
+    // las dos mitades entran una detrás de otra en /contacto (cliente, 22/09)
+    titleParts: ["Hazlo tuyo.", "Hazlo RAAR."],
     titleEn: "Make it yours. Make it RAAR.",
     lead: "Gratuita y sin compromiso. Te decimos con sinceridad qué se puede hacer con tu casa.",
     closingTitle: "Empecemos por una visita.",
+    // el cierre del índice de obra (cliente, 22/09): solo la frase y el formulario
+    projectsTitle: "Atrévete a proyectar",
   },
 
   // Bloques propios de la portada (maqueta «Opción S» del cliente, 18/09/2026).
@@ -197,7 +198,7 @@ export const copy = {
     // 22/09). La foto del teléfono también es suya (21/09/2026).
     contact: {
       title: "¿Quieres formar parte de nuestro viaje?",
-      cta: "Contacta con nosotros:",
+      cta: "Contacta con nosotros",
       photoAlt: "Un brazo sostiene en el aire un auricular de teléfono colgando del cable, con el logotipo de RAAR sobre el cielo",
     },
   },
@@ -241,6 +242,8 @@ export const copy = {
     follow: "Síguenos",
     legal: "Legal",
     rights: "Todos los derechos reservados.",
+    // la lista de dónde trabajan no se cierra: «y mucho más» (cliente, 22/09)
+    reachMore: "y mucho más…",
     langs: [
       { code: "es", label: "ES", active: true },
       { code: "ca", label: "CA", active: false },

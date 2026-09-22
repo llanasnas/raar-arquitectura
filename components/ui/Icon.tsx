@@ -74,6 +74,12 @@ export const Instagram = (p: Props) => (
   </svg>
 );
 
+export const LinkedIn = (p: Props) => (
+  <svg {...base} {...p}>
+    <path d="M4.5 9v10.5M4.5 4.75v.5M10 19.5V9m0 4.2c0-2.3 1.5-3.7 3.4-3.7S17 10.9 17 13.2v6.3" />
+  </svg>
+);
+
 export const Menu = (p: Props) => (
   <svg {...base} {...p}>
     <path d="M4 7h16M4 12h16M4 17h16" />
