@@ -17,19 +17,19 @@ const records = {
     ],
   },
   bo24: {
-    hero: "rendair-edit-canvas-22-09-2026-aae1e2ac",
+    hero: "piscina",
     gallery: [
-      ["rendair-edit-canvas-22-09-2026-aae1e2ac", "Fachada y zona exterior"],
+      ["piscina", "Piscina y fachada de la vivienda"],
       ["comedor", "Cocina exterior"],
-      ["garaje", "Acceso al garaje"],
-      ["interior", "Sala de estar"],
+      ["garaje-jpg", "Acceso al garaje"],
+      ["interior-1", "Sala de estar"],
     ],
   },
   gg01: {
     hero: "patio-interior",
     gallery: [
       ["patio-interior", "Patio como núcleo central"],
-      ["render-trasera", "Fachada posterior que abraza el patio"],
+      ["render-trasera-2", "Pasillo de acceso y fachada posterior"],
       ["render-terraza", "Fachada abierta al valle"],
       ["render-acceso-aprobado", "Acceso a la vivienda"],
     ],
@@ -40,6 +40,7 @@ const records = {
       ["fachada", "Fachada de calle"],
       ["acceso", "Acceso a la vivienda"],
       ["terrraza", "Terraza superior"],
+      ["posterior", "Fachada posterior y piscina"],
     ],
   },
   cm25: {
@@ -50,6 +51,13 @@ const records = {
       ["imagen-3", "Terraza de CM25"],
       ["imagen-4", "Acceso de CM25"],
       ["imagen-5", "Detalle de fachada de CM25"],
+    ],
+  },
+  se08: {
+    hero: "hall",
+    gallery: [
+      ["hall", "Hall de acceso de SE08"],
+      ["office", "Espacio de trabajo de SE08"],
     ],
   },
   to39: {
@@ -78,9 +86,10 @@ const records = {
   im10: {
     hero: null,
     gallery: [
-      ["cocina", "Cocina abierta al jardín"],
-      ["despacho", "Despacho"],
-      ["espacio-de-dia", "Espacio de día"],
+      ["cocina-01", "Cocina y comedor"],
+      ["despacho-01", "Despacho"],
+      ["zona-social", "Zona de estar abierta al comedor"],
+      ["hab-p", "Dormitorio principal"],
     ],
     append: true,
   },

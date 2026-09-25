@@ -136,7 +136,8 @@ function loadOne(id: string): Project | null {
 let cache: Project[] | null = null;
 
 export function getProjects(): Project[] {
-  if (cache) return cache;
+  // En desarrollo las fichas Markdown cambian sin reiniciar Next; no conservar su lectura.
+  if (cache && process.env.NODE_ENV === "production") return cache;
   const ids = fs
     .readdirSync(PROJECTS_DIR)
     .filter((f) => f.endsWith(".md"))

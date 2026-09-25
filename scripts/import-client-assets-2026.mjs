@@ -11,13 +11,14 @@ if (!source || !existsSync(join(source, "02. PROJECTES"))) {
 
 const projects = [
   ["ar07", "OBRA NOVA/Ar07/RENDERS", ["RENDER ACCESO.png", "RENDER FINAL FRONTAL.jpg", "RENDER PASILLO INTERIOR.png", "RENDER RELLENO.png"]],
-  ["bo24", "OBRA NOVA/Bo24/RENDERS", ["COMEDOR.png", "GARAJE.png", "INTERIOR.png", "rendair-edit-canvas-22-09-2026-aae1e2ac.png"]],
-  ["gg01", "OBRA NOVA/GG01/RENDERS", ["PATIO INTERIOR.png", "RENDER ACCESO APROBADO .jpg", "RENDER TERRAZA.jpg", "RENDER TRASERA .jpg"]],
-  ["gr16", "OBRA NOVA/Gr16/RENDERS", ["ACCESO.png", "FACHADA.png", "TERRRAZA.png"]],
+  ["bo24", "OBRA NOVA/Bo24/RENDERS", ["COMEDOR.png", "GARAJE.JPG.jpeg", "INTERIOR (1).jpg", "PISCINA_.jpg"]],
+  ["gg01", "OBRA NOVA/GG01/RENDERS", ["PATIO INTERIOR.png", "RENDER ACCESO APROBADO .jpg", "RENDER TERRAZA.jpg", "RENDER TRASERA  (2).png"]],
+  ["gr16", "OBRA NOVA/Gr16/RENDERS", ["ACCESO.png", "FACHADA.png", "TERRRAZA.png", "POSTERIOR.jpg"]],
   ["cm25", "PROJECT MANAGEMENT/Cm25/RENDERS", ["IMAGEN 1 .png", "IMAGEN 2.png", "IMAGEN 3 .png", "IMAGEN 4 .png", "IMAGEN 5.png"]],
+  ["se08", "PROJECT MANAGEMENT/Se08/RENDERS", ["HALL.jpg", "OFFICE.jpg"]],
   ["to39", "PROJECT MANAGEMENT/To39/RENDERS", ["CERAMICA.jpg", "RECEPCION.jpg", "SALAPP.jpg", "YOGA.jpg"]],
   ["co38", "REHABILITACIÓN/Co38/IMÁGENES", ["PISO RAAR VIA LAIETANA-2.jpg", "PISO RAAR VIA LAIETANA-23.jpg", "PISO RAAR VIA LAIETANA-28.jpg", "PISO RAAR VIA LAIETANA-32.jpg", "PISO RAAR VIA LAIETANA-34.jpg", "PISO RAAR VIA LAIETANA-41.jpg", "PISO RAAR VIA LAIETANA-59.jpg", "PISO RAAR VIA LAIETANA-82.jpg", "PISO RAAR VIA LAIETANA-86.jpg"]],
-  ["im10", "REHABILITACIÓN/IM10", ["cocina.png", "Despacho.jpg", "Espacio de día_.jpg"]],
+  ["im10", "REHABILITACIÓN/IM10", ["cocina-01.jpeg", "Despacho-01.jpeg", "ZONA SOCIAL.jpg", "HAB P.jpg"]],
   ["mo07", "REHABILITACIÓN/M023/RENDERS", ["INSTA 1.jpg", "INSTA 2.jpg", "INSTA 3.jpg", "INSTA 5.jpg"]],
   ["pe17", "REHABILITACIÓN/Pe 17/FOTOGRAFÍAS", ["RAAR_GRACIA-14.jpg", "RAAR_GRACIA-2.jpg", "RAAR_GRACIA-20.jpg", "RAAR_GRACIA-26.jpg", "RAAR_GRACIA-27.jpg", "RAAR_GRACIA-4.jpg", "RAAR_GRACIA-8.jpg", "RAAR_GRACIA-9.jpg", "RAAR_GRACIA.jpg"]],
   ["so30", "REHABILITACIÓN/So30/RENDERS", ["FOTO 1 SO30.png", "FOTO 2 SO30.jpg", "FOTO 3 SO30.jpg", "FOTO 4 SO30.PNG", "FOTO 5 SO30.jpg", "FOTO 6 SO30.jpg"]],
