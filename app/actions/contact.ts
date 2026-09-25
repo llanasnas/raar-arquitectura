@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { Resend } from "resend";
+import { sendMail } from "@/lib/mail";
 import { site } from "@/lib/site";
 
 const schema = z.object({
@@ -64,28 +64,34 @@ export async function sendContact(_prev: ContactState, formData: FormData): Prom
     `Consentimiento RGPD: sí · ${new Date().toISOString()}`,
   ].join("\n");
 
-  const apiKey = process.env.RESEND_API_KEY;
-  const to = process.env.CONTACT_TO ?? site.email;
-  const from = process.env.CONTACT_FROM ?? `RAAR web <web@${new URL(site.url).hostname.replace(/^www\./, "")}>`;
-
-  if (!apiKey) {
-    // No mail provider configured yet: keep the lead visible in server logs.
-    console.warn("[contact] RESEND_API_KEY missing — lead logged only:\n" + text);
-    return { status: "ok" };
-  }
+  const esc = (v: string) => v.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+  const rows: [string, string][] = [
+    ["Nombre", d.name],
+    ["Email", d.email],
+    ["Teléfono", d.phone],
+    ["Municipio", d.place || "—"],
+    ["Proyecto", typeLabel[d.type]],
+  ];
+  const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#111110">
+<p style="margin:0 0 16px"><strong>Nueva solicitud de primera visita</strong> · ${esc(site.name)}</p>
+<table cellpadding="6" style="border-collapse:collapse">${rows
+    .map(([k, v]) => `<tr><td style="color:#6B6B66;padding-right:16px">${k}</td><td>${esc(v)}</td></tr>`)
+    .join("")}</table>
+<p style="margin:16px 0 0;white-space:pre-wrap">${d.message ? esc(d.message) : "<em>(sin mensaje)</em>"}</p>
+<p style="margin:16px 0 0;color:#6B6B66;font-size:12px">Consentimiento RGPD: sí · ${new Date().toISOString()}</p>
+</div>`;
 
   try {
-    const resend = new Resend(apiKey);
-    await resend.emails.send({
-      from,
-      to,
-      replyTo: d.email,
+    await sendMail({
       subject: `Primera visita · ${d.name} · ${d.place || typeLabel[d.type]}`,
       text,
+      html,
+      replyTo: d.email,
     });
     return { status: "ok" };
   } catch (err) {
-    console.error("[contact] send failed", err);
+    // sin credenciales en el log: nodemailer solo da código y respuesta del servidor
+    console.error("[contact] send failed", err instanceof Error ? err.message : err);
     return { status: "error", message: "send" };
   }
 }

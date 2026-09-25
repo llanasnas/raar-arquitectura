@@ -39,7 +39,7 @@ Scripts de playwright deben ejecutarse **desde la raíz del proyecto** (resuelve
 - GSAP 3.15 + `@gsap/react` (`useGSAP` con `scope`), ScrollTrigger. Siempre dentro de `gsap.matchMedia()` con rama `(prefers-reduced-motion: no-preference)`. **Un solo pin por página** (el hero). Entradas con `<Reveal>` / `data-reveal="up|left|right|scale"`; profundidad con `<Parallax>` (el padre controla posición y tamaño).
 - Imágenes: `next/image` con `sizes` real y `aspect-ratio` reservado. Originales pesados en `assets-src/` (gitignored); derivados optimizados en `public/images/`.
 - **Cookies y analítica**: `lib/consent.ts` (decisión en `localStorage` `raar:consent`, con versión), `components/site/Consent.tsx` (aviso pequeño sobre la barra, a la izquierda, aceptar/rechazar con el mismo peso; oculto durante la apertura por `html[data-intro-lock]` y en `/cookies`, donde van los ajustes `ConsentSettings`) y `components/site/Analytics.tsx` (GA4 con `next/script`, solo si hay `NEXT_PUBLIC_GA_ID` **y** consentimiento; `page_view` a mano por ruta; al retirar, bandera `ga-disable` y borra `_ga*`). Los dos van en el layout.
-- Formulario: Server Action `app/actions/contact.ts` (zod + honeypot `website` + consentimiento). Envía con Resend si hay `RESEND_API_KEY`; si no, loguea el lead.
+- Formulario: Server Action `app/actions/contact.ts` (zod + honeypot `website` + consentimiento). Envía con `lib/mail.ts`: **SMTP** si hay `SMTP_HOST` (+ `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`), si no Resend (`RESEND_API_KEY`), si no loguea el lead. Destino `CONTACT_TO`, remitente `CONTACT_FROM` (por defecto `SMTP_USER`). Probar credenciales: `node scripts/test-mail.mjs [--send]`; sin buzón real, `--ethereal`.
 - SEO/GEO: metadata por página, canonical, OG, JSON-LD (`components/seo/JsonLd.tsx`), sitemap, robots permite bots de IA.
 - ESLint ignora `docs/`, `scripts/`, `assets-src/`. No usar `React.` como namespace en client components: importar tipos (`type MouseEvent as ReactMouseEvent`).
 
@@ -148,7 +148,7 @@ Reunión con el cliente del **16/09/2026**: cambia el concepto entero. La v1 («
 
 - **Nada inventado.** Sin testimonios, cifras, nombres de socios, premios ni fotos que RAAR no haya dado. Los huecos se dejan explícitos (`testimonials.items: []`, `legalCopy.pending`). Lo asumido está listado en `docs/05-reunion-cliente-preguntas.md`.
 - **Crédito FAL escaso** (~5 $ tras el vídeo actual). Ningún script gasta sin `--confirm`; nunca lanzar generaciones sin que el usuario lo pida y confirme el coste. Antes de regenerar: leer el prompt y las referencias en `scripts/hero/generate-hero-video.mjs` (dry-run imprime coste estimado).
-- Secretos solo en `.env.local` (gitignored): `FAL_KEY`, `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GA_ID`. Plantilla en `.env.example` (sí se commitea). No mostrar valores en salidas ni logs.
+- Secretos solo en `.env.local` (gitignored): `FAL_KEY`, `SMTP_*`, `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_GA_ID`. Plantilla en `.env.example` (sí se commitea). No mostrar valores en salidas ni logs.
 - No commitear ni inicializar git salvo que el usuario lo pida.
 - Verificar con capturas (desktop 1440 + móvil 390) después de cambios visuales; `html, body { overflow-x: clip }` existe porque las entradas con `x` ensanchaban el viewport móvil.
 - Archivos con acentos: escribir con la herramienta Write o Python, no con heredocs de Git Bash.
