@@ -44,7 +44,7 @@ export const copy = {
   featured: {
     title: "Tres maneras de empezar una casa.",
     lead: "Reformas entre medianeras, casas nuevas en el Vallès y el Gironès, naves convertidas en vivienda. Todas empezaron con una visita.",
-    all: "Ver los 12 proyectos",
+      all: "Ver todos los proyectos",
   },
 
   services: {
@@ -118,8 +118,8 @@ export const copy = {
       "RAAR nace del encuentro de tres arquitectos formados en Barcelona, unidos por una intuición común: la arquitectura puede ser una fuerza transformadora, consciente y libre, que encuentra su expresión en lo atemporal.",
       "Creemos en una arquitectura de gestos sutiles, integrada en su entorno y construida con la nobleza de los materiales que da la naturaleza. Una arquitectura que no necesita ostentación para tener presencia.",
     ],
-    cta: "Conoce al estudio",
-    photoAlt: "Los tres socios de RAAR caminando juntos, vistos desde arriba",
+    cta: "Conoce el estudio",
+    photoAlt: "Tres integrantes de RAAR juntos junto al mar",
   },
 
   faq: {
@@ -253,9 +253,9 @@ export const copy = {
 
   projects: {
     title: "Proyectos",
-    lead: "Doce proyectos entre Barcelona, el Vallès y el Gironès. Reformas, obra nueva y rehabilitaciones.",
+    lead: "Proyectos de obra nueva, rehabilitación, dirección de obra y project management en Barcelona y más allá.",
     all: "Todos",
-    processing: "En proceso",
+    processing: "Ficha pendiente",
     filterType: "Tipo",
     filterPlace: "Lugar",
     empty: "No hay proyectos con ese filtro.",
@@ -272,8 +272,8 @@ export const copy = {
     renders: "Imágenes",
     concept: "Diagrama de proyecto",
     conceptNote: "Del emplazamiento a la planta: cómo se ordena la casa.",
-    inProcessTitle: "Proyecto en proceso",
-    inProcessText: "Estamos en obra. Publicaremos la ficha cuando esté terminada.",
+    inProcessTitle: "Ficha en preparación",
+    inProcessText: "Estamos preparando la información completa de este proyecto.",
     ctaTitle: "¿Tienes una casa parecida?",
     ctaText: "Cuéntanos qué te gustaría hacer. La primera visita es gratuita.",
     langNote: "Texto original en inglés; traducción en curso.",
@@ -342,4 +342,38 @@ export const consentCopy = {
 
 export const legalCopy = {
   pending: "Este texto se completará con los datos registrales de RAAR arquitectura (razón social, NIF, colegiación) antes de la publicación.",
+} as const;
+
+// Blog y páginas de zona (SEO local, 25/09/2026). Texto nuevo: no toca nada de lo anterior.
+export const editorialCopy = {
+  blog: {
+    kicker: "Blog",
+    title: "Notas de obra",
+    lead: "Permisos, normativa y decisiones de proyecto en Barcelona, el Vallès, Girona, la Costa Brava y Andorra. Lo que conviene saber antes de empezar una casa.",
+    metaTitle: "Blog de arquitectura: licencias y normativa",
+    related: "Sigue leyendo",
+    updated: "Actualizado el",
+    published: "Publicado el",
+    minutes: "min de lectura",
+    zone: "Zona",
+    works: "Obra citada",
+    faqTitle: "Preguntas frecuentes",
+    note: "Este artículo resume normativa pública con fines informativos. Cada caso depende de su parcela, su edificio y la redacción vigente de las normas: compruébalo antes de decidir.",
+  },
+  zones: {
+    kicker: "Dónde trabajamos",
+    title: "Arquitectos en Barcelona, el Vallès, Girona, la Costa Brava y Andorra",
+    lead: "Estudio en el Eixample de Barcelona. Proyectamos y dirigimos obra nueva, reformas integrales y rehabilitaciones allí donde está tu casa.",
+    metaTitle: "Arquitectos en Barcelona, Vallès, Girona y Andorra",
+    works: "Obra en la zona",
+    worksNone: "Aún no publicamos obra en esta zona. Pregúntanos por proyectos en curso.",
+    posts: "Para leer antes de empezar",
+    faqTitle: "Preguntas sobre",
+    facts: "En resumen",
+    studio: "Estudio",
+    area: "Zona",
+    visit: "Primera visita",
+    visitText: "Gratuita y sin compromiso",
+    all: "Todas las zonas",
+  },
 } as const;

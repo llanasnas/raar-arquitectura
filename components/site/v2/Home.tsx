@@ -100,13 +100,14 @@ export function About() {
             aria-label={copy.studio.cta}
           >
             <Isotype />
+            <span>{copy.studio.cta}</span>
           </Link>
         </Reveal>
       </div>
       <figure className="about-media">
         <Reveal className="studio-plate" variant="wipe" delay={80}>
           <Image
-            src="/images/about/team-aerial.jpg"
+            src="/images/home-2026/equipo-251028-raar-0044.jpg"
             alt={copy.studio.photoAlt}
             fill
             sizes="(min-width: 900px) 640px, 100vw"

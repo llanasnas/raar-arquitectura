@@ -55,12 +55,13 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
       <div className="page">
         <div className="pj-head wrap">
           <Crumbs items={[{ label: t.back, href: routes.projects }, { label: p.codeDisplay }]} />
-          <Reveal as="h1" className="t-title pj-title" variant="up">
-            {p.name}
-          </Reveal>
         </div>
 
-        {heroItems.length > 0 && <HeroSlider items={heroItems} label={`${p.name} · ${t.renders}`} />}
+        {heroItems.length > 0 ? (
+          <HeroSlider items={heroItems} label={`${p.name} · ${t.renders}`} title={p.name} />
+        ) : (
+          <h1 className="t-title pj-title wrap">{p.name}</h1>
+        )}
 
         {p.status === "processing" ? (
           <section data-menu="dark" className="sheet wrap">
@@ -157,15 +158,17 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
             )}
 
             {/* segundo bloque de texto + renders */}
-            <section data-menu="dark" className="sheet wrap">
-              <div className="sheet-text">
-                {p.text.block2.map((text, i) => (
-                  <Reveal key={i} as="p" className="sheet-p" variant="up" delay={i * 70}>
-                    {text}
-                  </Reveal>
-                ))}
-              </div>
-            </section>
+            {p.text.block2.length > 0 && (
+              <section data-menu="dark" className="sheet wrap">
+                <div className="sheet-text">
+                  {p.text.block2.map((text, i) => (
+                    <Reveal key={i} as="p" className="sheet-p" variant="up" delay={i * 70}>
+                      {text}
+                    </Reveal>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {p.gallery.length > 0 && (
               <div className="gal wrap">
@@ -184,15 +187,17 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
             )}
 
             {/* tercer bloque de texto + planos */}
-            <section data-menu="dark" className="sheet wrap">
-              <div className="sheet-text">
-                {p.text.block3.map((text, i) => (
-                  <Reveal key={i} as="p" className="sheet-p" variant="up" delay={i * 70}>
-                    {text}
-                  </Reveal>
-                ))}
-              </div>
-            </section>
+            {p.text.block3.length > 0 && (
+              <section data-menu="dark" className="sheet wrap">
+                <div className="sheet-text">
+                  {p.text.block3.map((text, i) => (
+                    <Reveal key={i} as="p" className="sheet-p" variant="up" delay={i * 70}>
+                      {text}
+                    </Reveal>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {p.plans.length > 0 && (
               <div className="wrap">

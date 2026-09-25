@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { Isotype } from "@/components/site/Isotype";
 import { Reveal } from "@/components/site/v2/Reveal";
-import { copy } from "@/lib/copy";
+import { copy, editorialCopy } from "@/lib/copy";
+import { getZones } from "@/lib/editorial";
 import { routes, site } from "@/lib/site";
 
 // Piezas comunes de las páginas interiores en el lenguaje v2 «revista»: papel, tinta y mono.
@@ -158,7 +159,7 @@ export function CtaBlock({ title, lead }: { title?: string; lead?: string }) {
   );
 }
 
-// Pie de toda la web, en el mismo lenguaje: tres columnas con regla (contacto, web, legal),
+// Pie de toda la web, en el mismo lenguaje: cuatro columnas con regla (contacto, web, zonas, legal),
 // el rótulo del estudio arriba y el copyright abajo. Reserva la altura de la barra fija
 // (menú y logotipo) para que la última línea no quede debajo. `mark` añade el isotipo
 // centrado al final, como cierra la portada en la maqueta del cliente.
@@ -217,6 +218,20 @@ export function SiteFoot({ mark = false }: { mark?: boolean }) {
           <Link href={routes.contact} className="t-body foot-link">
             Contacto
           </Link>
+          <Link href={routes.blog} className="t-body foot-link">
+            Blog
+          </Link>
+        </div>
+        {/* las páginas de zona (SEO local): el pie es el enlace que las une a toda la web */}
+        <div className="foot-col">
+          <Link href={routes.zones} className="t-label foot-col-title">
+            {editorialCopy.zones.kicker}
+          </Link>
+          {getZones().map((z) => (
+            <Link key={z.slug} href={routes.zone(z.slug)} className="t-body foot-link">
+              {z.name}
+            </Link>
+          ))}
         </div>
         <div className="foot-col">
           <span className="t-label foot-col-title">{copy.footer.legal}</span>

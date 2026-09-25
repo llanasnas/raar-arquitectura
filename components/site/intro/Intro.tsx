@@ -46,11 +46,16 @@ export function Intro() {
       window.scrollTo({ top: 0, behavior: "instant" });
     }
 
-    // `intro-logo-land` es lo último que termina: cuando el logotipo aterriza, se suelta
+    // `intro-logo-land` es lo último que termina: cuando el logotipo aterriza, se suelta.
+    // El temporizador es solo de respaldo y no debe volver a cerrar la apertura más tarde:
+    // para entonces la persona ya puede haber hecho scroll.
+    let unlocked = false;
     const unlock = () => {
+      if (unlocked) return;
+      unlocked = true;
+      clearTimeout(timer);
       html.removeAttribute("data-intro-lock");
       if (reloaded) {
-        window.scrollTo({ top: 0, behavior: "instant" });
         history.scrollRestoration = "auto";
       }
     };

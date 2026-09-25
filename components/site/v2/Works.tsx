@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/site/v2/Reveal";
 import { routes } from "@/lib/site";
 import type { Project } from "@/lib/content";
+import { copy } from "@/lib/copy";
 
 // El índice de obra como pliego: doce columnas y un ritmo de siete posiciones que se repite
 // (ver .work en globals.css). Ninguna obra ocupa lo mismo que la anterior, así que la página
@@ -32,7 +33,7 @@ export function Works({ projects, rhythm = "index", heading = "h2" }: { projects
               {/* pie según el cliente (guía del 21/09): «Referencia. Tipo. Ubicación», título y subtítulo */}
               <div className="work-cap">
                 <span className="t-label">
-                  {project.code}. {project.typeLabel}. {wip ? <span className="work-tag">En proceso</span> : project.place}
+                  {project.code}. {project.typeLabel}. {wip ? <span className="work-tag">{copy.projects.processing}</span> : project.place}
                 </span>
                 <Name className="work-name">{project.name}</Name>
                 <p className="t-body work-sum">{project.summary}</p>

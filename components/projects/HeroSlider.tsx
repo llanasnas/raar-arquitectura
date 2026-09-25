@@ -17,7 +17,7 @@ import type { Media } from "@/lib/content";
 //
 // Va dentro del `.wrap`, con los mismos márgenes que el texto de debajo (cliente, 22/09): a
 // sangre, la foto y el texto no empezaban ni acababan en la misma línea.
-export function HeroSlider({ items, label }: { items: Media[]; label: string }) {
+export function HeroSlider({ items, label, title }: { items: Media[]; label: string; title: string }) {
   const track = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const n = items.length;
@@ -56,6 +56,8 @@ export function HeroSlider({ items, label }: { items: Media[]; label: string }) 
             </div>
           ))}
         </div>
+
+        <h1 className="pj-hero-title">{title}</h1>
 
         {n > 1 && (
           <>

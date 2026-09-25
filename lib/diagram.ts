@@ -9,10 +9,7 @@ import { TYPOLOGIES } from "@/lib/typologies";
 // Elementos del perímetro que todavía no tienen ficha en la web: se dibujan, pero no llevan
 // a ningún sitio. Son obras de las que el cliente aún no ha pasado material.
 const PENDING: Record<string, { label: string; note: string }> = {
-  bo24: { label: "BO_24", note: "Ficha en preparación" },
-  cm25: { label: "CM_25", note: "Ficha en preparación" },
   ll14: { label: "LL_14", note: "Ficha en preparación" },
-  so30: { label: "SO_30", note: "Ficha en preparación" },
 };
 
 // Los códigos se leen igual en todo el perímetro: las obras en proceso vienen sin guion bajo
@@ -59,7 +56,7 @@ export function getDiagram(): DiagramGroup[] {
           place: project.place,
           image: { src: media.src, alt: media.alt },
           href: routes.project(projectId),
-          note: project.status === "processing" ? "En proceso" : null,
+          note: project.status === "processing" ? "Ficha en preparación" : null,
         };
       }
       const pending = PENDING[projectId] ?? { label: projectId.toUpperCase(), note: "Ficha en preparación" };

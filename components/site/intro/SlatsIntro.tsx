@@ -12,7 +12,8 @@ import { SlatShow } from "@/components/site/intro/SlatShow";
 //
 // El orden de salida vive en el CSS, no aquí: un `--lift` en línea ganaría a la media query.
 //
-// Dos fotos por franja (ocho obras). Con tres, la apertura se comía medio mega de más para
+// Dos fotos por franja (obras, obra, materiales y equipo, selección del cliente de 2026).
+// Con tres, la apertura se comía medio mega de más para
 // enseñar una foto que casi no da tiempo a ver.
 //
 // El logotipo es el `SiteBrand` de la página: viaja del centro a su esquina al final.
@@ -22,22 +23,22 @@ const SLATS: Slat[] = [
   {
     start: 0,
     photos: [
-      "/images/projects/im10/hero.jpg",
-      "/images/projects/pe17/render-01-escena-1.jpg",
+      "/images/home-2026/renders-acceso.jpg",
+      "/images/home-2026/renders-comedor.jpg",
     ],
   },
   {
     start: 420,
     photos: [
-      "/images/projects/gg01/render-01-patio.jpg",
-      "/images/projects/to39/render-02-recepcion.jpg",
+      "/images/home-2026/obra-20240123-100707-copy.jpg",
+      "/images/home-2026/obra-251028-raar-0071.jpg",
     ],
   },
   {
     start: 840,
     photos: [
-      "/images/projects/ar07/render-03-interior.jpg",
-      "/images/projects/vi02/render-01-zona-social-1.jpg",
+      "/images/home-2026/materiales-img-4740.jpg",
+      "/images/home-2026/materiales-img-4815.jpg",
     ],
   },
   // 4ª · ventana al vídeo
@@ -46,8 +47,8 @@ const SLATS: Slat[] = [
     // 5ª · la que parte el vídeo por la mitad, en los dos tamaños
     start: 1260,
     photos: [
-      "/images/projects/mo07/render-02-escena-7.jpg",
-      "/images/projects/to39/render-03-yoga.jpg",
+      "/images/home-2026/equipo-251028-raar-0044.jpg",
+      "/images/home-2026/equipo-251028-raar-0473.jpg",
     ],
   },
   // 6ª · ventana al vídeo

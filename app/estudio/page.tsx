@@ -38,7 +38,7 @@ export default function StudioPage() {
         <figure className="about-media">
           <Reveal className="studio-plate" variant="wipe" delay={80}>
             <Image
-              src="/images/about/team-aerial.jpg"
+              src="/images/home-2026/equipo-251028-raar-0044.jpg"
               alt={copy.studio.photoAlt}
               fill
               priority

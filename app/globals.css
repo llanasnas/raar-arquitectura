@@ -524,7 +524,7 @@
   .cover-slogan {
     --l1: 1.36;
     font-size: clamp(1.7rem, min(3.4vw, 5.2svh), 3.9rem);
-    font-style: italic;
+    font-style: normal;
     font-weight: 500;
     line-height: 1.08;
     letter-spacing: -0.02em;
@@ -539,6 +539,9 @@
     font-size: calc(1em * var(--l1));
     font-weight: 600;
     line-height: 1;
+  }
+  .cover-slogan > span:last-child {
+    font-style: italic;
   }
   /* La lámina del vídeo ocupa la mitad derecha, de arriba abajo. Durante el telón es
      `position: fixed` con la misma caja que ocupa en el flujo, así que al soltar el fixed no
@@ -1260,16 +1263,21 @@
     .menu ul {
       gap: 0.3rem 0.6rem;
       flex-wrap: nowrap;
+      max-width: calc(100vw - 2 * var(--gutter-2));
     }
     /* el li en flex: si no, hereda la línea del cuerpo (1,6) y mide 26 px con letra de 11 */
     .menu li {
       display: flex;
     }
     .menu a {
-      font-size: 0.68rem;
+      font-size: clamp(0.56rem, 2.77vw, 0.68rem);
       letter-spacing: 0.02em;
       gap: 0.35em;
       white-space: nowrap;
+    }
+    .menu[data-tone="light"] {
+      color: var(--carbon);
+      text-shadow: none;
     }
 
     /* el logotipo no cabe al lado del menú: se pone justo encima, con el mismo margen
@@ -1698,7 +1706,7 @@
     text-align: center;
   }
   .philo-mark {
-    --iso-w: clamp(4rem, 5.6vw, 6.5rem);
+    --iso-w: clamp(5rem, 6.4vw, 7.5rem);
   }
   .philo-text {
     font-size: clamp(1.2rem, 2.1vw, 2rem);
@@ -1789,10 +1797,21 @@
   }
   /* el isotipo es el enlace a la página del estudio: centrado bajo el texto, como en la maqueta */
   .about-mark {
-    display: inline-block;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
     --iso-w: clamp(3rem, 4vw, 4.5rem);
     margin-inline: auto;
     transition: transform 480ms var(--ease-out-expo);
+  }
+  .about-mark span {
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
   }
   .about-text .about-foot {
     text-align: center;
@@ -2143,6 +2162,13 @@
     -webkit-mask-image: linear-gradient(to right, #000 42%, transparent 56%);
     mask-image: linear-gradient(to right, #000 42%, transparent 56%);
   }
+  @media (max-width: 899px) {
+    /* En móvil la navegación recorre todo el ancho, también sobre la lámina de vídeo. */
+    main:has(.cover)::after {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+  }
 
   .page-head {
     display: grid;
@@ -2281,7 +2307,7 @@
   .pj-head {
     display: grid;
     gap: 0.9rem;
-    padding-block: clamp(3rem, 10vh, 7rem) clamp(1.5rem, 4vh, 2.5rem);
+    padding-block: clamp(2.5rem, 7vh, 5rem) clamp(1rem, 2vh, 1.5rem);
   }
   /* el nombre de la obra baja de cuerpo: la referencia, el lugar y el tipo van en grande en la
      ficha, como en la web anterior del cliente (guía del 21/09) */
@@ -2302,6 +2328,21 @@
     max-height: min(82svh, 900px);
     overflow: hidden;
     background: var(--paper);
+  }
+  .pj-hero-title {
+    position: absolute;
+    z-index: 2;
+    left: clamp(1rem, 3vw, 2.5rem);
+    bottom: clamp(1rem, 3vw, 2.5rem);
+    max-width: min(70%, 26ch);
+    padding: 0.4em 0.65em;
+    color: white;
+    background: rgb(17 17 16 / 0.58);
+    font-size: clamp(1.15rem, 2.4vw, 2.4rem);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    pointer-events: none;
   }
   .pj-hero-track {
     position: absolute;
@@ -2371,19 +2412,31 @@
     gap: 1rem;
     padding-top: 0.8rem;
   }
+  /* el punto se dibuja a 8 px, pero el botón mide 24 × 24 para que se pueda tocar con el
+     dedo; el margen negativo mantiene la misma separación visual y la misma altura de barra */
   .pj-hero-dots {
     display: flex;
-    gap: 0.55rem;
+    gap: 0;
+    margin: -0.5rem -0.5rem -0.5rem -0.5rem;
   }
   .pj-hero-dot {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  .pj-hero-dot::before {
+    content: "";
     width: 0.5rem;
     height: 0.5rem;
-    padding: 0;
     border: 1px solid var(--carbon);
-    background: transparent;
     transition: background-color 240ms var(--ease-out-expo);
   }
-  .pj-hero-dot[data-on] {
+  .pj-hero-dot[data-on]::before {
     background: var(--carbon);
   }
   .pj-hero-count {
@@ -2843,7 +2896,7 @@
   }
   .foot-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 2rem clamp(1.5rem, 3vw, 3.5rem);
     padding-block: clamp(1.5rem, 4vh, 2.5rem);
     border-block: 1px solid var(--rule);
@@ -2892,6 +2945,267 @@
     height: 1px;
     background: var(--carbon);
     transform: translateY(-0.35em);
+  }
+
+  /* ── Blog y páginas de zona (SEO local, 25/09) ───────
+     Texto largo en Markdown dentro de la columna de la ficha (.sheet-text). Mismo cuerpo que
+     la ficha de obra, pero alineado a la izquierda: aquí hay tablas, listas y enlaces, y el
+     justificado abre ríos en líneas con palabras largas. */
+  /* un hijo de retícula no encoge por debajo de su contenido (min-width: auto): sin esto, la
+     tabla de 34rem ensanchaba la columna entera en móvil aunque tenga su propio scroll */
+  .sheet-text {
+    min-width: 0;
+  }
+  .md {
+    font-size: clamp(0.98rem, 1.08vw, 1.08rem);
+    line-height: 1.7;
+    color: var(--carbon-2);
+    max-width: 72ch;
+    text-wrap: pretty;
+  }
+  .md > * + * {
+    margin-top: 1.1rem;
+  }
+  .md h2 {
+    margin-top: clamp(2.2rem, 6vh, 3.4rem);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--rule);
+    font-size: clamp(1.3rem, 2.1vw, 1.9rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--carbon);
+    scroll-margin-top: 2rem;
+  }
+  .md > h2:first-child {
+    margin-top: 0;
+  }
+  .md h3 {
+    margin-top: 1.8rem;
+    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+    font-weight: 500;
+    color: var(--carbon);
+  }
+  .md strong {
+    font-weight: 500;
+    color: var(--carbon);
+  }
+  .md a {
+    color: var(--carbon);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+  .md a:hover {
+    text-decoration-thickness: 2px;
+  }
+  .md ul,
+  .md ol {
+    border-top: 1px solid var(--rule);
+  }
+  .md li {
+    position: relative;
+    padding: 0.7rem 0 0.7rem 2rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .md ul > li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1.55em;
+    width: 1.1rem;
+    height: 1px;
+    background: var(--carbon);
+  }
+  .md ol {
+    counter-reset: md;
+  }
+  .md ol > li {
+    counter-increment: md;
+  }
+  .md ol > li::before {
+    content: counter(md, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0.95em;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--carbon);
+  }
+  /* tablas: se desplazan dentro de su caja en móvil, nunca ensanchan la página */
+  .md-table {
+    overflow-x: auto;
+    border-top: 1px solid var(--carbon);
+  }
+  .md table {
+    width: 100%;
+    min-width: 34rem;
+    border-collapse: collapse;
+    font-size: 0.92em;
+    line-height: 1.5;
+  }
+  .md th {
+    text-align: left;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--carbon);
+  }
+  .md th,
+  .md td {
+    padding: 0.8rem 1rem 0.8rem 0;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .md-toc {
+    display: grid;
+    gap: 0.6rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+  }
+  .md-toc ol {
+    display: grid;
+    gap: 0.45rem;
+    font-size: 0.9rem;
+    line-height: 1.35;
+  }
+  .md-zones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.9rem;
+  }
+  .md-note {
+    margin-top: clamp(2rem, 5vh, 3rem);
+    max-width: 72ch;
+    letter-spacing: 0.08em;
+    line-height: 1.6;
+    text-transform: none;
+    font-weight: 400;
+    font-size: 0.8rem;
+  }
+  .md-sources {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    max-width: 72ch;
+  }
+  .md-sources ul {
+    display: grid;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: var(--carbon-2);
+  }
+  .vspace-title {
+    padding-top: clamp(2.5rem, 7vh, 4rem);
+    margin-bottom: clamp(1.2rem, 3vh, 2rem);
+  }
+  .post-h1 {
+    max-width: 22ch;
+  }
+  /* el índice del blog va pegado a los filtros de la cabecera, sin el aire de sección */
+  .posts-index {
+    padding-bottom: clamp(3rem, 9vh, 6rem);
+  }
+  .posts-index > .posts {
+    margin-top: 0;
+    border-top: 0;
+  }
+
+  /* índice del blog: filas con regla, como el sumario de una revista */
+  .posts {
+    border-top: 1px solid var(--rule);
+    margin-top: clamp(1.2rem, 3vh, 2rem);
+  }
+  .post-link {
+    display: grid;
+    grid-template-columns: minmax(12rem, 3fr) 9fr;
+    gap: 0.4rem clamp(1.5rem, 3vw, 3.5rem);
+    padding-block: clamp(1.2rem, 3.2vh, 2rem);
+    border-bottom: 1px solid var(--rule);
+  }
+  .post-meta {
+    grid-row: 1 / span 2;
+  }
+  .post-title {
+    font-size: clamp(1.2rem, 2.1vw, 1.9rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    transition: opacity 240ms var(--ease-out-expo);
+  }
+  .post-sum {
+    max-width: 62ch;
+  }
+  .post-link:hover .post-title {
+    opacity: 0.6;
+  }
+
+  /* índice de zonas: lámina a la izquierda, rótulo y entradilla a la derecha */
+  .zones {
+    border-top: 1px solid var(--rule);
+  }
+  .zone-link {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.2rem, 3vw, 3.5rem);
+    align-items: center;
+    padding-block: clamp(1.5rem, 4vh, 2.5rem);
+    border-bottom: 1px solid var(--rule);
+  }
+  .zone-plate {
+    grid-column: 1 / span 4;
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--rule);
+  }
+  .zone-img {
+    position: absolute;
+    inset: 0;
+  }
+  .zone-img img {
+    transition: transform 900ms var(--ease-out-expo);
+  }
+  .zone-link:hover .zone-img img {
+    transform: scale(1.03);
+  }
+  .zone-empty {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+  .zone-cap {
+    grid-column: 6 / -1;
+    display: grid;
+    gap: 0.7rem;
+  }
+  .zone-name {
+    max-width: 22ch;
+  }
+
+  @media (max-width: 899px) {
+    .post-link {
+      grid-template-columns: 1fr;
+    }
+    .post-meta {
+      grid-row: auto;
+    }
+    .zone-link {
+      grid-template-columns: 1fr;
+    }
+    .zone-plate,
+    .zone-cap {
+      grid-column: 1;
+    }
+    .md li {
+      padding-left: 1.7rem;
+    }
   }
 
   /* ── Servicios ─────────────────────────────────────── */

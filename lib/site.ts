@@ -45,6 +45,11 @@ export const routes = {
   // Off grid no tiene página: es un bloque de la portada (ancla)
   offgrid: "/off-grid",
   contact: "/contacto",
+  // SEO local y blog: una página por zona de trabajo y artículos enlazados a ellas
+  zones: "/arquitectos",
+  zone: (slug: string) => `/arquitectos/${slug}`,
+  blog: "/blog",
+  post: (slug: string) => `/blog/${slug}`,
   legal: "/aviso-legal",
   privacy: "/privacidad",
   cookies: "/cookies",
