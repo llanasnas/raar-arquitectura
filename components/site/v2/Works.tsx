@@ -11,7 +11,17 @@ import { copy } from "@/lib/copy";
 //
 // Las obras en proceso van en gris y con su etiqueta: no se enseñan como si estuvieran
 // terminadas. La foto de una obra en proceso es la miniatura, que es lo único que hay.
-const SIZES = "(min-width: 900px) 58vw, 100vw";
+//
+// `sizes` sale de las columnas que ocupa cada posición (ver .work y .works-featured en
+// globals.css): con un 58vw para todas, una lámina de 4 columnas pedía la foto de 1920 px y
+// tardaba el doble en llegar. El .wrap se para en 1680 px, así que ahí el ancho es fijo.
+const SPANS = { index: [7, 4, 4, 7, 5, 5, 8], featured: [6, 6, 4, 7, 7, 4] } as const;
+
+function sizesFor(rhythm: "index" | "featured", i: number) {
+  const cycle = SPANS[rhythm];
+  const span = cycle[i % cycle.length];
+  return `(min-width: 1680px) ${Math.round((1680 * span) / 12)}px, (min-width: 900px) ${Math.round((100 * span) / 12)}vw, 100vw`;
+}
 
 // `rhythm="featured"` es la versión de la portada: cuatro obras con su propio reparto (ver
 // .works-featured). `heading` baja el título a h3 cuando la sección ya lleva su h2.
@@ -27,7 +37,7 @@ export function Works({ projects, rhythm = "index", heading = "h2" }: { projects
             <Link href={routes.project(project.id)} className="work-link">
               <Reveal className="work-plate" variant="wipe" delay={(i % 2) * 90}>
                 <span className="work-zoom">
-                  <Image src={media.src} alt={media.alt} fill sizes={SIZES} priority={i < 2} className="object-cover" />
+                  <Image src={media.src} alt={media.alt} fill sizes={sizesFor(rhythm, i)} priority={i < 2} className="object-cover" />
                 </span>
               </Reveal>
               {/* pie según el cliente (guía del 21/09): «Referencia. Tipo. Ubicación», título y subtítulo */}

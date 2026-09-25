@@ -21,6 +21,9 @@ const nextConfig: NextConfig = {
     // o pesaba el doble de lo necesario.
     deviceSizes: [640, 750, 828, 1080, 1200, 1600, 1920, 2048, 3840],
     formats: ["image/avif", "image/webp"],
+    // Las fotos de public/ no cambian de URL sin cambiar de archivo: que el optimizador guarde
+    // lo que ya ha codificado un mes (por defecto son 4 h y el AVIF tarda ~1 s en rehacerse).
+    minimumCacheTTL: 2678400,
   },
   async redirects() {
     return [

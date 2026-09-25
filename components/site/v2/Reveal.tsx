@@ -9,6 +9,49 @@ import { useEffect, useRef, type CSSProperties, type ElementType, type HTMLAttri
 // entera igual: `.rv` solo existe mientras el observador no ha dicho nada, y con
 // prefers-reduced-motion el CSS lo neutraliza.
 let observer: IntersectionObserver | null = null;
+let ahead: IntersectionObserver | null = null;
+
+// Las fotos van con loading="lazy" y el navegador no las pide hasta tenerlas casi encima: con
+// scroll rápido llegaban 1,5 s tarde y la cortina se abría sobre una caja vacía. Este segundo
+// observador mira pantalla y media por delante y las pasa a «eager» para que se pidan ya.
+function prefetch(el: HTMLElement) {
+  if (!ahead) {
+    ahead = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => {
+            img.loading = "eager";
+          });
+          ahead?.unobserve(entry.target);
+        }
+      },
+      { rootMargin: "0px 0px 150% 0px" },
+    );
+  }
+  ahead.observe(el);
+  return () => ahead?.unobserve(el);
+}
+
+// La cortina (wipe) no se abre hasta que su foto está descodificada: si no, se anima un hueco
+// y la foto aparece de golpe al final. Con un tope, para no dejar nunca una lámina sin entrar.
+const IMAGE_WAIT_MS = 2500;
+
+function ready(img: HTMLImageElement | null): Promise<void> {
+  if (!img || (img.complete && img.naturalWidth > 0)) return Promise.resolve();
+  return new Promise((resolve) => {
+    const done = () => {
+      clearTimeout(timer);
+      img.removeEventListener("load", done);
+      img.removeEventListener("error", done);
+      // decode() evita el último frame en blanco mientras el navegador pinta la foto
+      img.decode().catch(() => {}).finally(resolve);
+    };
+    const timer = setTimeout(done, IMAGE_WAIT_MS);
+    img.addEventListener("load", done);
+    img.addEventListener("error", done);
+  });
+}
 
 function watch(el: HTMLElement) {
   if (!observer) {
@@ -16,8 +59,10 @@ function watch(el: HTMLElement) {
       (entries) => {
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
-          entry.target.setAttribute("data-in", "");
-          observer?.unobserve(entry.target);
+          const target = entry.target as HTMLElement;
+          observer?.unobserve(target);
+          const wait = target.dataset.rv === "wipe" ? ready(target.querySelector("img")) : Promise.resolve();
+          wait.then(() => target.setAttribute("data-in", ""));
         }
       },
       // un poco antes de que asome del todo: la lámina no debe entrar «tarde»
@@ -25,7 +70,11 @@ function watch(el: HTMLElement) {
     );
   }
   observer.observe(el);
-  return () => observer?.unobserve(el);
+  const stopAhead = el.querySelector("img") ? prefetch(el) : null;
+  return () => {
+    observer?.unobserve(el);
+    stopAhead?.();
+  };
 }
 
 // `none` no anima nada: solo marca `data-in` al entrar, para que lo que hay dentro se dibuje
