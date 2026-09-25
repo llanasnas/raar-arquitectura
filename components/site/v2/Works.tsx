@@ -25,7 +25,7 @@ function sizesFor(rhythm: "index" | "featured", i: number) {
 
 // `rhythm="featured"` es la versión de la portada: cuatro obras con su propio reparto (ver
 // .works-featured). `heading` baja el título a h3 cuando la sección ya lleva su h2.
-export function Works({ projects, rhythm = "index", heading = "h2" }: { projects: Project[]; rhythm?: "index" | "featured"; heading?: "h2" | "h3" }) {
+export function Works({ projects, rhythm = "index", heading = "h2", typeFilter }: { projects: Project[]; rhythm?: "index" | "featured"; heading?: "h2" | "h3"; typeFilter?: string }) {
   const Name = heading;
   return (
     <ol data-menu="dark" className={rhythm === "featured" ? "works works-featured wrap" : "works wrap"}>
@@ -34,7 +34,7 @@ export function Works({ projects, rhythm = "index", heading = "h2" }: { projects
         const media = wip || !project.hero ? project.thumb : project.hero;
         return (
           <li key={project.id} className="work" data-wip={wip || undefined}>
-            <Link href={routes.project(project.id)} className="work-link">
+            <Link href={typeFilter ? `${routes.project(project.id)}?tipo=${encodeURIComponent(typeFilter)}` : routes.project(project.id)} className="work-link">
               <Reveal className="work-plate" variant="wipe" delay={(i % 2) * 90}>
                 <span className="work-zoom">
                   <Image src={media.src} alt={media.alt} fill sizes={sizesFor(rhythm, i)} priority={i < 2} className="object-cover" />

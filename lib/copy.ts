@@ -119,7 +119,7 @@ export const copy = {
       "Creemos en una arquitectura de gestos sutiles, integrada en su entorno y construida con la nobleza de los materiales que da la naturaleza. Una arquitectura que no necesita ostentación para tener presencia.",
     ],
     cta: "Conoce el estudio",
-    photoAlt: "Tres integrantes de RAAR juntos junto al mar",
+    photoAlt: "Los tres integrantes de RAAR junto al mar",
   },
 
   faq: {
@@ -174,22 +174,21 @@ export const copy = {
     },
     featured: { title: "Proyectos destacados", all: "Todos los proyectos" },
     // Off grid: dos entradas (eventos y moda) con lámina que cambia al hacer scroll. El
-    // cliente aún no ha mandado ni textos ni fotos: lo que hay son párrafos del manifiesto
-    // y renders propios, de relleno, hasta que llegue lo suyo.
+    // El índice y las fichas usan el material de moda y eventos recibido del cliente.
     offgrid: {
       title: "Off grid",
       items: [
         {
           n: "01",
           title: "Eventos",
-          text: "Creemos firmemente en una arquitectura que se construye con gestos sutiles, con integración y con la nobleza de los materiales que nos da la naturaleza. Una arquitectura que no necesita ostentación para tener presencia, que se manifiesta en su esencia y no en el exceso. Cada proyecto es una oportunidad para repensar cómo vivimos, cómo nos movemos y cómo convivimos con lo que nos rodea.",
-          image: { src: "/images/projects/to39/render-04-ceramica.jpg", alt: "" },
+          text: "Encuentros, espacios e imágenes de las actividades del estudio fuera de la obra.",
+          image: { src: "/images/off-grid/plqs-encuentro.jpg", alt: "Asistentes en un encuentro de RAAR" },
         },
         {
           n: "02",
           title: "Moda",
-          text: "Entendemos la creación como un proceso en evolución constante, donde técnica e intuición se complementan. Trabajamos con un compromiso firme con una arquitectura más responsable, que responda a las necesidades reales de las personas y del entorno.",
-          image: { src: "/images/projects/mo07/render-01-escena-1.jpg", alt: "" },
+          text: "La colección PLQS en imágenes y movimiento.",
+          image: { src: "/images/off-grid/plqs-modelo.jpg", alt: "Modelo con una camiseta PLQS" },
         },
       ],
     },

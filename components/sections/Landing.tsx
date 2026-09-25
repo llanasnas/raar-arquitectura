@@ -153,7 +153,7 @@ export function StudioTeaser() {
       <div className="grid md:grid-cols-12 gap-10 items-start">
         <div className="md:col-span-5 md:sticky md:top-28" data-reveal="left">
           <Parallax className="plate relative aspect-[4/3] shadow-[var(--shadow-soft)]" amount={8}>
-            <Image src="/images/about/team-aerial.jpg" alt={copy.studio.photoAlt} fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover" />
+            <Image src="/images/about/team-aerial.jpg" alt="Vista en blanco y negro del equipo desde arriba" fill sizes="(min-width: 768px) 40vw, 100vw" className="object-cover" />
           </Parallax>
         </div>
         <div className="md:col-span-6 md:col-start-7" data-reveal="right">

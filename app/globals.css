@@ -28,7 +28,9 @@
   /* la posición grande del logotipo en la portada: de lado a lado arriba, con el mismo
      margen que el resto de la web a los lados y arriba (cliente, 22/09) */
   --hero-top: var(--gutter-2);
-  --hero-w: calc(100vw - 2 * var(--gutter-2));
+  /* El centro del hueco entre las dos A queda algo a la izquierda del centro del SVG.
+     Este ancho compensa esa diferencia y conserva márgenes laterales visibles. */
+  --hero-w: calc(100vw - 2 * var(--gutter-2) + 0.9vw);
   --hero-h: calc(var(--hero-w) / 3.489);
   /* cuánto ocupa mientras dura la apertura, en fracción del ancho de pantalla */
   --intro-hero: 0.52;
@@ -371,7 +373,7 @@
      que el viaje se ve. No recibe clics mientras es grande: taparía media portada. */
   .brand-fixed[data-corner][data-hero] {
     --brand-w: var(--hero-w);
-    right: var(--gutter-2);
+    right: calc(100vw - var(--gutter-2) - var(--hero-w));
     bottom: calc(100svh - var(--hero-top) - var(--hero-h));
     /* de lado a lado, el encogido de la apertura se mide desde el centro, no desde la
        esquina donde vive cuando es pequeño */
@@ -490,7 +492,7 @@
   .cover {
     position: relative;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     min-height: 100svh;
   }
   /* la columna de texto empieza por debajo del RAAR grande, que es fijo y no ocupa sitio */
@@ -523,7 +525,7 @@
      aquí es aproximado; CoverBody.tsx lo mide con la fuente cargada. */
   .cover-slogan {
     --l1: 1.36;
-    font-size: clamp(1.7rem, min(3.4vw, 5.2svh), 3.9rem);
+    font-size: clamp(1.7rem, min(4.5vw, 6.9svh), 5rem);
     font-style: normal;
     font-weight: 500;
     line-height: 1.08;
@@ -1306,7 +1308,7 @@
       padding-top: 1rem;
     }
     .cover-slogan {
-      font-size: 1.35rem;
+      font-size: clamp(1.2rem, 6.55vw, 1.6rem);
     }
     /* durante el telón el vídeo llega hasta abajo del todo, igual que en escritorio: así no
        se ve la sección siguiente por debajo */
@@ -1883,16 +1885,13 @@
     line-height: 1.5;
   }
 
-  /* Dónde estamos: el título y los datos en la columna de la izquierda y el mapa a la
-     derecha, en la misma retícula y con la misma caja (640 × 483) que la foto del estudio,
-     así los dos quedan alineados por la izquierda y por la derecha. El título arranca a la
-     altura del mapa y los datos llevan su interlínea normal: lo que sobra queda abajo
-     (cliente, 22/09). */
+  /* Dónde estamos: el mapa conserva la columna de la foto del estudio y termina junto
+     al último dato de contacto (LinkedIn). */
   .where {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
     gap: clamp(1.5rem, 3vw, 3.5rem);
-    align-items: start;
+    align-items: stretch;
     padding-block: var(--sec-pad);
   }
   .where-side,
@@ -1913,8 +1912,7 @@
     max-width: 640px;
   }
   .where-map .map {
-    height: auto;
-    aspect-ratio: 640 / 483;
+    height: 100%;
   }
   .where-list li {
     display: flex;
@@ -2078,17 +2076,20 @@
       min-height: 0;
       padding-block: 0.6rem;
       opacity: 0;
+      pointer-events: none;
       transition:
         opacity 700ms var(--ease-out-expo),
         color 500ms var(--ease-out-expo);
     }
     .offgrid-step[data-on] {
       opacity: 1;
+      pointer-events: auto;
     }
     @media (prefers-reduced-motion: reduce) {
       .offgrid-step {
         grid-area: auto;
         opacity: 1;
+        pointer-events: auto;
       }
     }
     .works-featured .work:nth-child(n) {
@@ -2105,6 +2106,7 @@
     }
     .where-map {
       max-width: none;
+      height: min(65vw, 360px);
     }
     .contact-2-title {
       white-space: normal;
@@ -2309,10 +2311,109 @@
     gap: 0.9rem;
     padding-block: clamp(2.5rem, 7vh, 5rem) clamp(1rem, 2vh, 1.5rem);
   }
-  /* el nombre de la obra baja de cuerpo: la referencia, el lugar y el tipo van en grande en la
-     ficha, como en la web anterior del cliente (guía del 21/09) */
-  .pj-title {
-    max-width: 26ch;
+  /* El nombre va sobre la primera descripción, fuera de la fotografía. */
+  .pj-project-title {
+    max-width: 22ch;
+    margin-bottom: clamp(1.5rem, 4vh, 2.75rem);
+    font-size: clamp(2rem, 3.4vw, 3.7rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+  .offgrid-step-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+  }
+  .offgrid-archive-link {
+    display: inline-block;
+    margin-top: 3rem;
+  }
+
+  .offgrid-index .work:nth-child(3) {
+    grid-column: 3 / span 8;
+    --work-ar: 16 / 10;
+  }
+  .og-detail-cover {
+    display: block;
+    position: relative;
+    height: min(72svh, 850px);
+    overflow: hidden;
+  }
+  .og-detail-head {
+    padding-block: clamp(2.5rem, 7vh, 5rem);
+  }
+  .og-detail-head .pj-project-title {
+    margin-top: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .og-detail-head .t-lead {
+    max-width: 45ch;
+  }
+  .og-gallery {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: clamp(1.5rem, 3vw, 3.5rem);
+  }
+  .og-photo {
+    position: relative;
+    grid-column: 1 / span 6;
+    aspect-ratio: 4 / 3;
+    background: var(--carbon);
+  }
+  .og-photo-hit {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .og-detail-cover:focus-visible,
+  .og-photo-hit:focus-visible {
+    outline: 2px solid var(--carbon);
+    outline-offset: 4px;
+  }
+  /* Las fotos avanzan por parejas: cada fila empieza a la izquierda. */
+  .og-photo:nth-child(even) {
+    grid-column: 8 / span 5;
+    aspect-ratio: 3 / 4;
+  }
+  .og-photo:last-child:nth-child(odd) {
+    grid-column: 4 / span 6;
+    aspect-ratio: 3 / 4;
+  }
+  .og-gallery[data-entry="plqs-evento"] .og-photo:last-child:nth-child(odd) {
+    grid-column: 2 / span 10;
+    aspect-ratio: 16 / 9;
+  }
+  .og-photo figcaption {
+    position: absolute;
+    left: 0;
+    bottom: -1.4rem;
+  }
+  .og-video-section {
+    padding-block: clamp(5rem, 12vh, 9rem);
+  }
+  .og-videos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 2rem);
+    margin-top: 2rem;
+  }
+  .og-videos video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    background: var(--carbon);
+  }
+  .og-videos figcaption {
+    margin-top: 0.6rem;
+  }
+  .og-next {
+    display: grid;
+    gap: 0.5rem;
+    padding-block: clamp(5rem, 12vh, 9rem);
   }
   /* Apertura: un pase de tres fotos (components/projects/HeroSlider.tsx). La cinta es un
      scroll horizontal con snap, así que el arrastre lo hace el navegador; el clic sobre la
@@ -2328,21 +2429,6 @@
     max-height: min(82svh, 900px);
     overflow: hidden;
     background: var(--paper);
-  }
-  .pj-hero-title {
-    position: absolute;
-    z-index: 2;
-    left: clamp(1rem, 3vw, 2.5rem);
-    bottom: clamp(1rem, 3vw, 2.5rem);
-    max-width: min(70%, 26ch);
-    padding: 0.4em 0.65em;
-    color: white;
-    background: rgb(17 17 16 / 0.58);
-    font-size: clamp(1.15rem, 2.4vw, 2.4rem);
-    font-weight: 400;
-    line-height: 1.12;
-    letter-spacing: -0.02em;
-    pointer-events: none;
   }
   .pj-hero-track {
     position: absolute;
@@ -2651,6 +2737,12 @@
     aspect-ratio: 640 / 483;
     overflow: hidden;
     background: var(--carbon);
+  }
+  .studio-plate-secondary {
+    margin-top: clamp(1.5rem, 4vw, 3rem);
+  }
+  .about-media:has(.studio-plate-secondary) {
+    align-self: start;
   }
   /* el manifiesto entero a la izquierda, en tinta y a cuerpo de lectura, como en la web
      anterior del cliente (guía del 21/09) */
@@ -3190,6 +3282,30 @@
   }
 
   @media (max-width: 899px) {
+    .offgrid-index .work:nth-child(3) {
+      grid-column: 1;
+      --work-ar: 4 / 3;
+    }
+    .og-detail-cover {
+      height: min(70svh, 620px);
+    }
+    .og-gallery {
+      display: block;
+    }
+    .og-photo,
+    .og-photo:nth-child(even),
+    .og-photo:last-child:nth-child(odd),
+    .og-gallery[data-entry="plqs-evento"] .og-photo:last-child:nth-child(odd) {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      margin-bottom: 3rem;
+    }
+    .og-videos {
+      grid-template-columns: 1fr;
+    }
+    .og-videos figure {
+      max-width: 440px;
+    }
     .post-link {
       grid-template-columns: 1fr;
     }

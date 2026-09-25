@@ -20,7 +20,7 @@ export const site = {
     region: "Catalunya",
     country: "ES",
   },
-  geo: { lat: 41.3979, lng: 2.1654 },
+  geo: { lat: 41.3970663, lng: 2.1660582 },
   instagram: "https://www.instagram.com/raar.arquitectura/",
   linkedin: "https://www.linkedin.com/company/raar-arquitectura/",
   // Dónde trabajan, en concreto (cliente, 22/09/2026): cierre de las páginas y datos

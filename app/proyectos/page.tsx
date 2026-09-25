@@ -74,7 +74,7 @@ export default async function ProjectsPage(props: PageProps<"/proyectos">) {
       {list.length === 0 ? (
         <p className="wrap t-lead vspace">{copy.projects.empty}</p>
       ) : (
-        <Works projects={list} />
+        <Works projects={list} typeFilter={active?.key} />
       )}
 
       {/* el cierre es la frase del cliente y el formulario, sin nada más (22/09) */}

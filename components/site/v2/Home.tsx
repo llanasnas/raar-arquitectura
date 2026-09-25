@@ -67,8 +67,7 @@ export function Featured({ projects }: { projects: Project[] }) {
 
 // El estudio, como lo puso el cliente en la maqueta: rótulo, titular (grande, guía del 21/09)
 // y el primer párrafo del manifiesto a la izquierda, con el isotipo debajo (que lleva a la
-// página del estudio), y la foto de los tres a la derecha. La foto es de 640 px: a su tamaño,
-// nunca a sangre.
+// página del estudio), y la foto de los tres a la derecha, nunca a sangre.
 export function About() {
   const [opening] = studioPage.manifesto;
   return (
@@ -119,10 +118,8 @@ export function About() {
   );
 }
 
-// Dónde estamos: el título y los datos en la columna de la izquierda, el mapa a la derecha,
-// en la misma retícula que el estudio (así el mapa y la foto de los tres quedan alineados por
-// los dos lados). El título arranca a la altura del mapa y los datos van con su interlínea
-// normal: lo que sobra, sobra por abajo (cliente, 22/09). Lo usan la portada y /estudio.
+// Dónde estamos: el mapa se alinea con la foto del estudio y termina a la altura de LinkedIn.
+// Lo usan la portada y /estudio.
 export function Where() {
   return (
     <section
@@ -179,7 +176,7 @@ export function Where() {
       <div className="where-map">
         <iframe
           title={`Mapa: ${site.address.street}, ${site.address.city}`}
-          src={`https://www.openstreetmap.org/export/embed.html?bbox=${site.geo.lng - 0.006}%2C${site.geo.lat - 0.004}%2C${site.geo.lng + 0.006}%2C${site.geo.lat + 0.004}&layer=mapnik&marker=${site.geo.lat}%2C${site.geo.lng}`}
+          src={`https://www.openstreetmap.org/export/embed.html?bbox=${site.geo.lng - 0.003}%2C${site.geo.lat - 0.002}%2C${site.geo.lng + 0.003}%2C${site.geo.lat + 0.002}&layer=mapnik&marker=${site.geo.lat}%2C${site.geo.lng}`}
           className="map"
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"

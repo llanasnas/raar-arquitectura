@@ -46,6 +46,15 @@ export default function StudioPage() {
               className="object-cover"
             />
           </Reveal>
+          <Reveal className="studio-plate studio-plate-secondary" variant="wipe" delay={150}>
+            <Image
+              src="/images/about/team-aerial.jpg"
+              alt="Vista en blanco y negro del equipo desde arriba"
+              fill
+              sizes="(min-width: 900px) 640px, 100vw"
+              className="object-cover"
+            />
+          </Reveal>
         </figure>
       </section>
 

@@ -1,25 +1,42 @@
 import type { Metadata } from "next";
-import { SiteFoot } from "@/components/site/v2/Page";
-import { OffGrid } from "@/components/site/v2/OffGrid";
+import Image from "next/image";
+import Link from "next/link";
+import { PageHead, SiteFoot } from "@/components/site/v2/Page";
+import { Reveal } from "@/components/site/v2/Reveal";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
-import { copy } from "@/lib/copy";
+import { offGridEntries } from "@/lib/off-grid";
 import { routes } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: copy.home.offgrid.title,
-  description: copy.home.offgrid.items[0].text.slice(0, 155),
+  title: "Off grid · Eventos y moda",
+  description: "El archivo de eventos y moda de RAAR.",
   alternates: { canonical: routes.offgrid },
 };
 
-// Off grid como página propia (cliente, 22/09/2026): antes era solo el ancla de la portada.
-// Es el mismo bloque, con su rótulo de h1, y nada más: sin cierre de contacto (22/09).
-// Los textos y las fotos son de relleno hasta que el cliente mande los suyos (ver copy.ts).
 export default function OffGridPage() {
   return (
     <div className="page">
-      <OffGrid heading="h1" />
+      <PageHead kicker="Archivo" title="Off grid" />
+      <ol data-menu="dark" className="works wrap offgrid-index">
+        {offGridEntries.map((entry, i) => (
+          <li key={entry.slug} className="work">
+            <Link href={`${routes.offgrid}/${entry.slug}`} className="work-link">
+              <Reveal className="work-plate" variant="wipe" delay={(i % 2) * 90}>
+                <span className="work-zoom">
+                  <Image src={entry.cover.src} alt={entry.cover.alt} fill priority={i < 2} sizes="(min-width: 900px) 58vw, 100vw" className="object-cover" />
+                </span>
+              </Reveal>
+              <div className="work-cap">
+                <span className="t-label">{String(i + 1).padStart(2, "0")}. {entry.category}</span>
+                <h2 className="work-name">{entry.title}</h2>
+                <p className="t-body work-sum">{entry.summary}</p>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ol>
       <SiteFoot />
-      <BreadcrumbJsonLd items={[{ name: "Inicio", href: "/" }, { name: copy.home.offgrid.title, href: routes.offgrid }]} />
+      <BreadcrumbJsonLd items={[{ name: "Inicio", href: "/" }, { name: "Off grid", href: routes.offgrid }]} />
     </div>
   );
 }

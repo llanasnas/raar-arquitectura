@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getProjects } from "@/lib/content";
 import { getPosts, getZones } from "@/lib/editorial";
+import { offGridEntries } from "@/lib/off-grid";
 import { routes, site } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -34,5 +35,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const projects: MetadataRoute.Sitemap = getProjects()
     .filter((p) => p.status === "published")
     .map((p) => ({ url: `${site.url}${routes.project(p.id)}`, lastModified: now, changeFrequency: "yearly", priority: 0.7 }));
-  return [...staticRoutes, ...zonePages, ...postPages, ...projects];
+  const offGridPages: MetadataRoute.Sitemap = offGridEntries.map((entry) => ({
+    url: `${site.url}${routes.offgrid}/${entry.slug}`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+  return [...staticRoutes, ...zonePages, ...postPages, ...projects, ...offGridPages];
 }

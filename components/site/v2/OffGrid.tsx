@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Reveal } from "@/components/site/v2/Reveal";
 import { copy } from "@/lib/copy";
+import { routes } from "@/lib/site";
 
 // Off grid (maqueta del cliente, 18/09/2026): lo que el estudio hace fuera de la obra, en
 // dos entradas, eventos y moda. La lámina de la izquierda se queda pegada y **cambia con la
@@ -105,10 +107,14 @@ export function OffGrid({ heading: Heading = "h2" }: { heading?: "h1" | "h2" }) 
                 {item.n} · {item.title}
               </h3>
               <p className="offgrid-step-text">{item.text}</p>
+              <Link className="t-label link-underline offgrid-step-link" href={`${routes.offgrid}/${i === 0 ? "plqs-evento" : "plqs-moda"}`}>
+                Ver imágenes {i === 1 ? "y vídeos" : ""} ↗
+              </Link>
             </article>
           ))}
         </div>
       </div>
+      <Link className="t-label link-underline offgrid-archive-link" href={routes.offgrid}>Explorar todo Off grid ↗</Link>
     </section>
   );
 }

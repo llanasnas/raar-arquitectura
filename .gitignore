@@ -46,3 +46,7 @@ assets-src/
 /shots
 # local binaries (Real-ESRGAN etc.)
 /tools/
+
+# Local CodeGraph index and generated editor rule
+/.codegraph/
+/.cursor/rules/codegraph.mdc

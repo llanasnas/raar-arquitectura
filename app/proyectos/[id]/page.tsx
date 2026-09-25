@@ -11,6 +11,10 @@ import { LightboxItem, LightboxProvider } from "@/components/projects/Lightbox";
 import { getAdjacentProjects, getProject, getProjects } from "@/lib/content";
 import { copy } from "@/lib/copy";
 import { routes, site } from "@/lib/site";
+import { TYPOLOGIES, typologiesOf } from "@/lib/typologies";
+
+// Según los Word del cliente, estas obras muestran los tres bloques antes del diagrama.
+const ALL_TEXT_BEFORE_DIAGRAM = new Set(["ar07", "bo24", "gr16", "cm25"]);
 
 export function generateStaticParams() {
   return getProjects().map((p) => ({ id: p.id }));
@@ -39,6 +43,7 @@ export async function generateMetadata(props: PageProps<"/proyectos/[id]">): Pro
 // y los planos abren la lupa; la apertura no (el clic pasa a la foto siguiente).
 export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
   const { id } = await props.params;
+  const sp = await props.searchParams;
   const p = getProject(id);
   if (!p) notFound();
   const { prev, next } = getAdjacentProjects(id);
@@ -49,16 +54,25 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
   // una sola lupa para renders y planos, en la misma secuencia
   const lightbox = [...p.gallery, ...p.plans];
   const plansOffset = p.gallery.length;
+  const requestedType = typeof sp.tipo === "string" ? sp.tipo : undefined;
+  const typeFromList = TYPOLOGIES.find((type) => type.id === requestedType && type.items.includes(id));
+  const projectType = typeFromList ?? typologiesOf(id)[0];
+  const category = requestedType === "en-proceso" && p.status === "processing"
+    ? { label: t.processing, href: `${routes.projects}?tipo=en-proceso` }
+    : projectType ? { label: projectType.label, href: `${routes.projects}?tipo=${projectType.id}` } : null;
+  const allTextBeforeDiagram = ALL_TEXT_BEFORE_DIAGRAM.has(id);
+  const openingText = [...p.text.intro, ...p.text.block2, ...(allTextBeforeDiagram ? p.text.block3 : [])];
+  const closingText = allTextBeforeDiagram ? [] : p.text.block3;
 
   return (
     <LightboxProvider items={lightbox} label={`${p.name} · ${t.renders}`}>
       <div className="page">
         <div className="pj-head wrap">
-          <Crumbs items={[{ label: t.back, href: routes.projects }, { label: p.codeDisplay }]} />
+          <Crumbs items={[{ label: t.back, href: routes.projects }, ...(category ? [category] : []), { label: p.codeDisplay }]} />
         </div>
 
         {heroItems.length > 0 ? (
-          <HeroSlider items={heroItems} label={`${p.name} · ${t.renders}`} title={p.name} />
+          <HeroSlider items={heroItems} label={`${p.name} · ${t.renders}`} />
         ) : (
           <h1 className="t-title pj-title wrap">{p.name}</h1>
         )}
@@ -125,7 +139,8 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
                 </div>
               </div>
               <div className="sheet-text">
-                {p.text.intro.map((text, i) => (
+                <h1 className="pj-project-title">{p.name}</h1>
+                {openingText.map((text, i) => (
                   <Reveal key={i} as="p" className="sheet-p" variant="up" delay={i * 70}>
                     {text}
                   </Reveal>
@@ -157,19 +172,6 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
               </figure>
             )}
 
-            {/* segundo bloque de texto + renders */}
-            {p.text.block2.length > 0 && (
-              <section data-menu="dark" className="sheet wrap">
-                <div className="sheet-text">
-                  {p.text.block2.map((text, i) => (
-                    <Reveal key={i} as="p" className="sheet-p" variant="up" delay={i * 70}>
-                      {text}
-                    </Reveal>
-                  ))}
-                </div>
-              </section>
-            )}
-
             {p.gallery.length > 0 && (
               <div className="gal wrap">
                 {p.gallery.map((g, i) => {
@@ -186,11 +188,11 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
               </div>
             )}
 
-            {/* tercer bloque de texto + planos */}
-            {p.text.block3.length > 0 && (
+            {/* El último bloque queda después de las imágenes cuando así lo indica el Word. */}
+            {closingText.length > 0 && (
               <section data-menu="dark" className="sheet wrap">
                 <div className="sheet-text">
-                  {p.text.block3.map((text, i) => (
+                  {closingText.map((text, i) => (
                     <Reveal key={i} as="p" className="sheet-p" variant="up" delay={i * 70}>
                       {text}
                     </Reveal>
@@ -242,7 +244,7 @@ export default async function ProjectPage(props: PageProps<"/proyectos/[id]">) {
         <SiteFoot />
         <ProjectJsonLd project={p} />
         <BreadcrumbJsonLd
-          items={[{ name: "Inicio", href: "/" }, { name: t.title, href: routes.projects }, { name: p.name, href: routes.project(p.id) }]}
+          items={[{ name: "Inicio", href: "/" }, { name: t.title, href: routes.projects }, ...(category ? [{ name: category.label, href: category.href }] : []), { name: p.name, href: routes.project(p.id) }]}
         />
       </div>
     </LightboxProvider>
